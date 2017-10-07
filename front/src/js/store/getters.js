@@ -1,3 +1,3 @@
-export const sampleMessage = (state) => {
-    return `hello, ${ state.sampleName }.`;
+export const matchingCount = (state) => {
+    return state.matchingCount;
 };
