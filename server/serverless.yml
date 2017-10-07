@@ -35,6 +35,8 @@ provider:
         - dynamodb:DescribeTable
         - dynamodb:PutItem
         - dynamodb:UpdateItem
+        - dynamodb:Query
+        - dynamodb:DeleteItem
       Resource: "*"
 
 
@@ -62,6 +64,9 @@ functions:
     timeout: 30
     events:
       - schedule: rate(5 minutes)
+  matching:
+      handler: functions/matching/handler.createMatching
+      timeout: 30
 
   twitter_session:
     handler: functions/twitter/index.handler
@@ -101,17 +106,22 @@ resources:
       Properties:
         AttributeDefinitions:
           -
-            AttributeName: tweetID
+            AttributeName: gender
             AttributeType: N
-        KeySchema:
           -
             AttributeName: tweetID
+            AttributeType: S
+        KeySchema:
+          -
+            AttributeName: gender
             KeyType: HASH
+          -
+            AttributeName: tweetID
+            KeyType: RANGE
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
         TableName: "tweets-${self:provider.stage}"
-          
     TwitterSessionDynamoDbTable:
       Type: 'AWS::DynamoDB::Table'
       DeletionPolicy: Retain
@@ -128,6 +138,3 @@ resources:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
         TableName: "twitter-session-${self:provider.stage}"
-
-
-
