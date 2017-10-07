@@ -70,6 +70,18 @@ const deleteUser = (user) => {
   });
 };
 
+const create = (params) => {
+  return new Promise((resolve, reject) => {
+    dynamo.put(params, (err, data) => {
+      if (err) {
+        console.log(err);
+        reject(err);
+        return
+      }
+      resolve()
+    })
+  })
+};
 
 
 const createMatching = () => {
@@ -79,6 +91,22 @@ const createMatching = () => {
     .then((users) => {
       console.log('users');
       console.log(users);
+
+      const params = {
+        TableName: `matching-${process.env.STAGE}`,
+        Item: {
+          id: uuid.v4(),
+          userID1: users[0].userID,
+          userID2: users[1].userID,
+          tweetID1: users[0].tweetID,
+          tweetID2: users[1].tweetID,
+          screenName1: users[0].screenName,
+          screenName2: users[1].screenName,
+          userImageUrl1: users[0].userImageUrl,
+          userImageUrl2: users[1].userImageUrl,
+        }
+
+      };
       console.log('users');
     })
     .catch((err) => {
