@@ -82,6 +82,23 @@ functions:
 
 resources:
   Resources:
+    TwitterProfileDynamoDbTable:
+      Type: 'AWS::DynamoDB::Table'
+      DeletionPolicy: Retain
+      Properties:
+        AttributeDefinitions:
+          -
+            AttributeName: uid
+            AttributeType: S
+        KeySchema:
+          -
+            AttributeName: uid
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        TableName: "twitter-profile-${self:provider.stage}"
+
     TweetsDynamoDbTable:
       Type: 'AWS::DynamoDB::Table'
       DeletionPolicy: Retain
@@ -104,19 +121,19 @@ resources:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
         TableName: "tweets-${self:provider.stage}"
-    TwitterDynamoDbTable:
-          Type: 'AWS::DynamoDB::Table'
-          DeletionPolicy: Retain
-          Properties:
-            AttributeDefinitions:
-              -
-                AttributeName: request_token
-                AttributeType: S
-            KeySchema:
-              -
-                AttributeName: request_token
-                KeyType: HASH
-            ProvisionedThroughput:
-              ReadCapacityUnits: 1
-              WriteCapacityUnits: 1
-            TableName: "twitter-session-${self:provider.stage}"
+    TwitterSessionDynamoDbTable:
+      Type: 'AWS::DynamoDB::Table'
+      DeletionPolicy: Retain
+      Properties:
+        AttributeDefinitions:
+          -
+            AttributeName: request_token
+            AttributeType: S
+        KeySchema:
+          -
+            AttributeName: request_token
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        TableName: "twitter-session-${self:provider.stage}"

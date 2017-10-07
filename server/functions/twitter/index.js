@@ -7,7 +7,7 @@ const dynamo = new aws.DynamoDB.DocumentClient({region: 'ap-northeast-1'});
 const twitterAPI = require('node-twitter-api');
 const twitter = new twitterAPI({
   consumerKey: process.env.CONSUMER_KEY,
-  consumerSecret: process.env.COMSUMER_SECRET,
+  consumerSecret: process.env.CONSUMER_SECRET,
   callback: process.env.TWITTER_CALLBACK
 });
 
@@ -53,7 +53,7 @@ function putToken(tokenHash) {
     console.log('tokenHash');
     console.log(tokenHash);
     dynamo.put({
-      TableName: `twitter-session-${process.env.STAGE}`,
+      TableName: `twitter-session-dev`,
       Item:{
         request_token : tokenHash.requestToken,
         request_secret : tokenHash.requestTokenSecret
