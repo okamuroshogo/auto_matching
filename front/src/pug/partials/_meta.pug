@@ -1,0 +1,52 @@
+meta(charset="utf-8")
+meta(name="viewport" content="width=device-width,user-scalable=no,initial-scale=1.0")
+
+title=title
+
+if meta_description
+  meta(name="description" content=meta_description)
+if meta_keywords
+  meta(name="keywords" content=meta_keywords.join(","))
+
+//- IEで「互換モード」で表示されるのを防ぐための指定
+meta(http-equiv="X-UA-Compatible", content="IE=Edge")
+
+if url
+  //- このページをはてぶ・シェアする際、使われるべきURLを明示する指定
+  link(rel="canonical" href=url)
+
+if is_set_ogp
+  meta(property="og:locale" content="ja_JP")
+  meta(property="og:type" content="website")
+  meta(property="og:url" content=url)
+  meta(property="og:title" content=title)
+  meta(property="og:site_name" content=site_name)
+  meta(property="og:description" content=(og_description || meta_description))
+  if share_image
+    meta(property="og:image" content=share_image)
+  if og_image_width
+    meta(property="og:image:width", content=ogp_image_width)
+    meta(property="og:image:height", content=ogp_image_height)
+  if fb_appid
+    meta(property="fb:app_id", content=fb_appid)
+
+if is_set_twitter
+  meta(name="twitter:card" content="summary_large_image")
+  meta(name="twitter:title" content=title)
+  meta(name="twitter:description" content=(tw_description || meta_description))
+  if share_image
+    meta(name="twitter:image" content=share_image)
+  if tw_site
+    meta(name="twitter:site" content=tw_site)
+  if tw_creator
+    meta(name="twitter:creator" content=tw_creator)
+
+if favicon_url
+  link(rel="shortcut icon" type="image/vnd.microsoft.icon" href=favicon_url)
+  link(rel="icon" type="image/vnd.microsoft.icon" href=favicon_url)
+  link(rel="shortcut icon" href=favicon_url)
+  link(rel="icon" href=favicon_url)
+
+if apple_touch_icon_url
+  link(rel="apple-touch-icon-precomposed" href=apple_touch_icon_url)
+  link(rel="apple-touch-icon" href=apple_touch_icon_url)

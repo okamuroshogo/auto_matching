@@ -1,0 +1,15 @@
+- const fb_share_url = "https://www.facebook.com/sharer/sharer.php?u=" + encodeURIComponent(url)
+- const tw_share_url = "https://twitter.com/share?url=" + encodeURIComponent(url) + "&text=" + encodeURIComponent(tw_description) + "&hashtags=" + encodeURIComponent(tw_hashtags.join(',')) + "&"
+- const line_share_url = "line://msg/text/" + encodeURIComponent(url)
+
+ul
+  li
+    a(href!=fb_share_url target="_blank")
+    div.fb-share-button(data-href=url data-layout="link")
+      | share facebook
+  li
+    a(href!=tw_share_url target="_blank")
+      | share twitter
+  li
+    a(href!=line_share_url target="_blank")
+      | share line

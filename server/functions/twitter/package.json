@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "dotenv": "^4.0.0",
+    "node-twitter-api": "^1.8.0"
+  }
+}
