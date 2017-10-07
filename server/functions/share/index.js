@@ -5,7 +5,7 @@ require('dotenv').config();
 const url = 'http://kamatte.cc/';
 const site_name = 'kamatte';
 const meta_description = 'description';
-const meta_keywords =;
+const meta_keywords = ['kamatte'];
 const share_image = 'http://localhost/img/ogp.png';
 const og_description = 'description';
 const og_image_width = 1200;
@@ -49,7 +49,7 @@ const genHtml = ({ id, title }) => `
 
 exports.handler = (event, context, callback) => {
   console.log(event.pathParameters);
-  const id = 'hoge';
+  const id = event.pathParameters;
   const title = 'fuga';
   const response = {
     statusCode: 200,
