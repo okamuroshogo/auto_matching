@@ -10,6 +10,7 @@ const share_image = 'http://localhost/img/ogp.png';
 const og_description = 'description';
 const og_image_width = 1200;
 const og_image_height = 630;
+const fb_appid = '';
 const tw_description = 'description';
 const tw_site = '@hoge';
 const tw_creator = '@hoge';
