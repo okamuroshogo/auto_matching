@@ -1,9 +1,12 @@
 <template lang="pug">
   .detail
-    h1 kamatte
-    p ogp
+    p おめでとうございます :tada:
+    p 写真はーと写真
+    p 店の写真
     p 店の名は
-    p hashtag
+    p 店の住所
+    p
+      a.btn-reserve(href='') お店を予約する
     p {{ sampleMessage }}
 </template>
 
