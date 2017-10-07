@@ -1,5 +1,8 @@
 <template lang="pug">
-  .root(v-on:click="changeSampleName") {{ sampleMessage }}
+  .root
+    h1 kamatte
+    p 本日のマッチング数
+    p {{ matchingCount }} 件！
 </template>
 
 <script>
@@ -8,10 +11,13 @@
   export default {
     name: 'root',
     computed: {
-      ...mapGetters([ 'sampleMessage' ])
+      ...mapGetters([])
     },
     methods: {
-      ...mapActions([ 'changeSampleName' ])
+      ...mapActions([])
+    },
+    created() {
+      this.$store.dispatch('getMatchingCount');
     }
   }
 </script>

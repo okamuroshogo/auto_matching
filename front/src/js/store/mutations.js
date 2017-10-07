@@ -1,3 +1,3 @@
-export const setSampleName = (state, { name }) => {
-    state.sampleName = name;
+export const setMatchingCount = (state, { count }) => {
+    state.matchingCount = count;
 };
