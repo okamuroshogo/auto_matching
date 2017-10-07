@@ -95,6 +95,22 @@ functions:
 
 resources:
   Resources:
+    TwitterProfileDynamoDbTable:
+      Type: 'AWS::DynamoDB::Table'
+      DeletionPolicy: Retain
+      Properties:
+        AttributeDefinitions:
+          -
+            AttributeName: uid
+            AttributeType: S
+        KeySchema:
+          -
+            AttributeName: uid
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        TableName: "twitter-profile-${self:provider.stage}"
     TwitterDynamoDbTable:
       Type: 'AWS::DynamoDB::Table'
       DeletionPolicy: Retain
