@@ -110,25 +110,23 @@ resources:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
         TableName: "tweets-${self:provider.stage}"
-        StreamSpecification:
-          StreamViewType: KEYS_ONLY
           
     TwitterSessionDynamoDbTable:
-          Type: 'AWS::DynamoDB::Table'
-          DeletionPolicy: Retain
-          Properties:
-            AttributeDefinitions:
-              -
-                AttributeName: request_token
-                AttributeType: S
-            KeySchema:
-              -
-                AttributeName: request_token
-                KeyType: HASH
-            ProvisionedThroughput:
-              ReadCapacityUnits: 1
-              WriteCapacityUnits: 1
-            TableName: "twitter-session-${self:provider.stage}"
+      Type: 'AWS::DynamoDB::Table'
+      DeletionPolicy: Retain
+      Properties:
+        AttributeDefinitions:
+          -
+            AttributeName: request_token
+            AttributeType: S
+        KeySchema:
+          -
+            AttributeName: request_token
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        TableName: "twitter-session-${self:provider.stage}"
 
 
 

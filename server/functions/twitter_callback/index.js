@@ -3,7 +3,7 @@
 const twitterAPI = require('node-twitter-api');
 const twitter = new twitterAPI({
   consumerKey: process.env.CONSUMER_KEY,
-  consumerSecret: process.env.COMSUMER_SECRET,
+  consumerSecret: process.env.CONSUMER_SECRET,
   callback: process.env.TWITTER_CALLBACK
 });
 const aws = require('aws-sdk');
