@@ -1,0 +1,60 @@
+{
+  "name": "template",
+  "version": "1.0.0",
+  "author": "motoki shun",
+  "license": "MIT",
+  "engines": {
+    "node": ">=6.0.0"
+  },
+  "scripts": {
+    "start": "gulp",
+    "server": "gulp server",
+    "watch": "gulp watch",
+    "build": "gulp build",
+    "build-html": "gulp html",
+    "build-css": "gulp css",
+    "build-js": "gulp js",
+    "lint": "gulp lint"
+  },
+  "devDependencies": {
+    "babel-eslint": "latest",
+    "babel-plugin-transform-runtime": "^6.23.0",
+    "babel-preset-es2015": "latest",
+    "babel-preset-stage-1": "^6.24.1",
+    "babelify": "latest",
+    "browserify": "latest",
+    "dotenv": "latest",
+    "gulp": "latest",
+    "gulp-eslint": "latest",
+    "gulp-if": "latest",
+    "gulp-ignore": "latest",
+    "gulp-notify": "latest",
+    "gulp-pleeease": "latest",
+    "gulp-plumber": "latest",
+    "gulp-pug": "latest",
+    "gulp-rename": "latest",
+    "gulp-sass": "latest",
+    "gulp-sass-glob": "latest",
+    "gulp-uglify": "latest",
+    "gulp-util": "latest",
+    "gulp-watch": "latest",
+    "koko": "latest",
+    "read-config": "latest",
+    "reset-css": "latest",
+    "vinyl-buffer": "latest",
+    "vinyl-source-stream": "latest",
+    "vue": "^2.4.4",
+    "vueify": "^9.4.1",
+    "vuex": "^2.4.1",
+    "watchify": "latest"
+  },
+  "babel": {
+    "presets": [
+      "es2015",
+      "stage-1"
+    ],
+    "plugins": [
+      "transform-runtime"
+    ]
+  }
+}
