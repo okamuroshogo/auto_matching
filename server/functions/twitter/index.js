@@ -1,28 +1,35 @@
 'use strict';
 
+require('dotenv').config();
 const aws         = require('aws-sdk');
 //const querystring = require('querystring');
 const dynamo = new aws.DynamoDB.DocumentClient({region: 'ap-northeast-1'});
 const twitterAPI = require('node-twitter-api');
 const twitter = new twitterAPI({
-  consumerKey: process.env.twitter_access,
-  consumerSecret: process.env.twitter_secret,
-  callback: process.env.twitter_callback
+  consumerKey: process.env.CONSUMER_KEY,
+  consumerSecret: process.env.COMSUMER_SECRET,
+  callback: process.env.TWITTER_CALLBACK
 });
 
 exports.handler = (event, context, callback) => {
+  console.log(twitter);
   twitterRequestToken().then(function(tokenHash) {
+    console.log(tokenHash);
     return putToken(tokenHash); 
   }).then(function(requestToken) {
+    console.log('requestToken');
+    console.log(requestToken);
     const response = {
       statusCode: 302,
       headers: {
         'Location': twitter.getAuthUrl(requestToken)
       }
     };
+    console.log('response');
+    console.log(response);
     callback(null, response);
   }).catch(function(error) {
-    //console.log('errror twitter token');
+    console.log('errror twitter token');
     callback(null, {statusCode: 400, error: error});
   });
 };
@@ -32,7 +39,7 @@ function twitterRequestToken() {
     //twitter.getRequestToken((error, requestToken, requestTokenSecret, results) => {
     twitter.getRequestToken((error, requestToken, requestTokenSecret) => {
       if (error) {
-        //console.log(error);
+        console.log(error);
         reject(error);
         return;
       } 
@@ -43,9 +50,10 @@ function twitterRequestToken() {
 
 function putToken(tokenHash) {
   return new Promise(function (resolve, reject) {
+    console.log('tokenHash');
+    console.log(tokenHash);
     dynamo.put({
-      //FIXME: 
-      TableName: 'dev-test-troop-twitter',
+      TableName: `twitter-session-${process.env.STAGE}`,
       Item:{
         request_token : tokenHash.requestToken,
         request_secret : tokenHash.requestTokenSecret
@@ -54,7 +62,7 @@ function putToken(tokenHash) {
     },  function(err){
     //},  function(err, res){
       if (err){
-        //console.log(err);
+        console.log(err);
         reject();
         return;
       }
