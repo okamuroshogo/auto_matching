@@ -1,0 +1,22 @@
+// TODO: ymlにする（jsonはほんとはコメント使えない）
+{
+  "extends": "eslint:recommended",
+  "parser": "babel-eslint",
+  "env": {
+    "browser": true,
+    "node": true,
+    "es6": true
+  },
+  "rules": {
+    // cf. http://eslint.org/docs/rules/
+    "comma-dangle": "off", // ケツカンマはok
+    "no-unused-vars": "warn",
+    "no-console": "warn",
+    "semi": "warn"
+  },
+  "globals": [
+    "jQuery",
+    "$",
+    "THREE"
+  ]
+}

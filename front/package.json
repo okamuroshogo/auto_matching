@@ -1,58 +1,55 @@
 {
-  "name": "kayac-html5-starter",
-  "version": "0.0.0",
-  "description": "kayac-html5-starter development.",
-  "main": "gulpfile.babel.js",
+  "name": "template",
+  "version": "1.0.0",
+  "author": "motoki shun",
+  "license": "MIT",
   "engines": {
-    "node": ">=5.0.0"
+    "node": ">=6.0.0"
   },
   "scripts": {
     "start": "gulp",
-    "serve": "gulp serve",
+    "server": "gulp server",
     "watch": "gulp watch",
     "build": "gulp build",
+    "build-html": "gulp html",
     "build-css": "gulp css",
     "build-js": "gulp js",
-    "build-html": "gulp html"
+    "lint": "gulp lint"
   },
-  "keywords": [
-    "gulp"
-  ],
-  "author": "Kayac Inc.",
-  "license": "MIT",
   "devDependencies": {
-    "babel": "6.3.*",
-    "babel-plugin-transform-runtime": "6.23.*",
-    "babel-preset-es2015": "6.3.*",
-    "babel-preset-stage-1": "^6.24.1",
-    "babelify": "7.2.*",
-    "browser-sync": "2.11.*",
-    "browserify": "12.0.*",
-    "dotenv": "^4.0.0",
-    "gulp": "git://github.com/gulpjs/gulp.git#4.0",
-    "gulp-notify": "^3.0.0",
-    "gulp-pleeease": "2.0.*",
-    "gulp-pug": "^3.0.3",
-    "gulp-sass": "2.1.*",
-    "gulp-sass-glob": "^1.0.6",
-    "gulp-uglify": "^3.0.0",
-    "gulp-util": "^3.0.8",
-    "gulp-watch": "^4.3.8",
-    "jquery": "2.*",
-    "read-config": "2.0.*",
-    "reset.css": "^2.0.2",
-    "rev-logger": "1.1.1",
-    "vinyl-buffer": "^1.0.0",
-    "vinyl-source-stream": "1.1.*",
-    "vue": "^2.4.1",
+    "babel-eslint": "latest",
+    "babel-plugin-transform-runtime": "^6.23.0",
+    "babel-preset-es2015": "latest",
+    "babelify": "latest",
+    "browserify": "latest",
+    "dotenv": "latest",
+    "gulp": "latest",
+    "gulp-eslint": "latest",
+    "gulp-if": "latest",
+    "gulp-ignore": "latest",
+    "gulp-notify": "latest",
+    "gulp-pleeease": "latest",
+    "gulp-plumber": "latest",
+    "gulp-pug": "latest",
+    "gulp-rename": "latest",
+    "gulp-sass": "latest",
+    "gulp-sass-glob": "latest",
+    "gulp-uglify": "latest",
+    "gulp-util": "latest",
+    "gulp-watch": "latest",
+    "koko": "latest",
+    "read-config": "latest",
+    "reset-css": "latest",
+    "vinyl-buffer": "latest",
+    "vinyl-source-stream": "latest",
+    "vue": "^2.4.4",
     "vueify": "^9.4.1",
-    "vuex": "^2.4.0",
-    "watchify": "^3.9.0"
+    "vuex": "^2.4.1",
+    "watchify": "latest"
   },
   "babel": {
     "presets": [
-      "es2015",
-      "stage-1"
+      "es2015"
     ],
     "plugins": [
       "transform-runtime"

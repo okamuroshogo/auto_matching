@@ -8,10 +8,10 @@
   export default {
       name: 'root',
       computed: {
-          ...mapGetters([ 'sampleMessage' ])
+          // ...mapGetters([ 'sampleMessage' ])
       },
       methods: {
-          ...mapActions([ 'changeSampleName' ])
+          // ...mapActions([ 'changeSampleName' ])
       }
   }
 </script>
