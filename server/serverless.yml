@@ -54,9 +54,13 @@ functions:
   getTweetMan:
     handler: functions/get_tweet_man/handler.getTweetMan
     timeout: 30
+    events:
+      - schedule: rate(5 minitues)
   getTweetWoman:
     handler: functions/get_tweet_woman/handler.getTweetWoman
     timeout: 30
+    events:
+      - schedule: rate(5 minitues)
 
   twitter_session:
     handler: functions/twitter/index.handler
