@@ -1,13 +1,16 @@
 <template lang="pug">
   .detail
-    p おめでとうございます :tada:
-    p 写真はーと写真
+    p おめでとうございます 🎉
+    p 写真...はーと...写真
     p 店の写真
     p 店の名は
     p 店の住所
     p
       a.btn-reserve(href='') お店を予約する
-    p {{ sampleMessage }}
+    p #彼氏欲しい
+    p と
+    p #彼女ほしい人RT
+    p でつながりました！！
 </template>
 
 <script>
