@@ -23,7 +23,7 @@ provider:
   profile: auto_matching
 
 # you can overwrite defaults here
-  stage: dev
+  stage: ${opt:stage, self:custom.defaultStage}
   region: ap-northeast-1
   memorySize: 128
   timeout: 10
@@ -37,38 +37,37 @@ provider:
         - dynamodb:PutItem
       Resource: "*"
 
-# you can add statements to the Lambda function's IAM Role here
-#  iamRoleStatements:
-#    - Effect: "Allow"
-#      Action:
-#        - "s3:ListBucket"
-#      Resource: { "Fn::Join" : ["", ["arn:aws:s3:::", { "Ref" : "ServerlessDeploymentBucket" } ] ]  }
-#    - Effect: "Allow"
-#      Action:
-#        - "s3:PutObject"
-#      Resource:
-#        Fn::Join:
-#          - ""
-#          - - "arn:aws:s3:::"
-#            - "Ref" : "ServerlessDeploymentBucket"
-#            - "/*"
 
-# you can define service wide environment variables here
-#  environment:
-#    variable1: value1
-
-# you can add packaging information here
-#package:
-#  include:
-#    - include-me.js
-#    - include-me-dir/**
-#  exclude:
-#    - exclude-me.js
-#    - exclude-me-dir/**
+package:
+  exclude:
+    - .serverless
+    - .webpack
+    - coverage
+    - .babelrc
+    - .eslintignore
+    - .eslintrc
+    - .gitignore
+    - LICENSE
+    - package.json
+    - README.md
+    - serverless.yml
+    - webpack.config.js
+    - node_modules/.bin/*
+    - node_modules/aws-sdk/**
+    - email/**
+    - tests/**
+    - vebdor/**
+    - tmp/**
+    - bin/**
 
 functions:
-  hello:
-    handler: handler.hello
+  getTweetMan:
+    handler: get_tweet_man/handler.getTweetMan
+    timeout: 30
+  getTweetWoman:
+    handler: get_tweet_woman/handler.getTweetWoman
+    timeout: 30
+
 
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events
@@ -113,3 +112,25 @@ functions:
 #     NewOutput:
 #       Description: "Description for the output"
 #       Value: "Some output value"
+
+
+resources:
+  Resources:
+    TweetsDynamoDbTable:
+      Type: 'AWS::DynamoDB::Table'
+      DeletionPolicy: Retain
+      Properties:
+        AttributeDefinitions:
+          -
+            AttributeName: tweetID
+            AttributeType: N
+        KeySchema:
+          -
+            AttributeName: tweetID
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        TableName: "tweets-${self:provider.stage}"
+        StreamSpecification:
+          StreamViewType: KEYS_ONLY
