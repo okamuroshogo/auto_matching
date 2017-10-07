@@ -12,5 +12,5 @@
             "bb >= 10"
         ]
     },
-    "minifier": false
+    "minifier": true
 }

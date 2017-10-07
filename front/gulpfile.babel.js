@@ -2,8 +2,10 @@
 
 // import
 import gulp from 'gulp';
-import gutil from 'gutil';
+import gutil from 'gulp-util';
+import notify from 'gulp-notify';
 import source from 'vinyl-source-stream';
+import buffer from 'vinyl-buffer';
 import sass from 'gulp-sass';
 import sassGlob from 'gulp-sass-glob';
 import pleeease from 'gulp-pleeease';
@@ -11,14 +13,18 @@ import watchify from 'watchify';
 import browserify from 'browserify';
 import vueify from 'vueify';
 import babelify from 'babelify';
+import uglify from 'gulp-uglify';
 import pug from 'gulp-pug';
 import browserSync from 'browser-sync';
 import readConfig from 'read-config';
 import watch from 'gulp-watch';
 import RevLogger from 'rev-logger';
+import Koko from 'koko';
+require('dotenv').config({ silent: true });
 
 
 // const
+const PORT = process.env.PORT || null;
 const SRC = './src';
 const CONFIG = './src/config';
 const HTDOCS = '../public';
@@ -43,22 +49,18 @@ gulp.task('sass', () => {
 
 gulp.task('css', gulp.series('sass'));
 
+
 // js
-gulp.task('watchify', () => {
-    return watchify(browserify(`${SRC}/js/script.js`))
-        .transform(vueify)
-        .transform(babelify)
-        .bundle()
-        .on("error", function(err) {
-            gutil.log(err.message);
-            gutil.log(err.codeFrame);
-            this.emit('end');
-        })           
-        .pipe(source('script.js'))
-        .pipe(gulp.dest(`${DEST}/js`));
+gulp.task('browserify', () => {
+  bundleJs();
 });
 
-gulp.task('js', gulp.parallel('watchify'));
+gulp.task('watchify', () => {
+  bundleJs(true);
+});
+
+gulp.task('js', gulp.parallel('browserify'));
+
 
 // html
 gulp.task('pug', () => {
@@ -79,30 +81,61 @@ gulp.task('html', gulp.series('pug'));
 
 
 // serve
-gulp.task('browser-sync', () => {
-    browserSync({
-        server: {
-            baseDir: HTDOCS
-        },
-        startPath: `${BASE_PATH}/`,
-        ghostMode: false
-    });
+gulp.task('server', () => {
+  new Koko(DEST, {
+    openPath: (gutil.env.open ? '/' : null),
+    staticPort: (gutil.env.port || PORT || null),
+  }).start();
+});
 
-    watch([`${SRC}/scss/**/*.scss`], gulp.series('sass', browserSync.reload));
-    watch([`${SRC}/js/**/*.js`, `${SRC}/js/components**/*.vue`], gulp.series('watchify', browserSync.reload));
+
+// watch
+gulp.task('watch', () => {
+    watch([`${SRC}/scss/**/*.scss`], gulp.series('sass'));
+    // watch([`${SRC}/js/**/*.js`, `${SRC}/js/components**/*.vue`], gulp.series('watchify'));
+    gulp.series('watchify');
     watch([
         `${SRC}/pug/**/*.pug`,
         `${SRC}/config/meta.yml`
-    ], gulp.series('pug', browserSync.reload));
+    ], gulp.series('pug'));
 
     revLogger.watch((changed) => {
-        gulp.series('pug', browserSync.reload)();
+        gulp.series('pug')();
     });
 });
 
-gulp.task('serve', gulp.series('browser-sync'));
+gulp.task('serve', gulp.series('server'));
 
 
 // default
 gulp.task('build', gulp.parallel('css', 'js', 'html'));
-gulp.task('default', gulp.series('build', 'serve'));
+gulp.task('default', gulp.series('build', 'serve', 'watch'));
+
+
+// functions
+function bundleJs(watching = false) {
+  const entries = `${SRC}/js/script.js`;
+  const paths = ['./node_modules'];
+  const dest_file = 'script.js';
+  const dest_path = `${DEST}/js`;
+  const b = browserify({
+    entries: entries,
+    paths: paths,
+    transform: [babelify, vueify],
+    plugin: watching ? [watchify] : null,
+  });
+  b.on('update', () => {
+    console.log('scripts update...');
+    bundler();
+  });
+  function bundler() {
+    return b.bundle()
+      .on('error', notify.onError('<%= error.message %>'))
+      .pipe(source(dest_file))
+      .pipe(buffer())
+      .pipe(uglify({ output: { comments: /^!/ }}))
+      .pipe(gulp.dest(dest_path))
+      .pipe(notify('scripts bundle completed!'));
+  }
+  return bundler();
+}
