@@ -8,7 +8,7 @@ aws.config.region = 'ap-northeast-1';
 
 
 // ここだけ、関数で違う
-const targetWord = process.env.TARGET_WORD_MAN;
+const targetWord = process.env.TARGET_WORD_WOMAN;
 const gender = 2;
 
 
@@ -70,8 +70,8 @@ const getTweet = () => {
   });
 };
 
-
-module.exports.getTweetMan = (event, context, callback) => {
+// TODO ここも男女で違う
+module.exports.getTweetWoman = (event, context, callback) => {
   getTweet()
 };
 
