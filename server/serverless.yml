@@ -81,6 +81,20 @@ functions:
           path: twitter/callback
           method: get
 
+  reservationStatusAPI:
+    handler: functions/reservation_status/index.handler
+    events:
+      - http:
+          path: api/v1/reservation_status
+          method: get
+
+  matchingCountAPI:
+    handler: functions/matching_count/index.handler
+    events:
+      - http:
+          path: api/v1/matching_count
+          method: get
+
 resources:
   Resources:
     MatchingDynamoDbTable:
