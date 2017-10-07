@@ -2,6 +2,8 @@
 
 require('dotenv').config();
 
+const getMatchingData = require('get_matching_data');
+
 const url = 'http://kamatte.cc/';
 const site_name = 'kamatte';
 const meta_description = 'description';
@@ -51,13 +53,15 @@ const genHtml = ({ id, title }) => `
 exports.handler = (event, context, callback) => {
   console.log(event.pathParameters);
   const id = event.pathParameters.id;
-  const title = 'fuga';
-  const response = {
-    statusCode: 200,
-    headers: {
-      'Content-Type': 'text/html',
-    },
-    body: genHtml({ id, title }),
-  };
-  callback(null, response);
+  getMatchingData(id).then((data) => {
+    const title = 'fuga';
+    const response = {
+      statusCode: 200,
+      headers: {
+        'Content-Type': 'text/html',
+      },
+      body: genHtml({ id, title }),
+    };
+    callback(null, response);
+  });
 };
