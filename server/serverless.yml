@@ -35,6 +35,8 @@ provider:
         - dynamodb:GetItem
         - dynamodb:DescribeTable
         - dynamodb:PutItem
+        - dynamodb:Scan
+        - dynamodb:DeleteItem
       Resource: "*"
 
 # you can add statements to the Lambda function's IAM Role here
@@ -80,6 +82,20 @@ package:
     - webpack.config.js
 
 functions:
+  getTweetMan:
+    handler: functions/get_tweet_man/handler.getTweetMan
+    timeout: 30
+    events:
+      - schedule: rate(5 minutes)
+  getTweetWoman:
+    handler: functions/get_tweet_woman/handler.getTweetWoman
+    timeout: 30
+    events:
+      - schedule: rate(5 minutes)
+  matching:
+      handler: functions/matching/handler.createMatching
+      timeout: 30
+
   twitter_session:
     handler: functions/twitter/index.handler
     events:
@@ -112,3 +128,19 @@ resources:
           WriteCapacityUnits: 1
         TableName: "twitter-session-${self:provider.stage}"
 
+    TweetsDynamoDbTable:
+      Type: 'AWS::DynamoDB::Table'
+      DeletionPolicy: Retain
+      Properties:
+        AttributeDefinitions:
+          -
+            AttributeName: tweetID
+            AttributeType: N
+        KeySchema:
+          -
+            AttributeName: tweetID
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        TableName: "tweets-${self:provider.stage}"
