@@ -52,10 +52,10 @@ package:
 
 functions:
   getTweetMan:
-    handler: get_tweet_man/handler.getTweetMan
+    handler: functions/get_tweet_man/handler.getTweetMan
     timeout: 30
   getTweetWoman:
-    handler: get_tweet_woman/handler.getTweetWoman
+    handler: functions/get_tweet_woman/handler.getTweetWoman
     timeout: 30
 
   twitter_session:
