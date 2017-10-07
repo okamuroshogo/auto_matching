@@ -10,14 +10,13 @@ const stage = process.env.stage;
 function getItemById(id) {
   const params = {
     Key: {
-     'id': {
-       S: id
-      }
+     'id': id
     }, 
-    TableName: `matching-${stage}`
+    //TableName: `matching-${stage}`
+    TableName: `matching-dev`
   };
   return new Promise((resolve, reject) => {
-    dynamo.getItem(params, (err, data) => {
+    dynamo.get(params, (err, data) => {
       if (err) {
         console.error('dynamodb get error');
         console.error(err.message);
