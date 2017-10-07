@@ -34,7 +34,7 @@ provider:
         - dynamodb:GetItem
         - dynamodb:DescribeTable
         - dynamodb:PutItem
-        - dynamodb:Scan
+        - dynamodb:Query
         - dynamodb:DeleteItem
       Resource: "*"
 
@@ -88,18 +88,22 @@ resources:
       Properties:
         AttributeDefinitions:
           -
-            AttributeName: tweetID
+            AttributeName: gender
             AttributeType: N
-        KeySchema:
           -
             AttributeName: tweetID
+            AttributeType: S
+        KeySchema:
+          -
+            AttributeName: gender
             KeyType: HASH
+          -
+            AttributeName: tweetID
+            KeyType: RANGE
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
         TableName: "tweets-${self:provider.stage}"
-        StreamSpecification:
-          StreamViewType: KEYS_ONLY
     TwitterDynamoDbTable:
           Type: 'AWS::DynamoDB::Table'
           DeletionPolicy: Retain
