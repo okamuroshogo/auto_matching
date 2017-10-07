@@ -29,9 +29,9 @@ const genHtml = ({ id, title }) => `
     <meta property="og:site_name" content=${site_name}>
     <meta property="og:description" content=${(og_description || meta_description)}>
     <meta property="og:image" content=${share_image}>
-    <meta property="og:image:width", content=${og_image_width}>
-    <meta property="og:image:height", content=${og_image_height}>
-    <meta property="fb:app_id", content=${fb_appid}>
+    <meta property="og:image:width" content=${og_image_width}>
+    <meta property="og:image:height" content=${og_image_height}>
+    <meta property="fb:app_id" content=${fb_appid}>
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content=${title}>
     <meta name="twitter:description" content=${(tw_description || meta_description)}>
