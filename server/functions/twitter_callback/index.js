@@ -22,34 +22,48 @@ exports.handler = (event, context, callback) => {
 
   const data = event.queryStringParameters;
   const roomID = data.roomID - 0;
+  let isReservation = false;
+  let reservationURL = "";
   fetchToken(oauth_token).then(function(dynamo) { 
     return accessToken(dynamo.Item.request_token, dynamo.Item.request_secret, oauth_verifier);
   }).then(function (token) {
     return userAuth(token, roomID);
-  }).then((item) => {
+  }).then((dataHash) => {
     const userID = data.userID;
-      console.log(userID);
-      console.log(item.user_id1);
-    if (userID === item.user_id1) {
+    if (('Item' in dataHash) && (userID === dataHash.Item.user_id1)) {
       console.log('user1');
+      isReservation = dataHash.Item.user_status2;
+      reservationURL = dataHash.Item.reservationURL;
       return updateStatus('user_status1', roomID);
-    } else if (userID === item.user_id2) {
+    } else if (('Item' in dataHash) && (userID === dataHash.Item.user_id2)) {
       console.log('user2');
+      isReservation = dataHash.Item.user_status2;
+      reservationURL = dataHash.Item.reservationURL;
       return updateStatus('user_status2', roomID);
     } else {
       console.log('user3');
       const response = {
         statusCode: 200,
-        body: JSON.stringify({message: 'ないぜーーー'})
+        body: JSON.stringify({message: 'nisemono user'})
       };
       callback(null, response);
     }
   }).then(() => {
+    if (isReservation) {
+      const response = {
+        statusCode: 301,
+        headers: {},
+        body: '',
+      };
+      response.headers['location'] = reservationURL;
+      callback(null, response);
+    } else {
       const response = {
         statusCode: 200,
-        body: JSON.stringify({message: '成功'})
+        body: JSON.stringify({message: 'success'})
       };
       callback(null, response);
+    }
   }).catch(function (error) {
     console.error('error');
     console.error(error);
@@ -108,7 +122,7 @@ function userAuth(token, roomID) {
       } else {
         console.log('dataaaaa');
         console.log(data);
-        resolve(data.Item);
+        resolve(data);
       }
     });
   });
@@ -120,13 +134,6 @@ function updateStatus(updateColumn, roomID) {
       Key:{
         id: roomID
       },
-//      ExpressionAttributeNames: {
-//        '#n': 'status'
-//      },
-//      UpdateExpression: "set #user =  :user",
- //     ExpressionAttributeValues:{
- //         `:${updateColumn}`: true
- //    },
       ReturnValues:"UPDATED_NEW"
   };
   
@@ -138,30 +145,16 @@ function updateStatus(updateColumn, roomID) {
   console.log('params');
   console.log(params);
 
-  
-  dynamo.update(params, function (err, data) {
+  return new Promise(function (resolve, reject) {
+    dynamo.update(params, function (err, data) {
       if (err) {
-          console.log(err);
+        console.log(err);
+        reject(err);
       } else {
-          console.log(data);
+        console.log(data);
+        resolve();
       }
+    });
   });
 }
-    //dynamo.put({
-    //  TableName: 'twitter-profile-dev',
-    //  Item:{
-    //    uid : userID,
-    //    screen_name : token.results.screen_name,
-    //    secret : token.accessToken,
-    //    token : token.accessTokenSecret
-    //  },
-    //   "ConditionExpression" : "attribute_not_exists(uid)"
-    //}, function (err, result){
-    //  if (err){
-    //    console.log("There was a database error:");
-    //    reject(err);
-    //    return;
-    //  }
-    //  resolve();
-    //});
 
