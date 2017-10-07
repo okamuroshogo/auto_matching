@@ -5,6 +5,50 @@ const s3 = new aws.S3();
 const fs = require('fs');
 const uuid = require('uuid');
 const exec = require('child_process').exec;
+const request = require('request');
+const apiUrl = `http://webservice.recruit.co.jp/hotpepper/gourmet/v1/?key=${process.env.HOT_API_KEY}&large_area=Z011&format=json`;
+
+
+function getRandomInt(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+
+
+const checkReservation = (id) => {
+  return new Promise((resolve, reject) => {
+    const reservationUrl = `https://www.hotpepper.jp/str${id}/yoyaku`;
+    console.log(reservationUrl);
+    request.get({url: reservationUrl, followRedirect: false}, (err, res, data2) => {
+      console.log(res.statusCode);
+      if (res.statusCode === 200) {
+        resolve(true)
+      } else {
+        resolve(false)
+      }
+    })
+  })
+};
+
+const searchShop = () => {
+  return new Promise((resolve, reject) => {
+    request.get(apiUrl, (err, data) => {
+      if (err) {
+        console.log(err);
+      }
+      const body = JSON.parse(data.body);
+      const shop = body.results.shop[getRandomInt(0, 9)];
+      checkReservation(shop.id).then((hasReservation) => {
+        if (hasReservation) {
+          resolve(shop)
+        }
+        else {
+          resolve(body.results.shop[getRandomInt(0, 9)])
+        }
+      })
+    })
+  })
+};
 
 
 require('dotenv').config();
@@ -91,23 +135,40 @@ const createMatching = () => {
     .then((users) => {
       console.log('users');
       console.log(users);
-
-      const params = {
-        TableName: `matching-${process.env.STAGE}`,
-        Item: {
-          id: uuid.v4(),
-          userID1: users[0].userID,
-          userID2: users[1].userID,
-          tweetID1: users[0].tweetID,
-          tweetID2: users[1].tweetID,
-          screenName1: users[0].screenName,
-          screenName2: users[1].screenName,
-          userImageUrl1: users[0].userImageUrl,
-          userImageUrl2: users[1].userImageUrl,
-        }
-
-      };
       console.log('users');
+
+      searchShop().then((shop) => {
+
+        const params = {
+          TableName: `matching-${process.env.STAGE}`,
+          Item: {
+            id: uuid.v4(),
+            userID1: users[0].userID,
+            userID2: users[1].userID,
+            tweetID1: users[0].tweetID,
+            tweetID2: users[1].tweetID,
+            screenName1: users[0].userScreenName,
+            screenName2: users[1].userScreenName,
+            userImageUrl1: users[0].userImageUrl,
+            userImageUrl2: users[1].userImageUrl,
+            userStatus1: 0,
+            userStatus2: 0,
+            shopName: shop.name,
+            shopUrl: shop.urls.pc,
+            shopReservationUrl: `https://www.hotpepper.jp/str${shop.id}/yoyaku`,
+            shopAddress: shop.address,
+          }
+        };
+
+
+        create(params).then(() => {
+
+        });
+
+
+
+      });
+
     })
     .catch((err) => {
       console.log('catch error');
