@@ -1,0 +1,13 @@
+ul
+  li
+    a.twitter-share-button(href="https://twitter.com/share" data-url=share_data[:url] data-text=share_data[:tw_description] data-hashtags=share_data[:tw_hashtags] data-lang="ja")
+      | tweet
+  li
+    div.fb-like(data-href=share_data[:url] data-layout="button_count" data-action="like" data-show-faces="false" data-share="true")
+    div.fb-share(data-href=share_data[:url] data-layout="button_count" data-show-faces="false")
+    div.fb-share-button(data-href=share_data[:url] data-layout="box_count" data-show-faces="false")
+  li
+    script.
+      new media_line_me.LineButton({"pc":false,"lang":"ja","type":"e","text":"#{share_data[:tw_description]}","withUrl":true});
+    a(href="line://msg/text/#{URI.escape(share_data[:tw_description] + ' ' + share_data[:url])}")
+      img(src="//media.line.me/img/button/ja/36x60.png" width="36" height="60" alt="LINEで送る")
