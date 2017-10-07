@@ -1,6 +1,8 @@
-export const changeSampleName = ({ commit }) => {
-    const array = [ 'hoge', 'moge', 'foo', 'bar' ];
-    commit('setSampleName', {
-        name: array[Math.floor(Math.random() * array.length)]
-    });
+export const getMatchingCount = ({ commit }) => {
+    fetch('/api/count.json', {})
+        .then(() => {
+            commit('setMatchingCount', {
+                count: 10
+            });
+        });
 };

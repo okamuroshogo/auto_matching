@@ -11,10 +11,13 @@
   export default {
     name: 'root',
     computed: {
-      ...mapGetters([ 'matchingCount' ])
+      ...mapGetters([])
     },
     methods: {
       ...mapActions([])
+    },
+    created() {
+      this.$store.dispatch('getMatchingCount')
     }
   }
 </script>

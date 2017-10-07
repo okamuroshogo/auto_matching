@@ -13,7 +13,7 @@
   export default {
     name: 'detail',
     computed: {
-      ...mapGetters([ 'sampleMessage' ])
+      ...mapGetters([])
     },
     methods: {
       ...mapActions([])
