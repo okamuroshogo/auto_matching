@@ -4,13 +4,3 @@ export const changeSampleName = ({ commit }) => {
         name: array[Math.floor(Math.random() * array.length)]
     });
 };
-
-
-
-
-
-
-
-
-
-

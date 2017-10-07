@@ -6,12 +6,12 @@
   import { mapGetters, mapActions } from 'vuex';
 
   export default {
-      name: 'root',
-      computed: {
-          // ...mapGetters([ 'sampleMessage' ])
-      },
-      methods: {
-          // ...mapActions([ 'changeSampleName' ])
-      }
+    name: 'root',
+    computed: {
+      ...mapGetters([ 'sampleMessage' ])
+    },
+    methods: {
+      ...mapActions([ 'changeSampleName' ])
+    }
   }
 </script>
