@@ -34,6 +34,7 @@ provider:
         - dynamodb:GetItem
         - dynamodb:DescribeTable
         - dynamodb:PutItem
+        - dynamodb:UpdateItem
         - dynamodb:Query
         - dynamodb:DeleteItem
       Resource: "*"
@@ -82,22 +83,22 @@ functions:
 
 resources:
   Resources:
-    TwitterProfileDynamoDbTable:
+    MatchingDynamoDbTable:
       Type: 'AWS::DynamoDB::Table'
       DeletionPolicy: Retain
       Properties:
         AttributeDefinitions:
           -
-            AttributeName: uid
-            AttributeType: S
+            AttributeName: id
+            AttributeType: N
         KeySchema:
           -
-            AttributeName: uid
+            AttributeName: id
             KeyType: HASH
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
-        TableName: "twitter-profile-${self:provider.stage}"
+        TableName: "matching-${self:provider.stage}"
 
     TweetsDynamoDbTable:
       Type: 'AWS::DynamoDB::Table'
