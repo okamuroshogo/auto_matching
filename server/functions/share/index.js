@@ -2,7 +2,6 @@
 
 require('dotenv').config();
 
-const title = '';
 const url = 'http://kamatte.cc/';
 const site_name = 'kamatte';
 const meta_description = 'description';
@@ -15,7 +14,7 @@ const tw_description = 'description';
 const tw_site = '@hoge';
 const tw_creator = '@hoge';
 
-const html = `
+const genHtml = ({ id, title }) => `
 <!DOCTYPE html>
 <html>
   <head>
@@ -41,19 +40,23 @@ const html = `
     <meta name="twitter:creator" content=${tw_creator}>
   </head>
   <body>
-    hoge
+    <script>
+      location.href = '/share?token=${id}'
+    </script>
   </body>
 </html>
 `;
 
 exports.handler = (event, context, callback) => {
   console.log(event.pathParameters);
+  const id = 'hoge';
+  const title = 'fuga';
   const response = {
     statusCode: 200,
     headers: {
       'Content-Type': 'text/html',
     },
-    body: html,
+    body: genHtml({ id, title }),
   };
   callback(null, response);
 };
