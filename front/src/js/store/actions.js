@@ -6,3 +6,13 @@ export const getMatchingCount = ({ commit }) => {
             });
         });
 };
+
+export const getDetail = ({ commit }, params) => {
+    const token = params.token;
+    fetch(`/api/detail.json?token=${token}`, {})
+        .then(() => {
+            commit('setMatchingCount', {
+                count: 10
+            });
+        });
+};

@@ -8,6 +8,7 @@
 </template>
 
 <script>
+  import qs from 'querystring';
   import { mapGetters, mapActions } from 'vuex';
 
   export default {
@@ -17,6 +18,15 @@
     },
     methods: {
       ...mapActions([])
+    },
+    created() {
+      const locationHash = (location.hash || '').replace(/^#/, '');
+      const locationSearch = (location.search || '').replace(/^\?/, '');
+      const locationParams = qs.parse(locationSearch);
+
+      this.$store.dispatch('getDetail', {
+        token: locationParams.token
+      });
     }
   }
 </script>

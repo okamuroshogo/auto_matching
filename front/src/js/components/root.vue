@@ -17,7 +17,7 @@
       ...mapActions([])
     },
     created() {
-      this.$store.dispatch('getMatchingCount')
+      this.$store.dispatch('getMatchingCount');
     }
   }
 </script>
