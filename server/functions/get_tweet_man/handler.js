@@ -41,8 +41,8 @@ const put = (tweetParams) => {
 const getTweet = () => {
   const stream = client.stream('statuses/filter', {track: targetWord});
   stream.on('data', function (event) {
-    console.log(event.id);
-    console.log(event.user.id);
+    console.log(event.id_str);
+    console.log(event.user.id_str);
     console.log(event.user.created_at);
     console.log(event.user.name);
     console.log(event.user.screen_name);
@@ -52,8 +52,8 @@ const getTweet = () => {
     const tweetParams = {
       TableName: `tweets-${process.env.STAGE}`,
       Item: {
-        tweetID: event.id,
-        userID: event.user.id,
+        tweetID: event.id_str,
+        userID: event.user.id_str,
         createdAt: event.user.created_at,
         userName: event.user.name,
         userScreenName: event.user.screen_name,
