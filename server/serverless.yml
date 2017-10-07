@@ -75,6 +75,17 @@ functions:
           path: twitter/callback
           method: get
 
+  share:
+    handler: functions/share/index.handler
+    events:
+      - http:
+          path: share/{id}
+          method: get
+          request:
+            parameters:
+              paths:
+                id: true
+
 resources:
   Resources:
     TwitterProfileDynamoDbTable:
@@ -127,6 +138,3 @@ resources:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
         TableName: "twitter-session-${self:provider.stage}"
-
-
-
