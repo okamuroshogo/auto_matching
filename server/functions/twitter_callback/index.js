@@ -10,17 +10,9 @@ const aws = require('aws-sdk');
 const dynamo = new aws.DynamoDB.DocumentClient({region: 'ap-northeast-1'});
 
 exports.handler = (event, context, callback) => {
-  const oauth_token = event.queryStringParameters.oauth_token;
-  const oauth_verifier = event.queryStringParameters.oauth_verifier;
-  const response = {
-    statusCode: 200,
-    body: JSON.stringify({
-      message: process.env.TESTMESSAGE,
-      input: event,
-    }),
-  };
-
   const data = event.queryStringParameters;
+  const oauth_token = data.oauth_token;
+  const oauth_verifier = data.oauth_verifier;
   const roomID = data.roomID - 0;
   let isReservation = false;
   let reservationURL = "";

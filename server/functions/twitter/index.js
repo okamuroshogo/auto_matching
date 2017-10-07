@@ -15,7 +15,7 @@ exports.handler = (event, context, callback) => {
   twitter = new twitterAPI({
   consumerKey: process.env.CONSUMER_KEY,
   consumerSecret: process.env.CONSUMER_SECRET,
-  callback: `https:\/\/${event.headers.Host}/dev/twitter/callback?userID=1234&roomID=4321`
+  callback: `${process.env.TWITTER_CALLBACK}?userID=1234&roomID=4321`
   });
   console.log('twitter');
   console.log(twitter);
