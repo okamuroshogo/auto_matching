@@ -1,5 +1,10 @@
 <template lang="pug">
-  .detail(v-on:click="changeSampleName") {{ sampleMessage }}
+  .detail
+    h1 auto_matching
+    p ogp
+    p 店の名は
+    p hashtag
+    p {{ sampleMessage }}
 </template>
 
 <script>
@@ -11,7 +16,7 @@
       ...mapGetters([ 'sampleMessage' ])
     },
     methods: {
-      ...mapActions([ 'changeSampleName' ])
+      ...mapActions([])
     }
   }
 </script>

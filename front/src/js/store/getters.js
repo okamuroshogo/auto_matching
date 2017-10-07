@@ -1,3 +1,3 @@
 export const matchingCount = (state) => {
-    return 100000;
+    return 100000; // TODO: APIからとってくる
 };
