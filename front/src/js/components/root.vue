@@ -1,6 +1,6 @@
 <template lang="pug">
   .root
-    h1 auto_matching
+    h1 kamatte
     p 本日のマッチング数
     p {{ matchingCount }} 件！
 </template>

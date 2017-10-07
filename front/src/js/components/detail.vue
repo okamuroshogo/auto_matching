@@ -1,6 +1,6 @@
 <template lang="pug">
   .detail
-    h1 auto_matching
+    h1 kamatte
     p ogp
     p 店の名は
     p hashtag
