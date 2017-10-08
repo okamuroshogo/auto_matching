@@ -6,11 +6,12 @@
 </template>
 
 <script>
-  import { mapGetters, mapActions } from 'vuex';
+  import { mapState, mapGetters, mapActions } from 'vuex';
 
   export default {
     name: 'root',
     computed: {
+      ...mapState(['matchingCount']),
       ...mapGetters([])
     },
     methods: {
