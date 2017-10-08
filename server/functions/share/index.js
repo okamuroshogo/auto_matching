@@ -4,22 +4,22 @@ require('dotenv').config();
 
 const getMatchingData = require('./get_matching_data');
 
-const url = 'http://kamatte.cc/';
-const site_name = 'kamatte';
-const meta_description = 'description';
+const url = 'http://www.kamatte.cc/';
+const site_name = 'kamatte(かまって)';
+const meta_description = 'かまってちゃんのための「勝手にマッチングしてお店の手配まで」するサービス';
 const meta_keywords = ['kamatte'];
 
 const share_image = (id) => {
   return `https:\/\/www.kamatte.cc\/ogp\/${id}.png`;
 };
 
-const og_description = 'description';
+const og_description = 'かまってちゃんのための「勝手にマッチングしてお店の手配まで」するサービス';
 const og_image_width = 1200;
 const og_image_height = 630;
 const fb_appid = '';
-const tw_description = 'description';
-const tw_site = '@hoge';
-const tw_creator = '@hoge';
+const tw_description = 'かまってちゃんのための「勝手にマッチングしてお店の手配まで」するサービス';
+const tw_site = '@kamatte_cc';
+const tw_creator = '@kamatte_cc';
 
 const genHtml = ({ id, title }) => `
 <!DOCTYPE html>
@@ -58,7 +58,7 @@ exports.handler = (event, context, callback) => {
   console.log(event.pathParameters);
   const id = event.pathParameters.id;
   getMatchingData(id).then((data) => {
-    const title = 'fuga';
+    const title = 'kamatte(かまって)';
     const response = {
       statusCode: 200,
       headers: {
