@@ -1,5 +1,6 @@
 // const domain = 'https://wqcgcdtbn5.execute-api.ap-northeast-1.amazonaws.com/dev';
-const domain = 'https://75n6tmmj4d.execute-api.ap-northeast-1.amazonaws.com/dev';
+// const domain = 'https://75n6tmmj4d.execute-api.ap-northeast-1.amazonaws.com/dev';
+const domain = '';
 
 export const getMatchingCount = ({ commit }) => {
     fetch(domain + '/api/v1/matching_count', { mode: 'cors' })
