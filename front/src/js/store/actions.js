@@ -12,9 +12,9 @@ export const getMatchingCount = ({ commit }) => {
 
 export const getDetailData = ({ commit }, params) => {
     const id = params.id;
-    fetch(domain + `/api/v1/reservation_status?roomID=${id}`, { mode: 'cors' })
-        .then((data) => {
-            console.log('res: ', data);
+    fetch(domain + `/api/v1/reservation_status?matching_id=${id}`, { mode: 'cors' })
+        .then((res) => {
+            // console.log('res: ', res.body.id);
             commit('setDetailData', {
                 id: "fb294d07-011f-49d8-a23d-670228aca7c5",
                 screenName1: "ttsh_ymmt",
