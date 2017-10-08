@@ -72,7 +72,7 @@ functions:
     handler: functions/twitter/index.handler
     events:
       - http:
-          path: api/v1/twitter_session/{id}
+          path: twitter_session/{id}
           method: get
           cors: true
 

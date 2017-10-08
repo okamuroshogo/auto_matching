@@ -13,7 +13,7 @@ exports.handler = (event, context, callback) => {
   const data = event.queryStringParameters;
   const oauth_token = data.oauth_token;
   const oauth_verifier = data.oauth_verifier;
-  const roomID = data.matching_id - 0;
+  const roomID = data.matching_id;
   let isReservation = false;
   let reservationURL = "";
   fetchToken(oauth_token).then(function(dynamo) { 
@@ -51,9 +51,11 @@ exports.handler = (event, context, callback) => {
       callback(null, response);
     } else {
       const response = {
-        statusCode: 200,
-        body: JSON.stringify({message: 'success'})
+        statusCode: 301,
+        headers: {},
+        body: '',
       };
+      response.headers['location'] = `https:\/\/www.kamatte.cc\/detail\/${roomID}`;
       callback(null, response);
     }
   }).catch(function (error) {

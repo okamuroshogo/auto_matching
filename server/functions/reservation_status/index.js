@@ -5,7 +5,7 @@ const dynamo = new aws.DynamoDB.DocumentClient({region: 'ap-northeast-1'});
 
 exports.handler = (event, context, callback) => {
   const data = event.queryStringParameters;
-  const roomID = data.roomID - 0;
+  const roomID = data.matching_id;
 
   getItem(roomID).then((item) => {
     const response = {
