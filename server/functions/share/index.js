@@ -44,7 +44,7 @@ const genHtml = ({ id, title }) => `
   </head>
   <body>
     <script>
-      location.href = '/detail?token=${id}';
+      location.href = '/detail?id=${id}';
     </script>
   </body>
 </html>
