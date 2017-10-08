@@ -26,7 +26,7 @@ exports.handler = (event, context, callback) => {
 function getItem(roomID) {
   return new Promise(function (resolve, reject) {
     var params = {
-      TableName : 'matching-dev',
+      TableName : `matching-${process.env.STAGE}`,
       Key: {
         'id': roomID
       }

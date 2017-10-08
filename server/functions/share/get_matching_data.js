@@ -12,8 +12,8 @@ function getItemById(id) {
     Key: {
      'id': id
     }, 
-    //TableName: `matching-${stage}`
-    TableName: `matching-dev`
+    TableName: `matching-${stage}`
+    //TableName: `matching-dev`
   };
   return new Promise((resolve, reject) => {
     dynamo.get(params, (err, data) => {

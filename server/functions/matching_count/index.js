@@ -23,7 +23,7 @@ exports.handler = (event, context, callback) => {
 function descItem() {
   return new Promise(function (resolve, reject) {
     const params = {
-      TableName: 'matching-dev'
+      TableName: `matching-${process.env.STAGE}`
     };
     dynamodb.describeTable(params, (err, data) => {
       if (err){
