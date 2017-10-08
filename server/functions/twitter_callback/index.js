@@ -35,9 +35,11 @@ exports.handler = (event, context, callback) => {
     } else {
       console.log('user3');
       const response = {
-        statusCode: 200,
-        body: JSON.stringify({message: 'nisemono user'})
+        statusCode: 301,
+        headers: {},
+        body: '',
       };
+      response.headers['location'] = `https://www.kamatte.cc/detail/${roomID}?error=1`;
       callback(null, response);
     }
   }).then(() => {
