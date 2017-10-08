@@ -22,16 +22,16 @@ exports.handler = (event, context, callback) => {
     return userAuth(token, roomID);
   }).then((dataHash) => {
     const userID = data.userID;
-    if (('Item' in dataHash) && (userID === dataHash.Item.user_id1)) {
+    if (('Item' in dataHash) && (userID === dataHash.Item.userID1)) {
       console.log('user1');
-      isReservation = dataHash.Item.user_status2;
+      isReservation = dataHash.Item.userStatus2;
       reservationURL = dataHash.Item.reservationURL;
-      return updateStatus('user_status1', roomID);
-    } else if (('Item' in dataHash) && (userID === dataHash.Item.user_id2)) {
+      return updateStatus('userStatus1', roomID);
+    } else if (('Item' in dataHash) && (userID === dataHash.Item.userID2)) {
       console.log('user2');
-      isReservation = dataHash.Item.user_status2;
+      isReservation = dataHash.Item.userStatus2;
       reservationURL = dataHash.Item.reservationURL;
-      return updateStatus('user_status2', roomID);
+      return updateStatus('userStatus2', roomID);
     } else {
       console.log('user3');
       const response = {

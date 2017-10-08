@@ -8,7 +8,11 @@ const url = 'http://kamatte.cc/';
 const site_name = 'kamatte';
 const meta_description = 'description';
 const meta_keywords = ['kamatte'];
-const share_image = 'http://localhost/img/ogp.png';
+
+const share_image = (id) => {
+  return `https:\/\/www.kamatte.cc\/ogp\/${id}.png`;
+};
+
 const og_description = 'description';
 const og_image_width = 1200;
 const og_image_height = 630;
@@ -31,14 +35,14 @@ const genHtml = ({ id, title }) => `
     <meta property="og:title" content=${title}>
     <meta property="og:site_name" content=${site_name}>
     <meta property="og:description" content=${og_description}>
-    <meta property="og:image" content=${share_image}>
+    <meta property="og:image" content=${share_image(id)}>
     <meta property="og:image:width" content=${og_image_width}>
     <meta property="og:image:height" content=${og_image_height}>
     <meta property="fb:app_id" content=${fb_appid}>
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content=${title}>
     <meta name="twitter:description" content=${tw_description}>
-    <meta name="twitter:image" content=${share_image}>
+    <meta name="twitter:image" content=${share_image(id)}>
     <meta name="twitter:site" content=${tw_site}>
     <meta name="twitter:creator" content=${tw_creator}>
   </head>
@@ -52,7 +56,7 @@ const genHtml = ({ id, title }) => `
 
 exports.handler = (event, context, callback) => {
   console.log(event.pathParameters);
-  const id = event.pathParameters.id - 0;
+  const id = event.pathParameters.id;
   getMatchingData(id).then((data) => {
     const title = 'fuga';
     const response = {

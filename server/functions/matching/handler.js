@@ -65,7 +65,7 @@ const uploadImage = (fileName) => {
     // s3.putObject({
     s3.upload({
       Bucket: `${process.env.OGP_BUCKET_NAME}`,
-      Key: fileName.replace('/tmp/', ''),
+      Key: `ogp/${fileName.replace('/tmp/', '')}`,
       Body: fs.createReadStream(fileName),
       ContentType: 'image/png',
       ACL: 'public-read'
