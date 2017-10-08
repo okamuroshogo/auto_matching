@@ -13,7 +13,7 @@ exports.handler = (event, context, callback) => {
   const data = event.queryStringParameters;
   const oauth_token = data.oauth_token;
   const oauth_verifier = data.oauth_verifier;
-  const roomID = data.roomID - 0;
+  const roomID = data.matching_id - 0;
   let isReservation = false;
   let reservationURL = "";
   fetchToken(oauth_token).then(function(dynamo) { 

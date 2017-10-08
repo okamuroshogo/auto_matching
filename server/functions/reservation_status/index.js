@@ -10,7 +10,10 @@ exports.handler = (event, context, callback) => {
   getItem(roomID).then((item) => {
     const response = {
       statusCode: 200,
-      body: JSON.stringify({matching: item})
+      body: JSON.stringify({matching: item}),
+      headers: {
+        "Access-Control-Allow-Origin" : "*" // Required for CORS support to work
+      }
     };
     callback(null, response);
   }).catch(function (error) {

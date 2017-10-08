@@ -12,10 +12,14 @@ exports.handler = (event, context, callback) => {
   console.log(process);
   console.log(event);
   console.log(context);
+  const matchingID = event.path.split('/').pop();
+  console.log('matching id');
+  console.log(matchingID);
+
   twitter = new twitterAPI({
-  consumerKey: process.env.CONSUMER_KEY,
-  consumerSecret: process.env.CONSUMER_SECRET,
-  callback: `${process.env.TWITTER_CALLBACK}?userID=1234&roomID=4321`
+    consumerKey: process.env.CONSUMER_KEY,
+    consumerSecret: process.env.CONSUMER_SECRET,
+    callback: `${process.env.TWITTER_CALLBACK}?matching_id=${matchingID}`
   });
   console.log('twitter');
   console.log(twitter);
