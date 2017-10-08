@@ -1,8 +1,8 @@
 <template lang="pug">
   .root
-    h1 kamatte
-    p 本日のマッチング数
-    p {{ matchingCount }} 件！
+    h1.logo kamatte
+    p マッチング数
+    p {{ matchingCount || 0 }} 件！
 </template>
 
 <script>
