@@ -39,7 +39,7 @@ exports.handler = (event, context, callback) => {
         headers: {},
         body: '',
       };
-      response.headers['location'] = `https://www.kamatte.cc/detail/${roomID}?error=1`;
+      response.headers['location'] = `https://www.kamatte.cc/detail/?id=${roomID}&error=1`;
       callback(null, response);
     }
   }).then(() => {
