@@ -1,6 +1,16 @@
 <template lang="pug">
   .detail
     p おめでとうございます 🎉
+    p いい感じのお店選んどきました！
+    p.shop-image(v-bind:style="'background-image:url(' + detailData.shopImageUrl + ')'")
+    //- p
+    //-   img(v-bind:src="detailData.shopImageUrl")
+    p {{ detailData.shopName }}
+    p.shop-address {{ detailData.shopAddress }}
+    p 18:00〜 ２名様
+    p
+      a.btn-reserve(v-bind:href="'/api/v1/twitter_session/' + detailData.id") お店を予約する
+    p ※外部ページへ飛びます
     p
       img(v-bind:src="detailData.userImageUrl1")
       | ...
@@ -8,14 +18,8 @@
       | ...
       img(v-bind:src="detailData.userImageUrl2")
     p
-      img(v-bind:src="detailData.shopImageUrl")
-    p {{ detailData.shopName }}
-    p
       a(v-bind:href="detailData.shopUrl") {{ detailData.shopUrl }}
-    p {{ detailData.shopAddress }}
     p {{ detailData.shopReservationUrl }}
-    p
-      a.btn-reserve(v-bind:href="'/api/v1/twitter_session/' + detailData.id") お店を予約する
     p #彼氏欲しい
     p と
     p #彼女ほしい人RT
