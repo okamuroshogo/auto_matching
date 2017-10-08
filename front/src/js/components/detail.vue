@@ -15,7 +15,7 @@
     p {{ detailData.shopAddress }}
     p {{ detailData.shopReservationUrl }}
     p
-      a.btn-reserve(href='') お店を予約する
+      a.btn-reserve(v-bind:href="'/api/v1/twitter_session/' + detailData.id") お店を予約する
     p #彼氏欲しい
     p と
     p #彼女ほしい人RT
