@@ -3,6 +3,5 @@ export const setMatchingCount = (state, { count }) => {
 };
 
 export const setDetailData = (state, data) => {
-    console.log(data);
     state.detailData = data;
 };

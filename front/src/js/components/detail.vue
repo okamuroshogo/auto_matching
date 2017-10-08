@@ -1,14 +1,19 @@
 <template lang="pug">
   .detail
     p おめでとうございます 🎉
-    p 写真...はーと...写真
-    p 店の写真
-    //- p state: {{ state }}
-    //- p detail: {{ detailData }}
-    //- p detail: {{ detailData.id }}
+    p
+      img(v-bind:src="detailData.userImageUrl1")
+      | ...
+      | ♡
+      | ...
+      img(v-bind:src="detailData.userImageUrl2")
+    p
+      img(v-bind:src="detailData.shopImageUrl")
     p {{ detailData.shopName }}
-    p {{ detailData.shopUrl }}
-    p 店の住所
+    p
+      a(v-bind:href="detailData.shopUrl") {{ detailData.shopUrl }}
+    p {{ detailData.shopAddress }}
+    p {{ detailData.shopReservationUrl }}
     p
       a.btn-reserve(href='') お店を予約する
     p #彼氏欲しい

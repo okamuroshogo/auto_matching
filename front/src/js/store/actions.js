@@ -23,6 +23,7 @@ export const getDetailData = ({ commit }, params) => {
                 shopName: "モンパルナス Montparnasse",
                 shopReservationUrl: "https://www.hotpepper.jp/strJ001155250/yoyaku",
                 shopUrl: "https://www.hotpepper.jp/strJ001155250/?vos=nhppalsa000016",
+                shopImageUrl: "https://imgfp.hotp.jp/IMGH/05/41/P027280541/P027280541_480.jpg",
                 tweetID1: "916803619877355520",
                 tweetID2: "916803810567249920",
                 userID1: "871270181225381889",

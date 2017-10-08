@@ -9,7 +9,7 @@ Vue.use(Vuex);
 
 const state = {
     matchingCount: 0,
-    detailData: { id: 1 }
+    detailData: {}
 };
 
 export default new Vuex.Store({
