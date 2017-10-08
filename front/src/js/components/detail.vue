@@ -45,6 +45,7 @@
       const locationParams = qs.parse(locationSearch);
 
       if (!locationParams.id) location.href = '/';
+      if (locationParams.error == 1) alert('マッチングしていないユーザーアカウントです。ログインしているアカウントを確認してください!');
 
       this.$store.dispatch('getDetailData', {
         id: locationParams.id
