@@ -1,8 +1,10 @@
 <template lang="pug">
   .root
-    h1.logo kamatte
-    p マッチング数
-    p {{ matchingCount || 0 }} 件！
+    //- h1.logo kamatte
+    div.top_image
+    div.matching_count
+      p マッチング数
+      p {{ matchingCount || 0 }} 件！
     | <a class="twitter-timeline"  href="https://twitter.com/hashtag/kamatte_cc" data-widget-id="916891364859641857">#kamatte_cc のツイート</a>
 </template>
 
