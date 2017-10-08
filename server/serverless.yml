@@ -38,6 +38,11 @@ provider:
         - dynamodb:Query
         - dynamodb:DeleteItem
       Resource: "*"
+    - Effect: Allow
+      Action:
+        - s3:*
+      Resource: "arn:aws:s3:::ogp.auto-matching.com/*"
+# TODO     Resource: "arn:aws:s3:::ogp.kamatte.cc/*"
 
 
 package:

@@ -1,19 +1,35 @@
 <template lang="pug">
   .detail
-    h1 kamatte
-    p ogp
-    p 店の名は
-    p hashtag
-    p {{ sampleMessage }}
+    p おめでとうございます 🎉
+    p
+      img(v-bind:src="detailData.userImageUrl1")
+      | ...
+      | ♡
+      | ...
+      img(v-bind:src="detailData.userImageUrl2")
+    p
+      img(v-bind:src="detailData.shopImageUrl")
+    p {{ detailData.shopName }}
+    p
+      a(v-bind:href="detailData.shopUrl") {{ detailData.shopUrl }}
+    p {{ detailData.shopAddress }}
+    p {{ detailData.shopReservationUrl }}
+    p
+      a.btn-reserve(v-bind:href="'/api/v1/twitter_session/' + detailData.id") お店を予約する
+    p #彼氏欲しい
+    p と
+    p #彼女ほしい人RT
+    p でつながりました！！
 </template>
 
 <script>
   import qs from 'querystring';
-  import { mapGetters, mapActions } from 'vuex';
+  import { mapState, mapGetters, mapActions } from 'vuex';
 
   export default {
     name: 'detail',
     computed: {
+      ...mapState(['detailData']),
       ...mapGetters([])
     },
     methods: {
@@ -24,8 +40,8 @@
       const locationSearch = (location.search || '').replace(/^\?/, '');
       const locationParams = qs.parse(locationSearch);
 
-      this.$store.dispatch('getDetail', {
-        token: locationParams.token
+      this.$store.dispatch('getDetailData', {
+        id: locationParams.id
       });
     }
   }

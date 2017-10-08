@@ -8,7 +8,8 @@ import * as getters from './getters';
 Vue.use(Vuex);
 
 const state = {
-    matchingCount: 0
+    matchingCount: 0,
+    detailData: {}
 };
 
 export default new Vuex.Store({
