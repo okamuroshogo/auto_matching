@@ -160,11 +160,7 @@ const getUser = (gender) => {
         reject(params);
         return
       }
-
-      deleteUser(data.Items[0])
-        .then(() => {
-          resolve(data.Items[0])
-        })
+      resolve(data.Items[0]);
     });
   });
 };
@@ -257,6 +253,8 @@ const createMatching = () => {
             tweetID2: users[1].tweetID,
             screenName1: users[0].userScreenName,
             screenName2: users[1].userScreenName,
+            userGender1: users[0].gender,
+            userGender2: users[1].gender,
             userImageUrl1: users[0].userImageUrl,
             userImageUrl2: users[1].userImageUrl,
             userStatus1: 0,
@@ -274,7 +272,18 @@ const createMatching = () => {
             params.Item["ogpUrl"] = ogpUrl;
             create(params).then(() => {
               postTweet(params.Item).then(() => {
+                deleteUser({
+                  gender: params.Item.userGender1,
+                  tweetID: user.tweetID1
+                })
+                  .then(() => {
+                    deleteUser({
+                      gender: params.Item.userGender2,
+                      tweetID: user.tweetID2
+                    }).then(() => {
 
+                    })
+                  })
               })
             }).catch((err) => {
               console.log('---------createError------');
