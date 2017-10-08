@@ -27,20 +27,28 @@ const createImage = (userImage1, userImage2, uuid) => {
     console.log(fileName);
     console.log(__dirname + '/baseImage.png');
 
+    userImage1 = userImage1.replace('normal', 'bigger');
+    userImage2 = userImage2.replace('normal', 'bigger');
+
     Jimp.read(__dirname + '/baseImage.png').then(function (base) {
 
       Jimp.read(userImage1).then(function (image1) {
         Jimp.read(userImage2).then(function (image2) {
           Jimp.read(__dirname + '/kareshi.png').then(function (kareshi) {
-            Jimp.read(__dirname + '/kareshi.png').then(function (kanojo) {
-              base.composite(kareshi, 0, 0)
-                .composite(kanojo, 0, 30)
-                .composite(image1, 0, 60)
-                .composite(image2, 0, 90)
-                .write(fileName, () => {
-                  console.log(fileName);
-                  resolve(fileName);
+            Jimp.read(__dirname + '/kanojo.png').then(function (kanojo) {
+              image1.scale(2.5, () => {
+                image2.scale(2.5, () => {
+                  base.composite(kareshi, 150, 500)
+                    .composite(kanojo, 700, 500)
+                    .composite(image1, 200, 200)
+                    .composite(image2, 800, 200)
+                    .write(fileName, () => {
+                      console.log(fileName);
+                      resolve(fileName);
+                    });
+
                 });
+              });
             })
           })
         })
@@ -218,7 +226,7 @@ const createMatching = () => {
           }
         };
 
-        createImage(params.Item.userImageUrl1, params.Item.userImageUrl1, params.Item.id).then((fileName) => {
+        createImage(params.Item.userImageUrl1, params.Item.userImageUrl2, params.Item.id).then((fileName) => {
           uploadImage(fileName).then((ogpUrl) => {
             params.Item["ogpUrl"] = ogpUrl;
             create(params).then(() => {
