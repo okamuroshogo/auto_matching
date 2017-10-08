@@ -216,10 +216,10 @@ const postTweet = (matching) => {
 
     const shareUrl = `https://www.kamatte.cc/share/${matching.id}`;
 
-
+    // TODO　コミットしない
     client.post('statuses/update',
-      // {status: `${toUser} \n【お店をご用意しました！】\n\nあなたの過去のツイートより勝手にマッチングし、お店もご用意させていただきました！🎉🎉\n\nそれでは、素敵なkamatteライフを！！ ${shareUrl} #kamatte_cc`},
-      {status: `${toUser} \n【お店をご用意しました！】\n\nあなたの過去のツイートより勝手にマッチングし、お店もご用意させていただきました！🎉🎉\n\n只今、大八耐に参加されている人のみでマッチングしています。 ${shareUrl}`},
+      // {status: `${toUser} \n【お店をご用意しました！】\n\nあなたの過去のツイートより勝手にマッチングし、お店もご用意させていただきました！🎉🎉\n\n ${shareUrl} #kamatte_cc`},
+      {status: `${toUser} \n【お店をご用意しました！】\n\n\n\n只今、大八耐に参加されている人のみでマッチングしています。 ${shareUrl}`},
       function (error, tweet, response) {
         if (error) {
           console.log(error);
@@ -274,12 +274,12 @@ const createMatching = () => {
               postTweet(params.Item).then(() => {
                 deleteUser({
                   gender: params.Item.userGender1,
-                  tweetID: user.tweetID1
+                  tweetID: params.Item.tweetID1
                 })
                   .then(() => {
                     deleteUser({
                       gender: params.Item.userGender2,
-                      tweetID: user.tweetID2
+                      tweetID: params.Item.tweetID2
                     }).then(() => {
 
                     })
