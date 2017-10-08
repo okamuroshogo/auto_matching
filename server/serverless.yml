@@ -26,8 +26,8 @@ provider:
   region: ap-northeast-1
   memorySize: 128
   timeout: 10
-  enviroment:
-    HOT_API_KEY=e6c49da7695c8fc5
+  environment:
+    HOT_API_KEY: e6c49da7695c8fc5
   iamRoleStatements:
     - Effect: Allow
       Action:
@@ -121,7 +121,7 @@ resources:
         AttributeDefinitions:
           -
             AttributeName: id
-            AttributeType: N
+            AttributeType: S
         KeySchema:
           -
             AttributeName: id
