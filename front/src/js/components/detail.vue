@@ -44,6 +44,8 @@
       const locationSearch = (location.search || '').replace(/^\?/, '');
       const locationParams = qs.parse(locationSearch);
 
+      if (!locationParams.id) location.href = '/';
+
       this.$store.dispatch('getDetailData', {
         id: locationParams.id
       });
