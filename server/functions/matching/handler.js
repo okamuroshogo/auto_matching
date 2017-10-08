@@ -216,13 +216,14 @@ const postTweet = (matching) => {
 
     let toUser = `@${matching.screenName1} @${matching.screenName2}`;
     console.log(toUser);
-    toUser = `@okaignishon`; // TODO 消す
+    // toUser = `@okaignishon`; // TODO 消す
 
     const shareUrl = `https://www.kamatte.cc/share/${matching.id}`;
 
 
     client.post('statuses/update',
-      {status: `${toUser} \n【お店をご用意しました！】\n\nあなたの過去のツイートより勝手にマッチングし、お店もご用意させていただきました！🎉🎉\n\nそれでは、素敵なkamatteライフを！！ ${shareUrl} #kamatte_cc`},
+      // {status: `${toUser} \n【お店をご用意しました！】\n\nあなたの過去のツイートより勝手にマッチングし、お店もご用意させていただきました！🎉🎉\n\nそれでは、素敵なkamatteライフを！！ ${shareUrl} #kamatte_cc`},
+      {status: `${toUser} \n【お店をご用意しました！】\n\nあなたの過去のツイートより勝手にマッチングし、お店もご用意させていただきました！🎉🎉\n\n只今、大八耐に参加されている人のみでマッチングしています。 ${shareUrl}`},
       function (error, tweet, response) {
         if (error) {
           console.log(error);
