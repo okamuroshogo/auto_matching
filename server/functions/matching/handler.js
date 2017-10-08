@@ -2,11 +2,22 @@
 
 const aws = require('aws-sdk');
 const s3 = new aws.S3();
+require('dotenv').config();
+
 const fs = require('fs');
 const uuid = require('uuid');
 const request = require('request');
 const apiUrl = `http://webservice.recruit.co.jp/hotpepper/gourmet/v1/?key=${process.env.HOT_API_KEY}&large_area=Z011&format=json`;
 const Jimp = require('jimp');
+
+const twitter = require('twitter');
+
+const client = new twitter({
+  consumer_key: process.env.CONSUMER_KEY2,
+  consumer_secret: process.env.CONSUMER_SECRET2,
+  access_token_key: process.env.ACCESS_TOKEN_KEY2,
+  access_token_secret: process.env.ACCESS_TOKEN_SECRET2
+});
 
 
 require('dotenv').config();
@@ -192,6 +203,37 @@ const create = (params) => {
 };
 
 
+const postTweet = (matching) => {
+  console.log('-----------------matching---------------');
+  console.log(matching);
+  console.log('-----------------matching---------------');
+
+  return new Promise((resolve, reject) => {
+    console.log('matching.ScreenName1');
+    console.log(matching.screenName1);
+    console.log('matching.ScreenName2');
+    console.log(matching.screenName2);
+
+    let toUser = `@${matching.screenName1} @${matching.screenName2}`;
+    console.log(toUser);
+    toUser = `@okaignishon`; // TODO 消す
+
+    const shareUrl = `https://www.kamatte.cc/share/${matching.id}`;
+
+
+    client.post('statuses/update',
+      {status: `${toUser} \n【お店をご用意しました！】\n\nあなたの過去のツイートより勝手にマッチングし、お店もご用意させていただきました！🎉🎉\n\nそれでは、素敵なkamatteライフを！！ ${shareUrl} #kamatte_cc`},
+      function (error, tweet, response) {
+        if (error) {
+          console.log(error);
+          reject(error)
+        }
+        resolve()
+      })
+  });
+
+};
+
 const createMatching = () => {
   Promise.all([1, 2].map((gender) => {
     return getUser(gender)
@@ -230,7 +272,9 @@ const createMatching = () => {
           uploadImage(fileName).then((ogpUrl) => {
             params.Item["ogpUrl"] = ogpUrl;
             create(params).then(() => {
+              postTweet(params.Item).then(() => {
 
+              })
             }).catch((err) => {
               console.log('---------createError------');
 
