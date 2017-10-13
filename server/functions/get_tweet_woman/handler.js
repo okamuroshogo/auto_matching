@@ -75,4 +75,4 @@ module.exports.getTweetWoman = (event, context, callback) => {
   getTweet()
 };
 
-getTweet();
+// getTweet();
