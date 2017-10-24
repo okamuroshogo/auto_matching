@@ -1,4 +1,5 @@
 'use strict';
+require('dotenv').config();
 
 const twitterAPI = require('node-twitter-api');
 const twitter = new twitterAPI({

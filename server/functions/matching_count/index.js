@@ -1,4 +1,5 @@
 'use strict';
+require('dotenv').config();
 
 const aws = require('aws-sdk');
 const dynamodb = new aws.DynamoDB();
