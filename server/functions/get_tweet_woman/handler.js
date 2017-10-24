@@ -9,6 +9,7 @@ aws.config.region = 'ap-northeast-1';
 
 // ここだけ、関数で違う
 const targetWord = process.env.TARGET_WORD_WOMAN;
+const targetWord2 = process.env.TARGET_WORD_MAN;
 const gender = 2;
 
 
@@ -62,7 +63,9 @@ const getTweet = () => {
         gender: gender // 男なら１, 女なら２
       }
     };
-    put(tweetParams).then()
+    if (event.text.indexOf(targetWord2) === -1) {
+      put(tweetParams).then()
+    }
   });
 
   stream.on('error', function (error) {
