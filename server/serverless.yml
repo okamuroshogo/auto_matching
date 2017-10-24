@@ -72,8 +72,8 @@ functions:
   matching:
       handler: functions/matching/handler.createMatching
       timeout: 30
-      #events:
-      #  - schedule: rate(5 minutes)
+      events:
+        - schedule: rate(5 minutes)
 
   twitter_session:
     handler: functions/twitter/index.handler
