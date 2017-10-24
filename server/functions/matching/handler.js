@@ -267,6 +267,10 @@ const createMatching = () => {
           }
         };
 
+        if (param.Item.userID1 === param.Item.userID2) {
+          throw new Error("ユーザネームが一緒エラー")
+        }
+
         createImage(params.Item.userImageUrl1, params.Item.userImageUrl2, params.Item.id).then((fileName) => {
           uploadImage(fileName).then((ogpUrl) => {
             params.Item["ogpUrl"] = ogpUrl;
