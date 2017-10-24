@@ -83,7 +83,7 @@ function accessToken(request_token, request_secret, oauth_verifier) {
 
 function fetchToken(oauth_token) {
   const get_query = {
-    TableName: 'twitter-session-dev',
+    TableName: `twitter-session-${process.env.STAGE}`,
     Key: {"request_token" : oauth_token}
   };
   return new Promise(function (resolve, reject) {
@@ -103,7 +103,7 @@ function userAuth(token, roomID) {
   const twUserID = token.results.user_id
   return new Promise(function (resolve, reject) {
     var params = {
-      TableName : 'matching-dev',
+      TableName : `matching-${process.env.STAGE}`,
       Key: {
         'id': roomID
       }
@@ -126,7 +126,7 @@ function userAuth(token, roomID) {
 
 function updateStatus(updateColumn, roomID) {
   const params = {
-      TableName: 'matching-dev',
+      TableName: `matching-${process.env.STAGE}`,
       Key:{
         id: roomID
       },

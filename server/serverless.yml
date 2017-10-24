@@ -14,7 +14,7 @@
 service: auto-matching
 
 custom:
-  defaultStage: dev
+  defaultStage: prod
 
 
 provider:
@@ -70,10 +70,10 @@ functions:
     events:
       - schedule: rate(10 minutes)
   matching:
-      handler: functions/matching/handler.createMatching
-      timeout: 30
-      events:
-        - schedule: rate(5 minutes)
+    handler: functions/matching/handler.createMatching
+    timeout: 30
+    events:
+      - schedule: rate(5 minutes)
 
   twitter_session:
     handler: functions/twitter/index.handler

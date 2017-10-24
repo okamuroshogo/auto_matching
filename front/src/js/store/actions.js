@@ -18,6 +18,9 @@ export const getDetailData = ({ commit }, params) => {
         .then((data) => {
             const item = data.matching.Item;
             console.log('data: ', item);
+            if (!item) {
+                reject();
+            }
             item.shopImageUrl = item.shopImageUrl || "https://imgfp.hotp.jp/IMGH/05/41/P027280541/P027280541_480.jpg"
             commit('setDetailData', item);
             // commit('setDetailData', {
@@ -38,5 +41,7 @@ export const getDetailData = ({ commit }, params) => {
             //     userStatus1: 0,
             //     userStatus2: 0
             // });
+        }).catch(() => {
+            location.href = '/';
         });
 };
