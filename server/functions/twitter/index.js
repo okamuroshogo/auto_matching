@@ -63,7 +63,7 @@ function putToken(tokenHash) {
     console.log('tokenHash');
     console.log(tokenHash);
     dynamo.put({
-      TableName: `twitter-session-dev`,
+      TableName: `twitter-session-${process.env.STAGE}`,
       Item:{
         request_token : tokenHash.requestToken,
         request_secret : tokenHash.requestTokenSecret
