@@ -75,4 +75,4 @@ module.exports.getTweetMan = (event, context, callback) => {
   getTweet()
 };
 
-getTweet();
+// getTweet();
