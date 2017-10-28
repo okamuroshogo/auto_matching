@@ -1,7 +1,9 @@
 'use strict';
 
+
+require('dotenv').config();
 const aws = require('aws-sdk');
-const dynamo = new aws.DynamoDB.DocumentClient({region: 'ap-northeast-1'});
+const dynamo = new aws.DynamoDB.DocumentClient({region: 'us-east-1'});
 
 exports.handler = (event, context, callback) => {
   const data = event.queryStringParameters;

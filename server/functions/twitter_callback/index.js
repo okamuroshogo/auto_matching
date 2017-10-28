@@ -1,5 +1,7 @@
 'use strict';
 
+
+require('dotenv').config();
 const twitterAPI = require('node-twitter-api');
 const twitter = new twitterAPI({
   consumerKey: process.env.CONSUMER_KEY,
@@ -7,7 +9,7 @@ const twitter = new twitterAPI({
   callback: process.env.TWITTER_CALLBACK
 });
 const aws = require('aws-sdk');
-const dynamo = new aws.DynamoDB.DocumentClient({region: 'ap-northeast-1'});
+const dynamo = new aws.DynamoDB.DocumentClient({region: 'us-east-1'});
 
 exports.handler = (event, context, callback) => {
   const data = event.queryStringParameters;
@@ -22,6 +24,9 @@ exports.handler = (event, context, callback) => {
     return userAuth(token, roomID);
   }).then((dataHash) => {
     const userID = data.userID;
+    console.log('qwertyuioiuytrertyuytrtyu');
+    console.log(userID);
+    console.log(dataHash.Item);
     if (('Item' in dataHash) && (userID === dataHash.Item.userID1)) {
       console.log('user1');
       isReservation = dataHash.Item.userStatus2;

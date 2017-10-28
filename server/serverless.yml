@@ -23,7 +23,7 @@ provider:
   profile: auto_matching
 
   stage: ${opt:stage, self:custom.defaultStage}
-  region: ap-northeast-1
+  region: us-east-1
   memorySize: 128
   timeout: 10
 
@@ -63,17 +63,19 @@ functions:
     handler: functions/get_tweet_man/handler.getTweetMan
     timeout: 300
     events:
-      - schedule: rate(10 minutes)
+#      - schedule: rate(10 minutes)
+
   getTweetWoman:
     handler: functions/get_tweet_woman/handler.getTweetWoman
     timeout: 300
     events:
-      - schedule: rate(10 minutes)
+#      - schedule: rate(10 minutes)
+
   matching:
     handler: functions/matching/handler.createMatching
     timeout: 30
     events:
-      - schedule: rate(5 minutes)
+#      - schedule: rate(5 minutes)
 
   twitter_session:
     handler: functions/twitter/index.handler

@@ -3,7 +3,7 @@
 require('dotenv').config();
 const aws         = require('aws-sdk');
 //const querystring = require('querystring');
-const dynamo = new aws.DynamoDB.DocumentClient({region: 'ap-northeast-1'});
+const dynamo = new aws.DynamoDB.DocumentClient({region: 'us-east-1'});
 const twitterAPI = require('node-twitter-api');
 let twitter;
 

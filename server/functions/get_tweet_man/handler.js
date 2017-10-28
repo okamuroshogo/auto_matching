@@ -3,7 +3,7 @@
 const aws = require('aws-sdk');
 require('dotenv').config();
 // aws.config.endpoint = new aws.Endpoint('http://localhost:8000'); // TODO
-aws.config.region = 'ap-northeast-1';
+aws.config.region = 'us-east-1';
 
 
 
