@@ -40,7 +40,7 @@ exports.handler = (event, context, callback) => {
         headers: {},
         body: '',
       };
-      response.headers['location'] = `https://www.kamatte.cc/detail/?id=${roomID}&error=1`;
+      response.headers['location'] = `https://kamatte.cc/detail/?id=${roomID}&error=1`;
       callback(null, response);
     }
   }).then(() => {
@@ -58,7 +58,7 @@ exports.handler = (event, context, callback) => {
         headers: {},
         body: '',
       };
-      response.headers['location'] = `https:\/\/www.kamatte.cc\/detail\/${roomID}`;
+      response.headers['location'] = `https:\/\/kamatte.cc\/detail\/${roomID}`;
       callback(null, response);
     }
   }).catch(function (error) {

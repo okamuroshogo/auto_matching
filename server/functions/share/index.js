@@ -4,13 +4,13 @@ require('dotenv').config();
 
 const getMatchingData = require('./get_matching_data');
 
-const url = 'http://www.kamatte.cc/';
+const url = 'http://kamatte.cc/';
 const site_name = 'kamatte(かまって)';
 const meta_description = 'かまってちゃんのための「勝手にマッチングしてお店の手配まで」するサービス';
 const meta_keywords = ['kamatte'];
 
 const share_image = (id) => {
-  return `https:\/\/www.kamatte.cc\/ogp\/${id}.png`;
+  return `https:\/\/kamatte.cc\/ogp\/${id}.png`;
 };
 
 const og_description = 'かまってちゃんのための「勝手にマッチングしてお店の手配まで」するサービス';

@@ -42,7 +42,7 @@ provider:
     - Effect: Allow
       Action:
         - s3:*
-      Resource: "arn:aws:s3:::www.kamatte.cc/*"
+      Resource: "arn:aws:s3:::kamatte.cc/*"
 
 
 package:

@@ -174,12 +174,14 @@ const deleteUser = (user) => {
         tweetID: user.tweetID
       }
     };
+    console.log(params);
     dynamo.delete(params, (err) => {
       if (err) {
         console.error('dynamodb delete error');
         console.error(err.message);
         reject(err)
       }
+      console.log('before resolve');
       resolve()
     });
   });
@@ -214,7 +216,7 @@ const postTweet = (matching) => {
     console.log(toUser);
     // toUser = `@okaignishon`; // TODO 消す
 
-    const shareUrl = `https://www.kamatte.cc/share/${matching.id}`;
+    const shareUrl = `https://kamatte.cc/share/${matching.id}`;
 
     // TODO　コミットしない
     client.post('statuses/update',
@@ -267,8 +269,11 @@ const createMatching = () => {
           }
         };
 
-        if (param.Item.userID1 === param.Item.userID2) {
-          throw new Error("ユーザネームが一緒エラー")
+        if (params.Item.userID1 === params.Item.userID2) {
+          deleteUser({tweetID: params.Item.tweetID1, gender: params.Item.userGender1}).then(() => {
+            console.log("ユーザネームが一緒エラー");
+          });
+          return
         }
 
         createImage(params.Item.userImageUrl1, params.Item.userImageUrl2, params.Item.id).then((fileName) => {
