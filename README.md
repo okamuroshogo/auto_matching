@@ -41,15 +41,17 @@
 - 対象エリアの拡大
 
 ## 6. 技術的情報など
-### AWS - Serverless Architecture で構成
-- Lambda
-- API Gateway
-- DynamoDB
-- CloudFront
-- S3
-- CloudFormation
+### サーバーサイド
+- AWS - Serverless Architecture で構成
+	- Lambda
+	- API Gateway
+	- DynamoDB
+	- CloudFront
+	- S3
+	- CloudFormation
 
-### Vue.js(説明をmotokkiさんから)
+### フロントエンド
+- Vue.jsを使用
 
 ### 使用API
 - Hotpepper API
