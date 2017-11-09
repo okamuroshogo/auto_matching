@@ -17,12 +17,13 @@ exports.handler = (event, context, callback) => {
   const roomID = data.matching_id;
   let isReservation = false;
   let reservationURL = "";
+  let userID = 0;
   fetchToken(oauth_token).then(function(dynamo) { 
     return accessToken(dynamo.Item.request_token, dynamo.Item.request_secret, oauth_verifier);
   }).then(function (token) {
-    return userAuth(token, roomID);
+    userID = token.results.user_id;
+    return userAuth(userID, roomID);
   }).then((dataHash) => {
-    const userID = data.userID;
     if (('Item' in dataHash) && (userID === dataHash.Item.userID1)) {
       console.log('user1');
       isReservation = dataHash.Item.userStatus2;
@@ -100,8 +101,7 @@ function fetchToken(oauth_token) {
   });
 }
 
-function userAuth(token, roomID) {
-  const twUserID = token.results.user_id
+function userAuth(twUserID, roomID) {
   return new Promise(function (resolve, reject) {
     var params = {
       TableName : `matching-${process.env.STAGE}`,
