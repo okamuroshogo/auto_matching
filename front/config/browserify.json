@@ -1,0 +1,7 @@
+{
+  "entries": [
+    "src/js/entry.js"
+  ],
+  "paths": ["./node_modules"],
+  "dest": "script.js"
+}

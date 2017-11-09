@@ -1,0 +1,141 @@
+@mixin is-sp {
+  @media (max-width: $breakpoint) {
+    @content;
+  }
+}
+
+@mixin is-pc {
+  @media (min-width: $breakpoint) {
+    @content;
+  }
+}
+
+@mixin absolute-center {
+    margin: auto;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+@mixin absolute($top, $right, $bottom, $left) {
+    position: absolute;
+    
+    @if $top    != '' { top: $top; }
+    @if $bottom != '' { bottom: $bottom; }
+    @if $left   != '' { left: $left; }
+    @if $right  != '' { right: $right; }
+}
+
+@mixin fixed($top, $right, $bottom, $left) {
+    position: fixed;
+    
+    @if $top    != '' { top: $top; }
+    @if $bottom != '' { bottom: $bottom; }
+    @if $left   != '' { left: $left; }
+    @if $right  != '' { right: $right; }
+}
+
+@mixin clearfix {
+    &:after {
+        content: '';
+        display: block;
+        clear: both;
+    }
+}
+
+@mixin placeholder {
+    &::placeholder {
+        @content;
+    }
+    &::-webkit-input-placeholder {
+        @content;
+    }
+    &:-moz-placeholder {
+        opacity: 1;
+        @content;
+    }
+    &::-moz-placeholder {
+        opacity: 1;
+        @content;
+    }
+    &:-ms-input-placeholder {
+        @content;
+    }
+}
+
+@mixin fix-webkit-placeholder {
+    ::-webkit-input-placeholder {
+        line-height: normal;
+    }
+}
+
+@mixin reset-btn-style {
+    border: none;
+    outline: none;
+    background: none;
+    appearance: none;
+    padding: 0;
+    cursor: pointer;
+    font: inherit;
+    color: inherit;
+}
+
+@mixin reset-anchor-style {
+    a {
+        color: inherit;
+        text-decoration: none;
+    }
+}
+
+@mixin anchor-state {
+    a, a:link, a:visited, a:hover, a:active {
+        @content;
+    }
+}
+
+@mixin text-link {
+    color: inherit;
+    text-decoration: none;
+    &:hover {
+        text-decoration: underline;
+    }
+}
+
+@mixin opacity-hover {
+    &:hover {
+        opacity: 0.7;
+    }
+}
+
+@mixin hide-text {
+    text-indent: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+@mixin hide-span-text {
+    span {
+        display: none;
+    }
+}
+
+@mixin text-ellipsis {
+    // テキストがはみ出す部分を三点リーダー…にする（１行のみ）
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+@mixin font-smoothing {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+@mixin prefix($prop, $value) {
+    #{$prop}: $value;
+    @each $prefix in webkit, moz, ms, o {
+        -#{$prefix}-#{$prop}: $value;
+    }
+}

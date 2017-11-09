@@ -1,0 +1,20 @@
+block config-block
+  - title = page_name ? [page_name, site_name].join(' | ') : site_name
+
+doctype html
+html(lang="ja")
+  head
+    include ../partials/_meta
+    
+    block stylesheet-block
+      link(rel="stylesheet" href="/css/app.css")
+    
+    include ../partials/_ga
+    
+  body
+    div.wrapper
+      div.header kamatte
+      block content-block
+    
+    block javascript-block
+      script(src="/js/script.js")

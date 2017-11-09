@@ -1,0 +1,31 @@
+# domain: 'http://localhost'
+url: 'http://kamatte.com/'
+
+site_name: 'kamatte'
+
+# meta_description: 'description'
+# meta_keywords:
+#   - key
+#   - words
+
+# share_image: 'http://localhost/img/ogp.png'
+
+is_set_ogp: false
+# og_description: 'description'
+# og_image_width: 1200
+# og_image_height: 630
+
+is_set_twitter: false
+# tw_description: 'description'
+# tw_hashtags: ['hashtag']
+# tw_site: '@hoge'
+# tw_creator: '@hoge'
+
+# line_description: 'description http://localhost/'
+
+# fb_appid: ''
+
+# favicon_url: 'http://localhost/favicon.ico'
+# apple_touch_icon_url: 'http://localhost/apple-touch-icon.png'
+
+# ga_tracking_code: ''

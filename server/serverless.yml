@@ -11,105 +11,168 @@
 #
 # Happy Coding!
 
-service: auto_matching
+service: auto-matching
 
-# You can pin your service to only deploy with a specific Serverless version
-# Check out our docs for more details
-# frameworkVersion: "=X.X.X"
+custom:
+  defaultStage: prod
+
 
 provider:
   name: aws
   runtime: nodejs6.10
   profile: auto_matching
 
-# you can overwrite defaults here
-  stage: dev
+  stage: ${opt:stage, self:custom.defaultStage}
   region: ap-northeast-1
   memorySize: 128
   timeout: 10
-  enviroment:
-    HOT_API_KEY=e6c49da7695c8fc5
+
+  environment:
+    HOT_API_KEY: e6c49da7695c8fc5
   iamRoleStatements:
     - Effect: Allow
       Action:
         - dynamodb:GetItem
         - dynamodb:DescribeTable
         - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:Query
+        - dynamodb:DeleteItem
       Resource: "*"
+    - Effect: Allow
+      Action:
+        - s3:*
+      Resource: "arn:aws:s3:::kamatte.cc/*"
 
-# you can add statements to the Lambda function's IAM Role here
-#  iamRoleStatements:
-#    - Effect: "Allow"
-#      Action:
-#        - "s3:ListBucket"
-#      Resource: { "Fn::Join" : ["", ["arn:aws:s3:::", { "Ref" : "ServerlessDeploymentBucket" } ] ]  }
-#    - Effect: "Allow"
-#      Action:
-#        - "s3:PutObject"
-#      Resource:
-#        Fn::Join:
-#          - ""
-#          - - "arn:aws:s3:::"
-#            - "Ref" : "ServerlessDeploymentBucket"
-#            - "/*"
 
-# you can define service wide environment variables here
-#  environment:
-#    variable1: value1
-
-# you can add packaging information here
-#package:
-#  include:
-#    - include-me.js
-#    - include-me-dir/**
-#  exclude:
-#    - exclude-me.js
-#    - exclude-me-dir/**
+package:
+  exclude:
+    - .serverless
+    - .webpack
+    - coverage
+    - .babelrc
+    - .gitignore
+    - LICENSE
+    - package.json
+    - README.md
+    - serverless.yml
+    - webpack.config.js
 
 functions:
-  hello:
-    handler: handler.hello
+  getTweetMan:
+    handler: functions/get_tweet_man/handler.getTweetMan
+    timeout: 300
+    events:
+      - schedule: cron(0/6 * * * ? *)
+  getTweetWoman:
+    handler: functions/get_tweet_woman/handler.getTweetWoman
+    timeout: 300
+    events:
+      - schedule: cron(0/6 * * * ? *)
+  matching:
+    handler: functions/matching/handler.createMatching
+    timeout: 30
+    events:
+      - schedule: rate(5 minutes)
 
-#    The following are a few example events you can configure
-#    NOTE: Please make sure to change your handler code to work with those events
-#    Check the event documentation for details
-#    events:
-#      - http:
-#          path: users/create
-#          method: get
-#      - s3: ${env:BUCKET}
-#      - schedule: rate(10 minutes)
-#      - sns: greeter-topic
-#      - stream: arn:aws:dynamodb:region:XXXXXX:table/foo/stream/1970-01-01T00:00:00.000
-#      - alexaSkill
-#      - iot:
-#          sql: "SELECT * FROM 'some_topic'"
-#      - cloudwatchEvent:
-#          event:
-#            source:
-#              - "aws.ec2"
-#            detail-type:
-#              - "EC2 Instance State-change Notification"
-#            detail:
-#              state:
-#                - pending
-#      - cloudwatchLog: '/aws/lambda/hello'
-#      - cognitoUserPool:
-#          pool: MyUserPool
-#          trigger: PreSignUp
+  twitter_session:
+    handler: functions/twitter/index.handler
+    events:
+      - http:
+          path: twitter_session/{id}
+          method: get
+          cors: true
 
-#    Define function environment variables here
-#    environment:
-#      variable2: value2
+  twitter_callback:
+    handler: functions/twitter_callback/index.handler
+    events:
+      - http:
+          path: twitter/callback
+          method: get
+          cors: true
 
-# you can add CloudFormation resource templates here
-#resources:
-#  Resources:
-#    NewResource:
-#      Type: AWS::S3::Bucket
-#      Properties:
-#        BucketName: my-new-bucket
-#  Outputs:
-#     NewOutput:
-#       Description: "Description for the output"
-#       Value: "Some output value"
+  share:
+    handler: functions/share/index.handler
+    events:
+      - http:
+          path: share/{id}
+          method: get
+          cors: true
+          request:
+            parameters:
+              paths:
+                id: true
+
+  reservationStatusAPI:
+    handler: functions/reservation_status/index.handler
+    events:
+      - http:
+          path: api/v1/reservation_status
+          method: get
+          cors: true
+
+  matchingCountAPI:
+    handler: functions/matching_count/index.handler
+    events:
+      - http:
+          path: api/v1/matching_count
+          method: get
+          cors: true
+
+resources:
+  Resources:
+    MatchingDynamoDbTable:
+      Type: 'AWS::DynamoDB::Table'
+      DeletionPolicy: Retain
+      Properties:
+        AttributeDefinitions:
+          -
+            AttributeName: id
+            AttributeType: S
+        KeySchema:
+          -
+            AttributeName: id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        TableName: "matching-${self:provider.stage}"
+
+    TweetsDynamoDbTable:
+      Type: 'AWS::DynamoDB::Table'
+      DeletionPolicy: Retain
+      Properties:
+        AttributeDefinitions:
+          -
+            AttributeName: gender
+            AttributeType: N
+          -
+            AttributeName: tweetID
+            AttributeType: S
+        KeySchema:
+          -
+            AttributeName: gender
+            KeyType: HASH
+          -
+            AttributeName: tweetID
+            KeyType: RANGE
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        TableName: "tweets-${self:provider.stage}"
+    TwitterSessionDynamoDbTable:
+      Type: 'AWS::DynamoDB::Table'
+      DeletionPolicy: Retain
+      Properties:
+        AttributeDefinitions:
+          -
+            AttributeName: request_token
+            AttributeType: S
+        KeySchema:
+          -
+            AttributeName: request_token
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        TableName: "twitter-session-${self:provider.stage}"
