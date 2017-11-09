@@ -15,30 +15,27 @@ exports.handler = (event, context, callback) => {
   const oauth_token = data.oauth_token;
   const oauth_verifier = data.oauth_verifier;
   const roomID = data.matching_id;
-  let isReservation = false;
+  let isReservation1 = false;
+  let isReservation2 = false;
   let reservationURL = "";
   let userID = "";
   fetchToken(oauth_token).then(function(dynamo) { 
     return accessToken(dynamo.Item.request_token, dynamo.Item.request_secret, oauth_verifier);
   }).then(function (token) {
     userID = token.results.user_id;
-    console.log("====USERID=====");
-    console.log(userID);
-    console.log("=========");
     return userAuth(userID, roomID);
   }).then((dataHash) => {
-    if (('Item' in dataHash) && (userID === dataHash.Item.userID1)) {
-      console.log('user1');
-      isReservation = dataHash.Item.userStatus2;
-      reservationURL = dataHash.Item.reservationURL;
+    if (!('Item' in dataHash)) { return; }
+    reservationURL = dataHash.Item.shopReservationUrl;
+    isReservation1 = dataHash.Item.userStatus1;
+    isReservation2 = dataHash.Item.userStatus2;
+    if (userID === dataHash.Item.userID1) {
+      isReservation1 = true
       return updateStatus('userStatus1', roomID);
-    } else if (('Item' in dataHash) && (userID === dataHash.Item.userID2)) {
-      console.log('user2');
-      isReservation = dataHash.Item.userStatus2;
-      reservationURL = dataHash.Item.reservationURL;
+    } else if (userID === dataHash.Item.userID2) {
+      isReservation2 = true
       return updateStatus('userStatus2', roomID);
     } else {
-      console.log('user3');
       const response = {
         statusCode: 301,
         headers: {},
@@ -48,7 +45,7 @@ exports.handler = (event, context, callback) => {
       callback(null, response);
     }
   }).then(() => {
-    if (isReservation) {
+    if (isReservation1 && isReservation2) {
       const response = {
         statusCode: 301,
         headers: {},
@@ -62,7 +59,7 @@ exports.handler = (event, context, callback) => {
         headers: {},
         body: '',
       };
-      response.headers['location'] = `https:\/\/kamatte.cc\/detail\/${roomID}`;
+      response.headers['location'] = `https:\/\/kamatte.cc\/detail\/?id=${roomID}`;
       callback(null, response);
     }
   }).catch(function (error) {
