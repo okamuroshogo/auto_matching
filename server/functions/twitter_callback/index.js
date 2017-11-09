@@ -17,11 +17,14 @@ exports.handler = (event, context, callback) => {
   const roomID = data.matching_id;
   let isReservation = false;
   let reservationURL = "";
-  let userID = 0;
+  let userID = "";
   fetchToken(oauth_token).then(function(dynamo) { 
     return accessToken(dynamo.Item.request_token, dynamo.Item.request_secret, oauth_verifier);
   }).then(function (token) {
     userID = token.results.user_id;
+    console.log("====USERID=====");
+    console.log(userID);
+    console.log("=========");
     return userAuth(userID, roomID);
   }).then((dataHash) => {
     if (('Item' in dataHash) && (userID === dataHash.Item.userID1)) {
