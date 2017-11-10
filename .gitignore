@@ -59,5 +59,7 @@ typings/
 # dotenv environment variables file
 .env
 
+*.otf
+server/functions/text_image/lib/*
 
 
