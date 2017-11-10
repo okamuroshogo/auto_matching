@@ -4,8 +4,9 @@ import sys
 import os
 import base64
 import cStringIO
+import requirements
 
-sys.path.append(os.path.dirname(os.path.abspath(__file__)) + '/lib')
+#sys.path.append(os.path.dirname(os.path.abspath(__file__)) + '/lib')
 
 from PIL import Image, ImageDraw, ImageFont
 

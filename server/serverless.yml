@@ -15,7 +15,11 @@ service: auto-matching
 
 custom:
   defaultStage: prod
+  pythonRequirements:
+    dockerizePip: true
 
+plugins:
+  - serverless-python-requirements
 
 provider:
   name: aws

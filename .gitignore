@@ -60,6 +60,6 @@ typings/
 .env
 
 *.otf
-server/functions/text_image/lib/*
+server/functions/text_image/p/*
 
 
