@@ -8,6 +8,8 @@ const fs = require('fs');
 const uuid = require('uuid');
 const request = require('request');
 const apiUrl = `http://webservice.recruit.co.jp/hotpepper/gourmet/v1/?key=${process.env.HOT_API_KEY}&large_area=Z011&format=json`;
+const gurunabiURL = process.env.GURUNABI_API_URL;
+
 const Jimp = require('jimp');
 
 const twitter = require('twitter');
@@ -130,6 +132,31 @@ function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
+const getGurunabi = () => {
+  return new Promise((resolve, reject) => {
+    console.log(gurunabiURL);
+    request.get(gurunabiURL, (err, data) => {
+      if (err) {
+        reject(err)
+      }
+      const body = JSON.parse(data.body);
+      console.log(body);
+      const rest = body.rest[getRandomInt(0, 9)];
+      console.log(rest);
+      console.log(rest.id);
+      const url = `https://r.gnavi.co.jp/plan/${rest.id}/plan-reserve/plan/plan_list/#wrapper`;
+      console.log(url);
+      resolve({
+        shopName: rest.name,
+        shopUrl: rest.url,
+        shopImageUrl: rest.image_url.shop_image1,
+        shopReservationUrl: `https://r.gnavi.co.jp/plan/${rest.id}/plan-reserve/plan/plan_list/#wrapper`,
+        shopAddress: rest.address
+      });
+    })
+  });
+};
+
 
 const checkReservation = (id) => {
   return new Promise((resolve, reject) => {
@@ -146,7 +173,7 @@ const checkReservation = (id) => {
   })
 };
 
-const searchShop = () => {
+const getHotpepper = () => {
   return new Promise((resolve, reject) => {
     request.get(apiUrl, (err, data) => {
       if (err) {
@@ -156,10 +183,26 @@ const searchShop = () => {
       const shop = body.results.shop[getRandomInt(0, 9)];
       checkReservation(shop.id).then((hasReservation) => {
         if (hasReservation) {
-          resolve(shop)
+          const selectedShop = shop;
+          console.log(selectedShop);
+          resolve({
+            shopName: selectedShop.name,
+            shopUrl: selectedShop.urls.pc,
+            shopImageUrl: selectedShop.photo.pc.l,
+            shopReservationUrl: `https://www.hotpepper.jp/str${selectedShop.id}/yoyaku`,
+            shopAddress: selectedShop.address
+          })
         }
         else {
-          resolve(body.results.shop[getRandomInt(0, 9)])
+          const selectedShop =  body.results.shop[getRandomInt(0, 9)];
+          console.log(selectedShop);
+          resolve({
+            shopName: selectedShop.name,
+            shopUrl: selectedShop.urls.pc,
+            shopImageUrl: selectedShop.photo.pc.l,
+            shopReservationUrl: `https://www.hotpepper.jp/str${selectedShop.id}/yoyaku`,
+            shopAddress: selectedShop.address
+          })
         }
       })
     })
@@ -275,7 +318,22 @@ const createMatching = () => {
       console.log(users);
       console.log('users');
 
-      searchShop().then((shop) => {
+      // gurunabi と ほっとの割合を決める
+      const dice = getRandomInt(1, 10);
+      console.log(dice);
+      let reservationFunc;
+      if (dice === 1) {
+        console.log('-------------------gurunabi-----------------');
+        reservationFunc = getGurunabi;
+        console.log('-------------------gurunabi-----------------');
+      } else {
+        console.log('-------------------getHotpepper-----------------');
+        reservationFunc = getHotpepper;
+        console.log('-------------------getHotpepper-----------------');
+      }
+
+
+      reservationFunc().then((shop) => {
         console.log('-------------searchShop----------------');
 
         const params = {
@@ -296,11 +354,11 @@ const createMatching = () => {
             userStatus2: false,
             targetWord1: users[0].targetWord,
             targetWord2: users[1].targetWord,
-            shopName: shop.name,
-            shopUrl: shop.urls.pc,
-            shopImageUrl: shop.photo.pc.l,
-            shopReservationUrl: `https://www.hotpepper.jp/str${shop.id}/yoyaku`,
-            shopAddress: shop.address,
+            shopName: shop.shopName,
+            shopUrl: shop.shopUrl,
+            shopImageUrl: shop.shopImageUrl,
+            shopReservationUrl: shop.shopReservationUrl,
+            shopAddress: shop.shopAddress,
           }
         };
 
@@ -314,9 +372,11 @@ const createMatching = () => {
           uploadImage(fileName).then((ogpUrl) => {
             params.Item["ogpUrl"] = ogpUrl;
             create(params).then(() => {
+              // return 'hoge'; // TODO
+
               postTweet(params.Item).then(() => {
 
-                return callback(null, 'hoge'); // TODO
+                // return callback(null, 'hoge'); // TODO
                 deleteUser({
                   gender: params.Item.userGender1,
                   tweetID: params.Item.tweetID1
@@ -356,7 +416,7 @@ const createMatching = () => {
 
 
 module.exports.createMatching = (event, context, callback) => {
-  createMatching()
+  callback(null,createMatching());
 };
 
 // createMatching();
