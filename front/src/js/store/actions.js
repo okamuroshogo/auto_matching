@@ -1,11 +1,16 @@
 import Cookies from 'js-cookie';
 
-// const domain = 'https://wqcgcdtbn5.execute-api.ap-northeast-1.amazonaws.com/dev';
-// const domain = 'https://75n6tmmj4d.execute-api.ap-northeast-1.amazonaws.com/dev';
-const domain = '';
+function fetchApi(endpoint, params, options) {
+    // const domain = 'https://wqcgcdtbn5.execute-api.ap-northeast-1.amazonaws.com/dev';
+    // const domain = 'https://75n6tmmj4d.execute-api.ap-northeast-1.amazonaws.com/dev';
+    const domain = '';
+    const paramStr = Object.keys(params).map((key) => `${key}=${params[key]}`).join('&');
+    return fetch(`${domain}/api/v1/${endpoint}?${paramStr}`, { ...options, mode: 'cors' })
+        .then((res) => res.json());
+}
 
 export const getMatchingCount = ({ commit }) => {
-    fetch(domain + '/api/v1/matching_count', { mode: 'cors' })
+    fetchApi('matching_count')
         .then((data) => {
             commit('setMatchingCount', {
                 count: data.count
@@ -14,9 +19,8 @@ export const getMatchingCount = ({ commit }) => {
 };
 
 export const getDetailData = ({ commit }, params) => {
-    const id = params.matchingId;
-    fetch(domain + `/api/v1/reservation_status?matching_id=${id}`, { mode: 'cors' })
-        .then((res) => res.json())
+    const matching_id = params.matchingId;
+    fetchApi('reservation_status', { matching_id })
         .then((data) => {
             const item = data.matching.Item;
             console.log('data: ', item);
@@ -56,10 +60,9 @@ export const getUserId = ({ commit }) => {
 };
 
 export const getUserStatus = ({ commit }, params) => {
-    const matchingId = params.matchingId;
-    const userId = params.userId;
-    fetch(domain + `/api/v1/reservation?matching_id=${matchingId}&user_id=${userId}`, { mode: 'cors' })
-        .then((res) => res.json())
+    const matching_id = params.matchingId;
+    const user_id = params.userId;
+    fetchApi('reservation', { matching_id, user_id })
         .then((data) => {
             console.log(data);
             // commit('setDetailData', data);
