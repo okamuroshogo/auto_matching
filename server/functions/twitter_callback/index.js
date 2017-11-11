@@ -11,57 +11,30 @@ const aws = require('aws-sdk');
 const dynamo = new aws.DynamoDB.DocumentClient({region: 'ap-northeast-1'});
 
 exports.handler = (event, context, callback) => {
-  const data = event.queryStringParameters;
+  const json = JSON.parse(event.body);
+  console.log('json');
+  console.log(json);
   const oauth_token = data.oauth_token;
   const oauth_verifier = data.oauth_verifier;
-  const roomID = data.matching_id;
-  let isReservation1 = false;
-  let isReservation2 = false;
-  let reservationURL = "";
-  let userID = "";
   fetchToken(oauth_token).then(function(dynamo) { 
     return accessToken(dynamo.Item.request_token, dynamo.Item.request_secret, oauth_verifier);
-  }).then(function (token) {
-    userID = token.results.user_id;
-    return userAuth(userID, roomID);
-  }).then((dataHash) => {
-    if (!('Item' in dataHash)) { return; }
-    reservationURL = dataHash.Item.shopReservationUrl;
-    isReservation1 = dataHash.Item.userStatus1;
-    isReservation2 = dataHash.Item.userStatus2;
-    if (userID === dataHash.Item.userID1) {
-      isReservation1 = true
-      return updateStatus('userStatus1', roomID);
-    } else if (userID === dataHash.Item.userID2) {
-      isReservation2 = true
-      return updateStatus('userStatus2', roomID);
-    } else {
-      const response = {
-        statusCode: 301,
-        headers: {},
-        body: '',
-      };
-      response.headers['location'] = `https://kamatte.cc/detail/?id=${roomID}&error=1`;
-      callback(null, response);
-    }
+  }).then((token) => {
+    return putUser(token, roomID);
   }).then(() => {
-    if (isReservation1 && isReservation2) {
-      const response = {
-        statusCode: 301,
-        headers: {},
-        body: '',
-      };
-      response.headers['location'] = reservationURL;
-      callback(null, response);
-    } else {
-      const response = {
-        statusCode: 301,
-        headers: {},
-        body: '',
-      };
-      response.headers['location'] = `https:\/\/kamatte.cc\/detail\/?id=${roomID}`;
-      callback(null, response);
-    }
+    const expire = new Date();
+    expire.setYear(expire.getFullYear() + 1);
+    const response = {
+        statusCode: 302,
+        headers: {
+          'Location': `https://kamatte.cc/detail/?id=${roomID}&callback=true`,
+          "Access-Control-Allow-Origin" : "*", // Required for CORS support to work
+          "Access-Control-Allow-Credentials" : true, // Required for cookies, authorization headers with HTTPS
+          "Set-Cookie": `user_id=${userID}; domain=kamatte.cc; expires=${expire.toUTCString()};"`,
+          "Cookie": `user_id=${userID}; domain=kamatte.cc; expires=${expire.toUTCString()};"`
+        },
+        body: ""
+    };
+    callback(null, response);
   }).catch(function (error) {
     console.error('error');
     console.error(error);
@@ -84,12 +57,12 @@ function accessToken(request_token, request_secret, oauth_verifier) {
 }
 
 function fetchToken(oauth_token) {
-  const get_query = {
+  const getQuery = {
     TableName: `twitter-session-${process.env.STAGE}`,
     Key: {"request_token" : oauth_token}
   };
   return new Promise(function (resolve, reject) {
-    dynamo.get(get_query, function(err, res){
+    dynamo.get(getQuery, function(err, res){
       if (err || typeof res.Item === 'undefined'){
         console.error('err');
         console.error(err);
@@ -101,57 +74,28 @@ function fetchToken(oauth_token) {
   });
 }
 
-function userAuth(twUserID, roomID) {
-  return new Promise(function (resolve, reject) {
-    var params = {
-      TableName : `matching-${process.env.STAGE}`,
-      Key: {
-        'id': roomID
-      }
-    };
-    console.log('params1');
-    console.log(params);
-
-    dynamo.get(params, function(err, data) {
+function putUser(tokenHash, roomID) {
+  const userID = tokenHash.results.user_id;
+  const putQuery = {
+    TableName: `users-${process.env.STAGE}`,
+    Item:{
+      twiid: userID,
+      roomID: roomID,
+      accessToken : tokenHash.accessToken,
+      accessTokenSecret : tokenHash.accessTokenSecret
+    }
+  };
+  console.log(putQuery);
+  return new Promise((resolve, reject) => {
+    dynamo.put(putQuery, (err) => {
       if (err){
         console.log(err);
-        reject(err);
-      } else {
-        console.log('dataaaaa');
-        console.log(data);
-        resolve(data);
+        reject();
+        return;
       }
-    });
+      resolve(tokenHash);        
+    }); 
   });
 }
 
-function updateStatus(updateColumn, roomID) {
-  const params = {
-      TableName: `matching-${process.env.STAGE}`,
-      Key:{
-        id: roomID
-      },
-      ReturnValues:"UPDATED_NEW"
-  };
-  
-  params['ExpressionAttributeNames'] = {};
-  params['ExpressionAttributeNames']['#b'] = `${updateColumn}`;
-  params['ExpressionAttributeValues'] = {};
-  params['ExpressionAttributeValues'][':status'] = true;
-  params['UpdateExpression'] = 'SET #b = :status';
-  console.log('params');
-  console.log(params);
-
-  return new Promise(function (resolve, reject) {
-    dynamo.update(params, function (err, data) {
-      if (err) {
-        console.log(err);
-        reject(err);
-      } else {
-        console.log(data);
-        resolve();
-      }
-    });
-  });
-}
 
