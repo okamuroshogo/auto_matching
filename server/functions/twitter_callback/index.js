@@ -11,11 +11,11 @@ const aws = require('aws-sdk');
 const dynamo = new aws.DynamoDB.DocumentClient({region: 'ap-northeast-1'});
 
 exports.handler = (event, context, callback) => {
-  const json = JSON.parse(event.body);
-  console.log('json');
-  console.log(json);
-  const oauth_token = data.oauth_token;
-  const oauth_verifier = data.oauth_verifier;
+  const qs = event.queryStringParameters;
+  const userID = qs && qs.user_id;
+  const roomID = qs && qs.matching_id;
+  const oauth_token = qs.oauth_token;
+  const oauth_verifier = qs.oauth_verifier;
   fetchToken(oauth_token).then(function(dynamo) { 
     return accessToken(dynamo.Item.request_token, dynamo.Item.request_secret, oauth_verifier);
   }).then((token) => {

@@ -18,17 +18,18 @@ const createResponse = (statusCode, body) => (
 );
 
 exports.handler = (event, context, callback) => {
-  const matchingID = event.path.split('/').pop();
-  const qs = event.queryStringParameters;
-  const userID = qs && qs.user_id;
-  const roomID = qs && qs.matching_id;
-  console.log('event');
-  console.log(event);
+  //const matchingID = event.path.split('/').pop();
+
+  const json = JSON.parse(event.body);
+  console.log('json');
+  console.log(json);
+  const roomID = (json && json.matching_id);
+  const userID = (json && json.user_id);
 
   twitter = new twitterAPI({
     consumerKey: process.env.CONSUMER_KEY,
     consumerSecret: process.env.CONSUMER_SECRET,
-    callback: `${process.env.TWITTER_CALLBACK}?matching_id=${matchingID}&matching_id=${roomID}`
+    callback: `${process.env.TWITTER_CALLBACK}?matching_id=${roomID}&user_id=${userID}`
   });
 
   Promise.resolve().then(function(){
@@ -51,9 +52,15 @@ exports.handler = (event, context, callback) => {
       });
     } else {
       return new Promise(function(fulfilled, rejected){
+        console.log('userID');
+        console.log(userID);
+        console.log('roomID');
+        console.log(roomID);
         getUser(userID, roomID).then((dataHash) => {
           if (!('Item' in dataHash)) { return; }
           reservationURL = dataHash.Item.shopReservationUrl;
+        console.log('dataHash');
+        console.log(dataHash);
           if (userID === dataHash.Item.userID1) {
             return updateStatus('userStatus1', roomID);
           } else if (userID === dataHash.Item.userID2) {
