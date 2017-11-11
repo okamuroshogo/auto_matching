@@ -81,12 +81,12 @@ functions:
     events:
       - schedule: rate(5 minutes)
 
-  twitter_session:
+  reservation:
     handler: functions/twitter/index.handler
     events:
       - http:
-          path: twitter_session/{id}
-          method: get
+          path: api/v1/reservation
+          method: post
           cors: true
 
   twitter_callback:
@@ -113,7 +113,7 @@ functions:
     handler: functions/reservation_status/index.handler
     events:
       - http:
-          path: api/v1/reservation_status
+          path: api/v1/reservation
           method: get
           cors: true
 
@@ -182,3 +182,19 @@ resources:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
         TableName: "twitter-session-${self:provider.stage}"
+    TwitterUsersSessionDynamoDbTable:
+      Type: 'AWS::DynamoDB::Table'
+      DeletionPolicy: Retain
+      Properties:
+        AttributeDefinitions:
+          -
+            AttributeName: twiid
+            AttributeType: S
+        KeySchema:
+          -
+            AttributeName: twiid
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        TableName: "users-${self:provider.stage}"
