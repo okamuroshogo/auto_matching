@@ -7,6 +7,14 @@ const twitterAPI = require('node-twitter-api');
 let twitter;
 let reservationURL = "";
 
+const twitter = require('twitter');
+const client = new twitter({
+  consumer_key: process.env.CONSUMER_KEY2,
+  consumer_secret: process.env.CONSUMER_SECRET2,
+  access_token_key: process.env.ACCESS_TOKEN_KEY2,
+  access_token_secret: process.env.ACCESS_TOKEN_SECRET2
+});
+
 const createResponse = (statusCode, body) => (
   {
     statusCode,
@@ -76,23 +84,33 @@ exports.handler = (event, context, callback) => {
         }).then(() => {
           return getUser(userID, roomID);
         }).then((dataHash) => {
-          const isReservation1 = dataHash.Item.userStatus1;
-          const isReservation2 = dataHash.Item.userStatus2;
-          if (isReservation1 && isReservation2) {
-            const response = {
-              success: true
-            };
-            fulfilled(response);
-          } else {
-            const response = {
-              success: true
-            };
-            fulfilled(response);
-          }
+    //      const isReservation1 = dataHash.Item.userStatus1;
+    //      const isReservation2 = dataHash.Item.userStatus2;
+    //      if (isReservation1 && isReservation2) {
+    //        fulfilled(toUser);
+    //      } else {
+    //        fulfilled(toUser);
+    //      }
+          const toUser = `@${dataHash.Item.screenName1} @${dataHash.Item.screenName2}`;
+          const shareUrl = dataHash.Item.ogpUrl;
+          client.post('statuses/update',
+            {status: `${toUser} \n【行きたいボタンが押されました】\n\n\n\n只今、デモです。\n相手が行きたいと言っています！予約に進みましょう!! ${shareUrl}`},
+            function (error, tweet, response) {
+              if (error) {
+                console.log(error);
+                rejected(error);
+                return;
+              }
+              fulfilled();
+            })
+          });
         });
       });
     }
-  }).then((response) => {
+  }).then(() => {
+    const response = {
+      success: true
+    };
     callback(null, createResponse(200, response));
   }).catch((error) => {
     callback(null, createResponse(400, {Message: error.message}));
