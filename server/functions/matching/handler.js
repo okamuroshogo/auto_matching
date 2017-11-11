@@ -27,46 +27,79 @@ aws.config.region = 'ap-northeast-1';
 
 const dynamo = new aws.DynamoDB.DocumentClient();
 
-
-const createImage = (userImage1, userImage2, uuid) => {
+const getImageFromText = (text) => {
   return new Promise((resolve, reject) => {
-    const fileName = `/tmp/${uuid}.png`; // 書き込み可能なのは/tmp以下だけ、かつ名前重複でエラー起きるので重複できないようにする。
-    console.log('-----------------start---------------------');
-    console.log(userImage1, userImage2, uuid);
-    console.log('-----------------start---------------------');
+    const apiURL = process.env.API_URL + encodeURIComponent(text);
+    console.log(apiURL);
 
-    console.log(fileName);
-    console.log(__dirname + '/baseImage.png');
+    request.get(apiURL, (err, res, body) => {
+      if (err) {
+        console.log('-------------getImageFromText-------------');
+        console.log(err);
+        console.log('-------------getImageFromText-------------');
+        reject(err)
+      }
+      resolve(Jimp.read(Buffer.from(body, 'base64')));
+    })
+  });
+};
 
-    userImage1 = userImage1.replace('normal', 'bigger');
-    userImage2 = userImage2.replace('normal', 'bigger');
 
-    Jimp.read(__dirname + '/baseImage.png').then(function (base) {
+const createImage = (item) => {
+  // .userImageUrl1, params.Item.userImageUrl2, params.Item.id
+  return new Promise((resolve, reject) => {
+    let userImage1 = item.userImageUrl1;
+    let userImage2 = item.userImageUrl2;
+    const targetWord1 = item.targetWord1;
+    const targetWord2 = item.targetWord2;
+    const _uuid = item.id;
+    let targetWordImage1;
+    let targetWordImage2;
 
-      Jimp.read(userImage1).then(function (image1) {
-        Jimp.read(userImage2).then(function (image2) {
-          Jimp.read(__dirname + '/kareshi.png').then(function (kareshi) {
-            Jimp.read(__dirname + '/kanojo.png').then(function (kanojo) {
+    getImageFromText(targetWord1).then((_targetWordImage1) => {
+      targetWordImage1 = _targetWordImage1;
+      return getImageFromText(targetWord2)
+    })
+      .then((_targetWordImage2) => {
+        targetWordImage2 = _targetWordImage2;
+        const fileName = `/tmp/${_uuid}.png`; // 書き込み可能なのは/tmp以下だけ、かつ名前重複でエラー起きるので重複できないようにする。
+        console.log('-----------------start---------------------');
+        console.log(userImage1, userImage2, uuid);
+        console.log('-----------------start---------------------');
+
+        console.log(fileName);
+        console.log(__dirname + '/baseImage.png');
+
+        userImage1 = userImage1.replace('normal', 'bigger');
+        userImage2 = userImage2.replace('normal', 'bigger');
+
+
+        Jimp.read(__dirname + '/baseImage.png').then(function (base) {
+
+          Jimp.read(userImage1).then(function (image1) {
+            console.log('image1');
+            Jimp.read(userImage2).then(function (image2) {
+              console.log('image2');
               image1.scale(2.5, () => {
+                console.log('scale1');
                 image2.scale(2.5, () => {
-                  base.composite(kareshi, 150, 500)
-                    .composite(kanojo, 700, 500)
+                  console.log('scale2');
+                  base.composite(targetWordImage1, 180, 450)
+                    .composite(targetWordImage2, 775, 450)
                     .composite(image1, 200, 200)
                     .composite(image2, 800, 200)
                     .write(fileName, () => {
                       console.log(fileName);
                       resolve(fileName);
                     });
-
                 });
               });
             })
           })
-        })
-      })
-    }).catch(function (err) {
-      console.error(err);
-    });
+        }).catch(function (err) {
+          console.error(err);
+        });
+      });
   });
 };
 
@@ -259,8 +292,10 @@ const createMatching = () => {
             userGender2: users[1].gender,
             userImageUrl1: users[0].userImageUrl,
             userImageUrl2: users[1].userImageUrl,
-            userStatus1: 0,
-            userStatus2: 0,
+            userStatus1: false,
+            userStatus2: false,
+            targetWord1: users[0].targetWord,
+            targetWord2: users[1].targetWord,
             shopName: shop.name,
             shopUrl: shop.urls.pc,
             shopImageUrl: shop.photo.pc.l,
@@ -275,12 +310,13 @@ const createMatching = () => {
           });
           return
         }
-
-        createImage(params.Item.userImageUrl1, params.Item.userImageUrl2, params.Item.id).then((fileName) => {
+        createImage(params.Item).then((fileName) => {
           uploadImage(fileName).then((ogpUrl) => {
             params.Item["ogpUrl"] = ogpUrl;
             create(params).then(() => {
               postTweet(params.Item).then(() => {
+
+                return callback(null, 'hoge');
                 deleteUser({
                   gender: params.Item.userGender1,
                   tweetID: params.Item.tweetID1
