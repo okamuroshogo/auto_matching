@@ -84,8 +84,8 @@ const createImage = (item) => {
                 console.log('scale1');
                 image2.scale(2.5, () => {
                   console.log('scale2');
-                  base.composite(targetWordImage1, 180, 450)
-                    .composite(targetWordImage2, 775, 450)
+                  base.composite(targetWordImage1, 90, 450)
+                    .composite(targetWordImage2, 705, 450)
                     .composite(image1, 200, 200)
                     .composite(image2, 800, 200)
                     .write(fileName, () => {
