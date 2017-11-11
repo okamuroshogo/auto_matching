@@ -20,7 +20,7 @@ export const getMatchingCount = ({ commit }) => {
 
 export const getDetailData = ({ commit }, params) => {
     const matching_id = params.matchingId;
-    fetchApi('reservation_status', { matching_id })
+    fetchApi('reservation', { matching_id })
         .then((data) => {
             const item = data.matching.Item;
             console.log('data: ', item);
