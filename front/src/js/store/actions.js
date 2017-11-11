@@ -83,6 +83,9 @@ export const postReservation = ({ commit }, params) => {
             if (data.location) {
                 location.href = data.location;
             }
+            if (data.reservation_url) {
+                open(data.reservation_url, '_blank');
+            }
             // commit('setDetailData', data);
         }).catch(() => {
             // location.href = '/';
