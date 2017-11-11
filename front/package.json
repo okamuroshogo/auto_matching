@@ -38,6 +38,7 @@
     "gulp-uglify": "latest",
     "gulp-util": "latest",
     "gulp-watch": "latest",
+    "js-cookie": "^2.2.0",
     "koko": "latest",
     "read-config": "latest",
     "reset-css": "latest",
