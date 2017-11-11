@@ -23,7 +23,41 @@
     line-height: 1
     font-weight: normal
     font-size: 14px
-
+  .btn-ikitai
+    $w: 153px
+    $h: 133px
+    display: block
+    position: relative
+    width: $w
+    height: $h
+    margin: 20px auto 25px
+    padding: 0
+    background: none
+    color: #fff
+    font-size: 20px
+    font-weight: bold
+    text-decoration: none
+    text-align: center
+    line-height: $h - 10px
+    span
+      display: block
+      width: 100%
+      height: 100%
+      position: absolute
+      top: 0
+      left: 0
+      background-repeat: no-repeat
+      background-position: center
+      background-size: $w $h
+    span:first-child
+      background-image: url('/img/heart_shadow.svg')
+      transform: translateY(10px)
+    span:nth-child(2)
+      background-image: url('/img/heart.svg')
+    &:active
+      transform: translateY(8px)
+      span:first-child
+        transform: translateY(2px)
   .btn-reserve
     $h: 60px
     display: block
@@ -31,8 +65,8 @@
     height: $h
     margin: 12px auto 15px
     border-radius: 20px
-    background-color: $main_color
-    box-shadow: 0 10px 0 0 $shadow_color
+    background-color: $blue_color
+    box-shadow: 0 10px 0 0 $blue_shadow_color
     color: #fff
     font-size: 20px
     font-weight: bold
@@ -40,7 +74,7 @@
     text-align: center
     line-height: $h
     &:active
-      box-shadow: 0 2px 0 0 $shadow_color
+      box-shadow: 0 2px 0 0 $blue_shadow_color
       transform: translateY(8px)
   .notice
     // font-weight: normal
