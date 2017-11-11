@@ -316,7 +316,7 @@ const createMatching = () => {
             create(params).then(() => {
               postTweet(params.Item).then(() => {
 
-                return callback(null, 'hoge');
+                return callback(null, 'hoge'); // TODO
                 deleteUser({
                   gender: params.Item.userGender1,
                   tweetID: params.Item.tweetID1
