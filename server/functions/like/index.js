@@ -18,6 +18,8 @@ const createResponse = (statusCode, body) => (
 );
 
 exports.handler = (event, context, callback) => {
+  //const matchingID = event.path.split('/').pop();
+
   const json = JSON.parse(event.body);
   console.log('json');
   console.log(json);
@@ -55,15 +57,13 @@ exports.handler = (event, context, callback) => {
         console.log('roomID');
         console.log(roomID);
         getUser(userID, roomID).then((dataHash) => {
-          if (!('Item' in dataHash)) { reject(); return; }
+          if (!('Item' in dataHash)) { return; }
           reservationURL = dataHash.Item.shopReservationUrl;
           console.log('dataHash');
           console.log(dataHash);
           if (userID === dataHash.Item.userID1) {
-            if (!dataHash.Item.userStatus2) { reject(); return; }
             return updateStatus('userStatus1', roomID);
           } else if (userID === dataHash.Item.userID2) {
-            if (!dataHash.Item.userStatus1) { reject(); return; }
             return updateStatus('userStatus2', roomID);
           } else {
             const response = {
@@ -80,12 +80,14 @@ exports.handler = (event, context, callback) => {
           const isReservation2 = dataHash.Item.userStatus2;
           if (isReservation1 && isReservation2) {
             const response = {
-              success: true,
-              reservationURL: reservationURL
+              success: true
             };
             fulfilled(response);
           } else {
-            reject();
+            const response = {
+              success: true
+            };
+            fulfilled(response);
           }
         });
       });

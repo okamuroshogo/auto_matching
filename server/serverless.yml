@@ -103,6 +103,14 @@ functions:
               paths:
                 id: true
 
+  likeAPI:
+    handler: functions/like/index.handler
+    events:
+      - http:
+          path: api/v1/like
+          method: post
+          cors: true
+
   reservationStatusAPI:
     handler: functions/reservation_status/index.handler
     events:
