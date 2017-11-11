@@ -76,9 +76,13 @@ export const postReservation = ({ commit }, params) => {
     console.log(params);
     const matching_id = params.matchingId;
     const user_id = params.userId;
-    fetchApi('reservation', { matching_id, user_id }, { method: 'post' })
+    fetchApi('reservation', {}, { method: 'post', data: { matching_id, user_id } })
         .then((data) => {
             console.log(data);
+            if (!data.success) reject();
+            if (data.location) {
+                location.href = data.location;
+            }
             // commit('setDetailData', data);
         }).catch(() => {
             // location.href = '/';
