@@ -60,6 +60,7 @@ const getTweet = () => {
         userScreenName: event.user.screen_name,
         userImageUrl: event.user.profile_image_url,
         tweet: event.text,
+        targetWord: targetWord,
         gender: gender // 男なら１, 女なら２
       }
     };

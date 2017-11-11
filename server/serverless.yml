@@ -15,7 +15,11 @@ service: auto-matching
 
 custom:
   defaultStage: prod
+  pythonRequirements:
+    dockerizePip: true
 
+plugins:
+  - serverless-python-requirements
 
 provider:
   name: aws
@@ -59,16 +63,18 @@ package:
     - webpack.config.js
 
 functions:
-  # getTweetMan:
-  #   handler: functions/get_tweet_man/handler.getTweetMan
-  #   timeout: 300
-  #   events:
-  #     - schedule: cron(0/6 * * * ? *)
-  # getTweetWoman:
-  #   handler: functions/get_tweet_woman/handler.getTweetWoman
-  #   timeout: 300
-  #   events:
-  #     - schedule: cron(0/6 * * * ? *)
+  getTweetMan:
+    handler: functions/get_tweet_man/handler.getTweetMan
+    timeout: 300
+    events:
+      - schedule: cron(0/6 * * * ? *)
+  getTweetWoman:
+    handler: functions/get_tweet_woman/handler.getTweetWoman
+    timeout: 300
+    events:
+      - schedule: cron(0/6 * * * ? *)
+  createTweet:
+    handler: functions/debug_api/handler.create
   matching:
     handler: functions/matching/handler.createMatching
     timeout: 30
