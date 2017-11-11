@@ -49,12 +49,17 @@
       const locationSearch = (location.search || '').replace(/^\?/, '');
       const locationParams = qs.parse(locationSearch);
 
+      const isCallback = locationParams.callback === 'true';
       const matchingId = locationParams.id;
       if (!matchingId) location.href = '/';
       if (locationParams.error == 1) alert('マッチングしていないユーザーアカウントです。ログインしているアカウントを確認してください!');
 
       this.setMatchingId({ matchingId });
       this.$store.dispatch('getUserId').then(() => {
+        if (isCallback) {
+          this.postReservation({ matchingId, userId });
+          reject();
+        }
         this.$store.dispatch('getUserStatus', {
           matchingId,
           userId: this.$store.state.userId,
