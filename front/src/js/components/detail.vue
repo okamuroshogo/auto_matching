@@ -58,7 +58,7 @@
       this.$store.dispatch('getUserId').then(() => {
         if (isCallback) {
           this.postReservation({ matchingId, userId });
-          reject();
+          Promise.reject();
         }
         this.$store.dispatch('getUserStatus', {
           matchingId,
