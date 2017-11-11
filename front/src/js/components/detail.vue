@@ -2,7 +2,7 @@
   .detail
     p {{ userId }}
     p
-      button.btn-reserve(v-on:click="postReservation({userId})") お店を予約する
+      button.btn-reserve(v-on:click="postReservation({ matchingId, userId })") お店を予約する
 
     p おめでとうございます 🎉
     p いい感じのお店選んどきました！
@@ -32,16 +32,17 @@
 
 <script>
   import qs from 'querystring';
-  import { mapState, mapGetters, mapActions } from 'vuex';
+  import { mapState, mapGetters, mapActions, mapMutations } from 'vuex';
 
   export default {
     name: 'detail',
     computed: {
-      ...mapState(['detailData', 'userId']),
+      ...mapState(['matchingId', 'detailData', 'userId']),
       ...mapGetters([])
     },
     methods: {
-      ...mapActions(['postReservation'])
+      ...mapActions(['postReservation']),
+      ...mapMutations(['setMatchingId'])
     },
     created() {
       const locationHash = (location.hash || '').replace(/^#/, '');
@@ -52,6 +53,7 @@
       if (!matchingId) location.href = '/';
       if (locationParams.error == 1) alert('マッチングしていないユーザーアカウントです。ログインしているアカウントを確認してください!');
 
+      this.setMatchingId({ matchingId });
       this.$store.dispatch('getUserId').then(() => {
         this.$store.dispatch('getUserStatus', {
           matchingId: matchingId,
