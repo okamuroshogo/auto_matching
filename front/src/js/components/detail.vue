@@ -6,7 +6,9 @@
     p.shop-name {{ detailData.shopName }}
     p.shop-address {{ detailData.shopAddress }}
     p 18:00〜 ２名様
-    p
+    p(v-if="detailData.userStatus1")
+      button.btn-reserve(v-on:click="postReservation({ matchingId, userId })") 行きたい !
+    p(v-else-if="detailData.userStatus2")
       button.btn-reserve(v-on:click="postReservation({ matchingId, userId })") お店を予約する
 </template>
 
@@ -40,6 +42,14 @@
         if (isCallback) {
           this.postReservation({ matchingId, userId });
           Promise.reject();
+        }
+        const isSelf = userId == detailData.userID1 || userId == detailData.userID2;
+        // const isSelf = detailData.userStatus1 && userId == detailData.userID1;
+        if (detailData.userStatus1 && detailData.userStatus2) {
+          // ふたりとも押してる
+        }
+        else if (detailData.userStatus1 ^ detailData.userStatus2) {
+          // どちらかが押してる
         }
       });
       this.$store.dispatch('getDetailData', {
