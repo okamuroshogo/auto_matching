@@ -36,6 +36,7 @@
 
       this.setMatchingId({ matchingId });
       this.$store.dispatch('getUserId').then(() => {
+        const userId = this.$store.state.userId;
         if (isCallback) {
           this.postReservation({ matchingId, userId });
           Promise.reject();
