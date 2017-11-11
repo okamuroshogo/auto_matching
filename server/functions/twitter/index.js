@@ -2,51 +2,99 @@
 
 require('dotenv').config();
 const aws         = require('aws-sdk');
-//const querystring = require('querystring');
 const dynamo = new aws.DynamoDB.DocumentClient({region: 'ap-northeast-1'});
 const twitterAPI = require('node-twitter-api');
 let twitter;
+let reservationURL = "";
+
+const createResponse = (statusCode, body) => (
+  {
+    statusCode,
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+    },
+    body: JSON.stringify(body),
+  }
+);
 
 exports.handler = (event, context, callback) => {
-  console.log('process.env');
-  console.log(process);
-  console.log(event);
-  console.log(context);
   const matchingID = event.path.split('/').pop();
-  console.log('matching id');
-  console.log(matchingID);
+  const qs = event.queryStringParameters;
+  const userID = qs && qs.user_id;
+  const roomID = qs && qs.matching_id;
+  console.log('event');
+  console.log(event);
 
   twitter = new twitterAPI({
     consumerKey: process.env.CONSUMER_KEY,
     consumerSecret: process.env.CONSUMER_SECRET,
-    callback: `${process.env.TWITTER_CALLBACK}?matching_id=${matchingID}`
+    callback: `${process.env.TWITTER_CALLBACK}?matching_id=${matchingID}&matching_id=${roomID}`
   });
-  console.log('twitter');
-  console.log(twitter);
-  twitterRequestToken().then(function(tokenHash) {
-    console.log(tokenHash);
-    return putToken(tokenHash); 
-  }).then(function(requestToken) {
-    console.log('requestToken');
-    console.log(requestToken);
-    const response = {
-      statusCode: 302,
-      headers: {
-        'Location': twitter.getAuthUrl(requestToken)
-      }
-    };
-    console.log('response');
-    console.log(response);
-    callback(null, response);
-  }).catch(function(error) {
-    console.log('errror twitter token');
-    callback(null, {statusCode: 400, error: error});
+
+  Promise.resolve().then(function(){
+    if (!userID) {  
+      return new Promise(function(fulfilled, rejected){
+        twitterRequestToken().then((tokenHash) => {
+          return putToken(tokenHash); 
+        }).then((requestToken) => {
+          const response = {
+            success: true,
+            login: false,
+            'location': twitter.getAuthUrl(requestToken)
+          };
+          console.log('responseseeeeeeee');
+          console.log(response);
+          fulfilled(response); 
+        }).catch((error) => {
+          rejected(error);
+        });
+      });
+    } else {
+      return new Promise(function(fulfilled, rejected){
+        getUser(userID, roomID).then((dataHash) => {
+          if (!('Item' in dataHash)) { return; }
+          reservationURL = dataHash.Item.shopReservationUrl;
+          if (userID === dataHash.Item.userID1) {
+            return updateStatus('userStatus1', roomID);
+          } else if (userID === dataHash.Item.userID2) {
+            return updateStatus('userStatus2', roomID);
+          } else {
+            const response = {
+              success: false,
+              error: 1
+            };
+            fulfilled(response);
+            return;
+          }
+        }).then(() => {
+          return getUser(userID, roomID);
+        }).then((dataHash) => {
+          const isReservation1 = dataHash.Item.userStatus1;
+          const isReservation2 = dataHash.Item.userStatus2;
+          if (isReservation1 && isReservation2) {
+            const response = {
+              success: true
+            };
+            fulfilled(response);
+          } else {
+            const response = {
+              success: true,
+              reservationURL: reservationURL
+            };
+            fulfilled(response);
+          }
+        });
+      });
+    }
+  }).then((response) => {
+    callback(null, createResponse(200, response));
+  }).catch((error) => {
+    callback(null, createResponse(400, {Message: error.message}));
   });
 };
 
 function twitterRequestToken() {
-  return new Promise(function (resolve, reject) {
-    //twitter.getRequestToken((error, requestToken, requestTokenSecret, results) => {
+  return new Promise((resolve, reject) => {
     twitter.getRequestToken((error, requestToken, requestTokenSecret) => {
       if (error) {
         console.log(error);
@@ -59,7 +107,7 @@ function twitterRequestToken() {
 }
 
 function putToken(tokenHash) {
-  return new Promise(function (resolve, reject) {
+  return new Promise((resolve, reject) => {
     console.log('tokenHash');
     console.log(tokenHash);
     dynamo.put({
@@ -69,7 +117,7 @@ function putToken(tokenHash) {
         request_secret : tokenHash.requestTokenSecret
         //follow : JSON.parse(querystring.parse(event['body-json']).follow)
       }
-    },  function(err){
+    },  (err) => {
     //},  function(err, res){
       if (err){
         console.log(err);
@@ -80,3 +128,52 @@ function putToken(tokenHash) {
     }); 
   });
 }
+
+function getUser(twUserID, roomID) {
+  return new Promise((resolve, reject) => {
+    var params = {
+      TableName : `matching-${process.env.STAGE}`,
+      Key: {
+        'id': roomID
+      },
+      ConsistentRead: true
+    };
+
+    dynamo.get(params, (err, data) => {
+      if (err){
+        console.log(err);
+        reject(err);
+      } else {
+        resolve(data);
+      }
+    });
+  });
+}
+
+function updateStatus(updateColumn, roomID) {
+  const params = {
+      TableName: `matching-${process.env.STAGE}`,
+      Key:{
+        id: roomID
+      },
+      ReturnValues:"UPDATED_NEW"
+  };
+  
+  params['ExpressionAttributeNames'] = {};
+  params['ExpressionAttributeNames']['#b'] = `${updateColumn}`;
+  params['ExpressionAttributeValues'] = {};
+  params['ExpressionAttributeValues'][':status'] = true;
+  params['UpdateExpression'] = 'SET #b = :status';
+
+  return new Promise(function (resolve, reject) {
+    dynamo.update(params, function (err, data) {
+      if (err) {
+        console.log(err);
+        reject(err);
+      } else {
+        resolve();
+      }
+    });
+  });
+}
+
