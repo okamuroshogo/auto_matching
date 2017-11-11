@@ -64,7 +64,7 @@ export const postReservation = ({ commit }, params) => {
     console.log(params);
     const matching_id = params.matchingId;
     const user_id = params.userId;
-    fetchApi('reservation', {}, { method: 'post', data: { matching_id, user_id } })
+    fetchApi('reservation', {}, { method: 'post', body: JSON.stringify({ matching_id, user_id }) })
         .then((data) => {
             console.log(data);
             if (!data.success) Promise.reject();
