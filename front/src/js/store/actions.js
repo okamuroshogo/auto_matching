@@ -14,7 +14,7 @@ export const getMatchingCount = ({ commit }) => {
 };
 
 export const getDetailData = ({ commit }, params) => {
-    const id = params.id;
+    const id = params.matchingId;
     fetch(domain + `/api/v1/reservation_status?matching_id=${id}`, { mode: 'cors' })
         .then((res) => res.json())
         .then((data) => {
@@ -53,4 +53,17 @@ export const getUserId = ({ commit }) => {
     return commit('setUserId', {
         userId: Cookies.get('user_id'),
     });
+};
+
+export const getUserStatus = ({ commit }, params) => {
+    const matchingId = params.matchingId;
+    const userId = params.userId;
+    fetch(domain + `/api/v1/reservation?matching_id=${matchingId}&user_id=${userId}`, { mode: 'cors' })
+        .then((res) => res.json())
+        .then((data) => {
+            console.log(data);
+            // commit('setDetailData', data);
+        }).catch(() => {
+            // location.href = '/';
+        });
 };

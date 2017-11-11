@@ -45,12 +45,18 @@
       const locationSearch = (location.search || '').replace(/^\?/, '');
       const locationParams = qs.parse(locationSearch);
 
-      if (!locationParams.id) location.href = '/';
+      const matchingId = locationParams.id;
+      if (!matchingId) location.href = '/';
       if (locationParams.error == 1) alert('マッチングしていないユーザーアカウントです。ログインしているアカウントを確認してください!');
 
-      this.$store.dispatch('getUserId');
+      this.$store.dispatch('getUserId').then(() => {
+        this.$store.dispatch('getUserStatus', {
+          matchingId: matchingId,
+          userId: this.$store.state.userId,
+        });
+      });
       this.$store.dispatch('getDetailData', {
-        id: locationParams.id
+        matchingId: matchingId,
       });
     }
   }
