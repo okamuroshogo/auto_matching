@@ -56,12 +56,12 @@
       this.setMatchingId({ matchingId });
       this.$store.dispatch('getUserId').then(() => {
         this.$store.dispatch('getUserStatus', {
-          matchingId: matchingId,
+          matchingId,
           userId: this.$store.state.userId,
         });
       });
       this.$store.dispatch('getDetailData', {
-        matchingId: matchingId,
+        matchingId,
       });
     }
   }
