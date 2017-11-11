@@ -1,5 +1,6 @@
 <template lang="pug">
   .detail
+    p {{ userId }}
     p おめでとうございます 🎉
     p いい感じのお店選んどきました！
     p.shop-image(v-bind:style="'background-image:url(' + detailData.shopImageUrl + ')'")
@@ -33,7 +34,7 @@
   export default {
     name: 'detail',
     computed: {
-      ...mapState(['detailData']),
+      ...mapState(['detailData', 'userId']),
       ...mapGetters([])
     },
     methods: {
@@ -47,6 +48,7 @@
       if (!locationParams.id) location.href = '/';
       if (locationParams.error == 1) alert('マッチングしていないユーザーアカウントです。ログインしているアカウントを確認してください!');
 
+      this.$store.dispatch('getUserId');
       this.$store.dispatch('getDetailData', {
         id: locationParams.id
       });

@@ -1,3 +1,5 @@
+import Cookies from 'js-cookie';
+
 // const domain = 'https://wqcgcdtbn5.execute-api.ap-northeast-1.amazonaws.com/dev';
 // const domain = 'https://75n6tmmj4d.execute-api.ap-northeast-1.amazonaws.com/dev';
 const domain = '';
@@ -44,4 +46,11 @@ export const getDetailData = ({ commit }, params) => {
         }).catch(() => {
             // location.href = '/';
         });
+};
+
+export const getUserId = ({ commit }) => {
+    // Cookies.set('user_id', '11111');
+    return commit('setUserId', {
+        userId: Cookies.get('user_id'),
+    });
 };
