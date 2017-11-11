@@ -71,3 +71,16 @@ export const getUserStatus = ({ commit }, params) => {
             // location.href = '/';
         });
 };
+
+export const postReservation = ({ commit }, params) => {
+    console.log(params);
+    const matching_id = params.matchingId;
+    const user_id = params.userId;
+    fetchApi('reservation', { matching_id, user_id }, { method: 'post' })
+        .then((data) => {
+            console.log(data);
+            // commit('setDetailData', data);
+        }).catch(() => {
+            // location.href = '/';
+        });
+};

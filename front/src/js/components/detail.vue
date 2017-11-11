@@ -1,6 +1,9 @@
 <template lang="pug">
   .detail
     p {{ userId }}
+    p
+      button.btn-reserve(v-on:click="postReservation({userId})") お店を予約する
+
     p おめでとうございます 🎉
     p いい感じのお店選んどきました！
     p.shop-image(v-bind:style="'background-image:url(' + detailData.shopImageUrl + ')'")
@@ -38,7 +41,7 @@
       ...mapGetters([])
     },
     methods: {
-      ...mapActions([])
+      ...mapActions(['postReservation'])
     },
     created() {
       const locationHash = (location.hash || '').replace(/^#/, '');
