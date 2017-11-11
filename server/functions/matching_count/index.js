@@ -1,4 +1,5 @@
 'use strict';
+require('dotenv').config();
 
 const aws = require('aws-sdk');
 const dynamodb = new aws.DynamoDB();
@@ -7,6 +8,9 @@ exports.handler = (event, context, callback) => {
   descItem().then((count) => {
     const response = {
       statusCode: 200,
+      headers: {
+        "Access-Control-Allow-Origin" : "*" // Required for CORS support to work
+      },
       body: JSON.stringify({count: count})
     };
     callback(null, response);
@@ -20,7 +24,7 @@ exports.handler = (event, context, callback) => {
 function descItem() {
   return new Promise(function (resolve, reject) {
     const params = {
-      TableName: 'matching-dev'
+      TableName: `matching-${process.env.STAGE}`
     };
     dynamodb.describeTable(params, (err, data) => {
       if (err){

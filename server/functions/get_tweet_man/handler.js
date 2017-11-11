@@ -6,7 +6,6 @@ require('dotenv').config();
 aws.config.region = 'ap-northeast-1';
 
 
-
 // ここだけ、関数で違う
 const targetWord = process.env.TARGET_WORD_MAN;
 const gender = 1;
@@ -59,6 +58,7 @@ const getTweet = () => {
         userScreenName: event.user.screen_name,
         userImageUrl: event.user.profile_image_url,
         tweet: event.text,
+        targetWord: targetWord,
         gender: gender // 男なら１, 女なら２
       }
     };

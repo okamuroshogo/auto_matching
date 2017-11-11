@@ -14,8 +14,12 @@
 service: auto-matching
 
 custom:
-  defaultStage: dev
+  defaultStage: prod
+  pythonRequirements:
+    dockerizePip: true
 
+plugins:
+  - serverless-python-requirements
 
 provider:
   name: aws
@@ -26,6 +30,7 @@ provider:
   region: ap-northeast-1
   memorySize: 128
   timeout: 10
+
   environment:
     HOT_API_KEY: e6c49da7695c8fc5
   iamRoleStatements:
@@ -41,8 +46,7 @@ provider:
     - Effect: Allow
       Action:
         - s3:*
-      Resource: "arn:aws:s3:::ogp.auto-matching.com/*"
-# TODO     Resource: "arn:aws:s3:::ogp.kamatte.cc/*"
+      Resource: "arn:aws:s3:::kamatte.cc/*"
 
 
 package:
@@ -61,32 +65,37 @@ package:
 functions:
   getTweetMan:
     handler: functions/get_tweet_man/handler.getTweetMan
-    timeout: 30
+    timeout: 300
     events:
-      - schedule: rate(5 minutes)
+      - schedule: cron(0/6 * * * ? *)
   getTweetWoman:
     handler: functions/get_tweet_woman/handler.getTweetWoman
+    timeout: 300
+    events:
+      - schedule: cron(0/6 * * * ? *)
+  createTweet:
+    handler: functions/debug_api/handler.create
+  matching:
+    handler: functions/matching/handler.createMatching
     timeout: 30
     events:
       - schedule: rate(5 minutes)
-  matching:
-      handler: functions/matching/handler.createMatching
-      timeout: 30
-      #events:
-      #  - schedule: rate(5 minutes)
 
   twitter_session:
     handler: functions/twitter/index.handler
     events:
       - http:
-          path: api/v1/twitter_session
+          path: twitter_session/{id}
           method: get
+          cors: true
+
   twitter_callback:
     handler: functions/twitter_callback/index.handler
     events:
       - http:
           path: twitter/callback
           method: get
+          cors: true
 
   share:
     handler: functions/share/index.handler
@@ -94,6 +103,7 @@ functions:
       - http:
           path: share/{id}
           method: get
+          cors: true
           request:
             parameters:
               paths:
@@ -105,6 +115,7 @@ functions:
       - http:
           path: api/v1/reservation_status
           method: get
+          cors: true
 
   matchingCountAPI:
     handler: functions/matching_count/index.handler
@@ -112,6 +123,7 @@ functions:
       - http:
           path: api/v1/matching_count
           method: get
+          cors: true
 
 resources:
   Resources:

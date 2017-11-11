@@ -1,14 +1,14 @@
 #!/bin/bash
 
 # Usage:
-#   bin/s3-sync --profile www.kamatte.cc --dryrun
+#   bin/s3-sync --profile kamatte.cc --dryrun
 
 # Sample:
-#   aws s3 ls --profile www.kamatte.cc s3://www.kamatte.cc
-#   aws s3 sync --profile www.kamatte.cc --exact-timestamps --exclude "*.DS_Store" --cache-control 'no-cache' --dryrun ./public s3://www.kamatte.cc
+#   aws s3 ls --profile kamatte.cc s3://kamatte.cc
+#   aws s3 sync --profile kamatte.cc --exact-timestamps --exclude "*.DS_Store" --cache-control 'no-cache' --dryrun ./public s3://kamatte.cc
 
 public_path="$(cd "$(dirname $0)/../public/"; pwd)"
-bucket="s3://www.kamatte.cc"
+bucket="s3://kamatte.cc"
 
 echo "option: $@"
 

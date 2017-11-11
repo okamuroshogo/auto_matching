@@ -1,4 +1,5 @@
 'use strict';
+require('dotenv').config();
 
 const twitterAPI = require('node-twitter-api');
 const twitter = new twitterAPI({
@@ -22,16 +23,16 @@ exports.handler = (event, context, callback) => {
     return userAuth(token, roomID);
   }).then((dataHash) => {
     const userID = data.userID;
-    if (('Item' in dataHash) && (userID === dataHash.Item.user_id1)) {
+    if (('Item' in dataHash) && (userID === dataHash.Item.userID1)) {
       console.log('user1');
-      isReservation = dataHash.Item.user_status2;
+      isReservation = dataHash.Item.userStatus2;
       reservationURL = dataHash.Item.reservationURL;
-      return updateStatus('user_status1', roomID);
-    } else if (('Item' in dataHash) && (userID === dataHash.Item.user_id2)) {
+      return updateStatus('userStatus1', roomID);
+    } else if (('Item' in dataHash) && (userID === dataHash.Item.userID2)) {
       console.log('user2');
-      isReservation = dataHash.Item.user_status2;
+      isReservation = dataHash.Item.userStatus2;
       reservationURL = dataHash.Item.reservationURL;
-      return updateStatus('user_status2', roomID);
+      return updateStatus('userStatus2', roomID);
     } else {
       console.log('user3');
       const response = {
@@ -39,7 +40,7 @@ exports.handler = (event, context, callback) => {
         headers: {},
         body: '',
       };
-      response.headers['location'] = `https://www.kamatte.cc/detail/?id=${roomID}&error=1`;
+      response.headers['location'] = `https://kamatte.cc/detail/?id=${roomID}&error=1`;
       callback(null, response);
     }
   }).then(() => {
@@ -53,9 +54,11 @@ exports.handler = (event, context, callback) => {
       callback(null, response);
     } else {
       const response = {
-        statusCode: 200,
-        body: JSON.stringify({message: 'success'})
+        statusCode: 301,
+        headers: {},
+        body: '',
       };
+      response.headers['location'] = `https:\/\/kamatte.cc\/detail\/${roomID}`;
       callback(null, response);
     }
   }).catch(function (error) {
@@ -81,7 +84,7 @@ function accessToken(request_token, request_secret, oauth_verifier) {
 
 function fetchToken(oauth_token) {
   const get_query = {
-    TableName: 'twitter-session-dev',
+    TableName: `twitter-session-${process.env.STAGE}`,
     Key: {"request_token" : oauth_token}
   };
   return new Promise(function (resolve, reject) {
@@ -101,7 +104,7 @@ function userAuth(token, roomID) {
   const twUserID = token.results.user_id
   return new Promise(function (resolve, reject) {
     var params = {
-      TableName : 'matching-dev',
+      TableName : `matching-${process.env.STAGE}`,
       Key: {
         'id': roomID
       }
@@ -124,7 +127,7 @@ function userAuth(token, roomID) {
 
 function updateStatus(updateColumn, roomID) {
   const params = {
-      TableName: 'matching-dev',
+      TableName: `matching-${process.env.STAGE}`,
       Key:{
         id: roomID
       },

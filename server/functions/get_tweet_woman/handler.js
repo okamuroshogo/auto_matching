@@ -9,6 +9,7 @@ aws.config.region = 'ap-northeast-1';
 
 // ここだけ、関数で違う
 const targetWord = process.env.TARGET_WORD_WOMAN;
+const targetWord2 = process.env.TARGET_WORD_MAN;
 const gender = 2;
 
 
@@ -17,10 +18,10 @@ const dynamo = new aws.DynamoDB.DocumentClient();
 const twitter = require('twitter');
 
 const client = new twitter({
-  consumer_key: process.env.CONSUMER_KEY,
-  consumer_secret: process.env.CONSUMER_SECRET,
-  access_token_key: process.env.ACCESS_TOKEN_KEY,
-  access_token_secret: process.env.ACCESS_TOKEN_SECRET
+  consumer_key: process.env.CONSUMER_KEY2,
+  consumer_secret: process.env.CONSUMER_SECRET2,
+  access_token_key: process.env.ACCESS_TOKEN_KEY2,
+  access_token_secret: process.env.ACCESS_TOKEN_SECRET2
 });
 
 
@@ -59,10 +60,13 @@ const getTweet = () => {
         userScreenName: event.user.screen_name,
         userImageUrl: event.user.profile_image_url,
         tweet: event.text,
+        targetWord: targetWord,
         gender: gender // 男なら１, 女なら２
       }
     };
-    put(tweetParams).then()
+    if (event.text.indexOf(targetWord2) === -1) {
+      put(tweetParams).then()
+    }
   });
 
   stream.on('error', function (error) {
