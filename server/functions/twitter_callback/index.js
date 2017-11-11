@@ -29,11 +29,13 @@ exports.handler = (event, context, callback) => {
           'Location': `https://kamatte.cc/detail/?id=${roomID}&callback=true`,
           "Access-Control-Allow-Origin" : "*", // Required for CORS support to work
           "Access-Control-Allow-Credentials" : true, // Required for cookies, authorization headers with HTTPS
-          "Set-Cookie": `user_id=${userID}; domain=kamatte.cc; expires=${expire.toUTCString()};"`,
           "Cookie": `user_id=${userID}; domain=kamatte.cc; expires=${expire.toUTCString()};"`
         },
-        body: ""
+        body: "",
+        "Cookie": `user_id=${userID}; domain=kamatte.cc; expires=${expire.toUTCString()};"`
     };
+    console.log('responseseeeeeeee');
+    console.log(response);
     callback(null, response);
   }).catch(function (error) {
     console.error('error');
