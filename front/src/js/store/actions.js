@@ -10,7 +10,8 @@ function fetchApi(endpoint, params, options) {
 }
 
 export const getMatchingCount = ({ commit }) => {
-    fetchApi('matching_count')
+    // fetchApi('matching_count')
+    fetch('/api/v1/matching_count', { mode: 'cors' })
         .then((data) => {
             commit('setMatchingCount', {
                 count: data.count
