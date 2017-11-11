@@ -40,10 +40,6 @@
           this.postReservation({ matchingId, userId });
           Promise.reject();
         }
-        this.$store.dispatch('getUserStatus', {
-          matchingId,
-          userId: this.$store.state.userId,
-        });
       });
       this.$store.dispatch('getDetailData', {
         matchingId,
