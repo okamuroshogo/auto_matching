@@ -89,6 +89,9 @@ export const postLike = ({ commit }, params) => {
             console.log(data);
             if (!data.success) Promise.reject();
             commit('setBtnState', { btnState: { isIkitaiBtnActive: false } });
+            if (data.location) {
+                location.href = data.location;
+            }
         }).catch(() => {
             // location.href = '/';
         });
