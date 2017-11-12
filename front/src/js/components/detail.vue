@@ -8,12 +8,12 @@
     p 18:00〜 ２名様
     //- p(v-if="detailData.userStatus1")
     p
-      button.btn-ikitai(v-on:click="postReservation({ matchingId, userId })")
+      button.btn-ikitai(v-bind:class="{ active: isIkitaiBtnActive }" v-on:click="postReservation({ matchingId, userId })")
         span
         span
         span 行きたい !
     p
-      button.btn-reserve(v-on:click="postReservation({ matchingId, userId })") お店を予約する
+      button.btn-reserve(v-bind:class="{ active: isReserveBtnActive }" v-on:click="postReservation({ matchingId, userId })") お店を予約する
 </template>
 
 <script>
@@ -47,14 +47,16 @@
           this.postReservation({ matchingId, userId });
           Promise.reject();
         }
+        const isUser1 = userId == detailData.userID1;
+        const isUser2 = userId == detailData.userID2;
         // const isSelf = userId == detailData.userID1 || userId == detailData.userID2;
-        // // const isSelf = detailData.userStatus1 && userId == detailData.userID1;
-        // if (detailData.userStatus1 && detailData.userStatus2) {
-        //   // ふたりとも押してる
-        // }
-        // else if (detailData.userStatus1 ^ detailData.userStatus2) {
-        //   // どちらかが押してる
-        // }
+        // const isUser1Done = isUser1 && detailData.userStatus1;
+        // const isUser2Done = isUser2 && detailData.userStatus2;
+        const isPartnerIkitai = (isUser1 && detailData.userStatus2) || (isUser2 && detailData.userStatus1);
+        const isEachIkitai = detailData.userStatus1 ^ detailData.userStatus2; // どちらかがいきたい
+        const isBothIkitai = detailData.userStatus1 && detailData.userStatus2; // ふたりともいきた
+        const isIkitaiBtnActive = !isPartnerIkitai;
+        const isReserveBtnActive = isPartnerIkitai;
       });
       this.$store.dispatch('getDetailData', {
         matchingId,
