@@ -65,6 +65,7 @@
           isIkitaiBtnActive: isSelfIkitai,
           isReserveBtnActive: isPartnerIkitai,
         };
+        console.log(btnState);
         this.setBtnState({ btnState });
       });
     }
