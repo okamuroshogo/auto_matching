@@ -59,7 +59,7 @@ exports.handler = (event, context, callback) => {
         });
       });
     } else {
-      return new Promise(function(fulfilled, rejected){
+      return new Promise((fulfilled, rejected) => {
         console.log('userID');
         console.log(userID);
         console.log('roomID');
@@ -69,32 +69,18 @@ exports.handler = (event, context, callback) => {
           reservationURL = dataHash.Item.shopReservationUrl;
           console.log('dataHash');
           console.log(dataHash);
-          if (userID === dataHash.Item.userID1) {
-            return updateStatus('userStatus1', roomID);
-          } else if (userID === dataHash.Item.userID2) {
-            return updateStatus('userStatus2', roomID);
-          } else {
-            const response = {
-              success: false,
-              error: 1
-            };
-            fulfilled(response);
-            return;
-          }
+          return updateStatus('complete', roomID);
+        }).then(() => {
+          return updateStatus('userStatus1', roomID);
+        }).then(() => {
+          return updateStatus('userStatus2', roomID);
         }).then(() => {
           return getUser(userID, roomID);
         }).then((dataHash) => {
-    //      const isReservation1 = dataHash.Item.userStatus1;
-    //      const isReservation2 = dataHash.Item.userStatus2;
-    //      if (isReservation1 && isReservation2) {
-    //        fulfilled(toUser);
-    //      } else {
-    //        fulfilled(toUser);
-    //      }
           const toUser = `@${dataHash.Item.screenName1} @${dataHash.Item.screenName2}`;
-          const shareUrl = `https://kamatte.cc/share/${dataHash.Item.id}`;
+          const shareUrl = dataHash.Item.ogpUrl;
           client.post('statuses/update',
-            {status: `${toUser} \n【行きたいボタンが押されました】\n\n\n\n只今、デモです。\n相手が行きたいと言っています！予約に進みましょう!! ${shareUrl}`},
+            {status: `${toUser} \n【予約が確定されました】\n\n\n\n只今、デモです。\nおめでとうございます！！予約が確定したみたいです。楽しいひと時をお過ごしください！ ${shareUrl}`},
             function (error, tweet, response) {
               if (error) {
                 console.log(error);
