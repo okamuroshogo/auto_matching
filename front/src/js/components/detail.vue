@@ -7,7 +7,7 @@
     p.shop-address {{ detailData.shopAddress }}
     p 18:00〜 ２名様
     p
-      button.btn-ikitai(v-bind:class="{ inactive: !btnState.isIkitaiBtnActive }" v-on:click="btnState.isIkitaiBtnActive ? postReservation({ matchingId, userId }) : null")
+      button.btn-ikitai(v-bind:class="{ inactive: !btnState.isIkitaiBtnActive }" v-on:click="btnState.isIkitaiBtnActive ? postLike({ matchingId, userId }) : null")
         span
         span
         span 行きたい !
@@ -26,7 +26,7 @@
       ...mapGetters([])
     },
     methods: {
-      ...mapActions(['postReservation']),
+      ...mapActions(['postReservation', 'postLike']),
       ...mapMutations(['setMatchingId', 'setBtnState'])
     },
     created() {

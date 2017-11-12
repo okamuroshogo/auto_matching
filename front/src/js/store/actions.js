@@ -79,3 +79,17 @@ export const postReservation = ({ commit }, params) => {
             // location.href = '/';
         });
 };
+
+export const postLike = ({ commit }, params) => {
+    console.log(params);
+    const matching_id = params.matchingId;
+    const user_id = params.userId;
+    fetchApi('like', {}, { method: 'post', body: JSON.stringify({ matching_id, user_id }) })
+        .then((data) => {
+            console.log(data);
+            if (!data.success) Promise.reject();
+            commit('setBtnState', { isIkitaiBtnActive: false });
+        }).catch(() => {
+            // location.href = '/';
+        });
+};
