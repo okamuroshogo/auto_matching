@@ -7,13 +7,14 @@
     p.shop-address {{ detailData.shopAddress }}
     p 18:00〜 ２名様
     //- p(v-if="detailData.userStatus1")
+    p {{btnState}}
     p
-      button.btn-ikitai(v-bind:class="{ active: isIkitaiBtnActive }" v-on:click="postReservation({ matchingId, userId })")
+      button.btn-ikitai(v-bind:class="{ active: btnState.isIkitaiBtnActive }" v-on:click="postReservation({ matchingId, userId })")
         span
         span
         span 行きたい !
     p
-      button.btn-reserve(v-bind:class="{ active: isReserveBtnActive }" v-on:click="postReservation({ matchingId, userId })") お店を予約する
+      button.btn-reserve(v-bind:class="{ active: btnState.isReserveBtnActive }" v-on:click="postReservation({ matchingId, userId })") お店を予約する
 </template>
 
 <script>
@@ -23,12 +24,12 @@
   export default {
     name: 'detail',
     computed: {
-      ...mapState(['matchingId', 'detailData', 'userId']),
+      ...mapState(['matchingId', 'detailData', 'userId', 'btnState']),
       ...mapGetters([])
     },
     methods: {
       ...mapActions(['postReservation']),
-      ...mapMutations(['setMatchingId'])
+      ...mapMutations(['setMatchingId', 'setBtnState'])
     },
     created() {
       const locationHash = (location.hash || '').replace(/^#/, '');
@@ -41,12 +42,17 @@
       if (locationParams.error == 1) alert('マッチングしていないユーザーアカウントです。ログインしているアカウントを確認してください!');
 
       this.setMatchingId({ matchingId });
-      this.$store.dispatch('getUserId').then(() => {
+      this.$store.dispatch('getUserId')
+      .then(() => {
+        return this.$store.dispatch('getDetailData', { matchingId });
+      })
+      .then(() => {
         const userId = this.$store.state.userId;
         if (isCallback) {
           this.postReservation({ matchingId, userId });
           Promise.reject();
         }
+        const detailData = this.$store.state.detailData;
         const isUser1 = userId == detailData.userID1;
         const isUser2 = userId == detailData.userID2;
         // const isSelf = userId == detailData.userID1 || userId == detailData.userID2;
@@ -55,11 +61,11 @@
         const isPartnerIkitai = (isUser1 && detailData.userStatus2) || (isUser2 && detailData.userStatus1);
         const isEachIkitai = detailData.userStatus1 ^ detailData.userStatus2; // どちらかがいきたい
         const isBothIkitai = detailData.userStatus1 && detailData.userStatus2; // ふたりともいきた
-        const isIkitaiBtnActive = !isPartnerIkitai;
-        const isReserveBtnActive = isPartnerIkitai;
-      });
-      this.$store.dispatch('getDetailData', {
-        matchingId,
+        const btnState = {
+          isIkitaiBtnActive: !isPartnerIkitai,
+          isReserveBtnActive: isPartnerIkitai,
+        };
+        this.setBtnState({ btnState });
       });
     }
   }

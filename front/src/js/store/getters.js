@@ -10,6 +10,10 @@ export const detailData = (state) => {
     return state.detailData;
 };
 
+export const btnState = (state) => {
+    return state.btnState;
+};
+
 export const userId = (state) => {
     return state.userId;
 };
