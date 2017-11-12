@@ -305,7 +305,8 @@ const postTweet = (matching) => {
           console.log(error);
           reject(error)
         }
-        resolve()
+        console.log(tweet);
+        resolve(tweet.id)
       })
   });
 
@@ -373,10 +374,11 @@ const createMatching = () => {
         createImage(params.Item).then((fileName) => {
           uploadImage(fileName).then((ogpUrl) => {
             params.Item["ogpUrl"] = ogpUrl;
-            create(params).then(() => {
               // return 'hoge'; // TODO
 
-              postTweet(params.Item).then(() => {
+            postTweet(params.Item).then((tweetID) => {
+              params.Item["matchingTweetID"] = tweetID;
+              create(params).then(() => {
 
                 // return callback(null, 'hoge'); // TODO
                 deleteUser({

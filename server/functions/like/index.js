@@ -100,7 +100,7 @@ exports.handler = (event, context, callback) => {
           const toUser = `@${dataHash.Item.screenName1} @${dataHash.Item.screenName2}`;
           const shareUrl = `https://kamatte.cc/share/${dataHash.Item.id}`;
           client.post('statuses/update',
-            {status: `${toUser} \n【行きたいボタンが押されました】\n\n\n\n只今、デモです。\n相手が行きたいと言っています！予約に進みましょう!! ${shareUrl}`},
+            {status: `${toUser} \n【行きたいボタンが押されました】\n\n\n\n只今、デモです。\n相手が行きたいと言っています！予約に進みましょう!! ${shareUrl}`, in_reply_to_status_id: dataHash.Item.matchingTweetID},
             function (error, tweet, response) {
               if (error) {
                 console.log(error);
