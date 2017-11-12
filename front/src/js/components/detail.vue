@@ -56,11 +56,13 @@
         // const isSelf = userId == detailData.userID1 || userId == detailData.userID2;
         // const isUser1Done = isUser1 && detailData.userStatus1;
         // const isUser2Done = isUser2 && detailData.userStatus2;
+        const isSelfIkitai = (isUser1 && detailData.userStatus1) || (isUser2 && detailData.userStatus2);
         const isPartnerIkitai = (isUser1 && detailData.userStatus2) || (isUser2 && detailData.userStatus1);
         const isEachIkitai = detailData.userStatus1 ^ detailData.userStatus2; // どちらかがいきたい
         const isBothIkitai = detailData.userStatus1 && detailData.userStatus2; // ふたりともいきた
         const btnState = {
-          isIkitaiBtnActive: !isPartnerIkitai,
+          // isIkitaiBtnActive: !isPartnerIkitai,
+          isIkitaiBtnActive: isSelfIkitai,
           isReserveBtnActive: isPartnerIkitai,
         };
         this.setBtnState({ btnState });
