@@ -6,15 +6,13 @@
     p.shop-name {{ detailData.shopName }}
     p.shop-address {{ detailData.shopAddress }}
     p 18:00〜 ２名様
-    //- p(v-if="detailData.userStatus1")
-    p {{btnState}}
     p
-      button.btn-ikitai(v-bind:class="{ active: btnState.isIkitaiBtnActive }" v-on:click="postReservation({ matchingId, userId })")
+      button.btn-ikitai(v-bind:class="{ inactive: btnState.isIkitaiBtnActive }" v-on:click="postReservation({ matchingId, userId })")
         span
         span
         span 行きたい !
     p
-      button.btn-reserve(v-bind:class="{ active: btnState.isReserveBtnActive }" v-on:click="postReservation({ matchingId, userId })") お店を予約する
+      button.btn-reserve(v-bind:class="{ inactive: btnState.isReserveBtnActive }" v-on:click="postReservation({ matchingId, userId })") お店を予約する
 </template>
 
 <script>
