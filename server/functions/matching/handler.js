@@ -81,21 +81,23 @@ const createImage = (item) => {
           Jimp.read(userImage1).then(function (image1) {
             console.log('image1');
             Jimp.read(userImage2).then(function (image2) {
-              console.log('image2');
-              image1.scale(2.5, () => {
-                console.log('scale1');
-                image2.scale(2.5, () => {
-                  console.log('scale2');
-                  base.composite(targetWordImage1, 90, 450)
-                    .composite(targetWordImage2, 705, 450)
-                    .composite(image1, 200, 200)
-                    .composite(image2, 800, 200)
-                    .write(fileName, () => {
-                      console.log(fileName);
-                      resolve(fileName);
-                    });
+              Jimp.read(__dirname + '/mask.png').then(function (mask) {
+                console.log('image2');
+                image1.scale(2.5, () => {
+                  console.log('scale1');
+                  image2.scale(2.5, () => {
+                    console.log('scale2');
+                    base.composite(targetWordImage1, 90, 450)
+                      .composite(targetWordImage2, 705, 450)
+                      .composite(image1.mask(mask, 0, 0), 200, 200)
+                      .composite(image2.mask(mask, 0, 0), 800, 200)
+                      .write(fileName, () => {
+                        console.log(fileName);
+                        resolve(fileName);
+                      });
+                  });
                 });
-              });
+              })
             })
           })
         }).catch(function (err) {
@@ -194,7 +196,7 @@ const getHotpepper = () => {
           })
         }
         else {
-          const selectedShop =  body.results.shop[getRandomInt(0, 9)];
+          const selectedShop = body.results.shop[getRandomInt(0, 9)];
           console.log(selectedShop);
           resolve({
             shopName: selectedShop.name,
@@ -416,7 +418,7 @@ const createMatching = () => {
 
 
 module.exports.createMatching = (event, context, callback) => {
-  callback(null,createMatching());
+  callback(null, createMatching());
 };
 
 // createMatching();
