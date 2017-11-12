@@ -32,7 +32,7 @@ exports.handler = (event, context, callback) => {
   console.log('json');
   console.log(json);
   const roomID = (json && json.matching_id);
-  const userID = (json && json.user_id);
+  const userID = (json && json.user_id) || false;
 
   twitter = new twitterAPI({
     consumerKey: process.env.CONSUMER_KEY,
@@ -41,7 +41,10 @@ exports.handler = (event, context, callback) => {
   });
 
   Promise.resolve().then(function(){
-    if (!userID) {  
+    console.log('userID');
+    console.log(userID);
+    //if (!userID) {  
+    if (userID == 'undefined' || !userID) {
       return new Promise(function(fulfilled, rejected){
         twitterRequestToken().then((tokenHash) => {
           return putToken(tokenHash); 
@@ -53,7 +56,10 @@ exports.handler = (event, context, callback) => {
           };
           console.log('responseseeeeeeee');
           console.log(response);
-          fulfilled(response); 
+          //fulfilled(response); 
+
+          callback(null, createResponse(200, response));
+          return;
         }).catch((error) => {
           rejected(error);
         });
@@ -65,7 +71,7 @@ exports.handler = (event, context, callback) => {
         console.log('roomID');
         console.log(roomID);
         getUser(userID, roomID).then((dataHash) => {
-          if (!('Item' in dataHash)) { return; }
+          if (!('Item' in dataHash)) { rejected(); return; }
           reservationURL = dataHash.Item.shopReservationUrl;
           console.log('dataHash');
           console.log(dataHash);

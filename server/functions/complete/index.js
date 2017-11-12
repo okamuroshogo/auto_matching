@@ -41,7 +41,8 @@ exports.handler = (event, context, callback) => {
   });
 
   Promise.resolve().then(function(){
-    if (!userID) {  
+    //if (!userID) {  
+    if (userID == 'undefined' || !userID) {
       return new Promise(function(fulfilled, rejected){
         twitterRequestToken().then((tokenHash) => {
           return putToken(tokenHash); 

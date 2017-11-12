@@ -11,14 +11,24 @@ const aws = require('aws-sdk');
 const dynamo = new aws.DynamoDB.DocumentClient({region: 'ap-northeast-1'});
 
 exports.handler = (event, context, callback) => {
+  console.log('event');
+  console.log(event);
   const qs = event.queryStringParameters;
-  const userID = qs && qs.user_id;
+  let userID = (qs && qs.user_id) || '';
   const roomID = qs && qs.matching_id;
   const oauth_token = qs.oauth_token;
   const oauth_verifier = qs.oauth_verifier;
   fetchToken(oauth_token).then(function(dynamo) { 
     return accessToken(dynamo.Item.request_token, dynamo.Item.request_secret, oauth_verifier);
   }).then((token) => {
+    console.log('userID');
+    console.log(typeof userID);
+    console.log(token);
+    console.log('userID');
+    console.log(userID);
+    console.log(token);
+    userID = token.results.user_id;
+    console.log(userID);
     return putUser(token, roomID);
   }).then(() => {
     const expire = new Date();
@@ -27,12 +37,11 @@ exports.handler = (event, context, callback) => {
         statusCode: 302,
         headers: {
           'Location': `https://kamatte.cc/detail/?id=${roomID}&callback=true`,
-          "Access-Control-Allow-Origin" : "*", // Required for CORS support to work
-          "Access-Control-Allow-Credentials" : true, // Required for cookies, authorization headers with HTTPS
-          "Cookie": `user_id=${userID}; domain=kamatte.cc; expires=${expire.toUTCString()};"`
+          "Access-Control-Allow-Origin" : "*",
+          "Access-Control-Allow-Credentials" : true,
+          "Set-Cookie": `user_id=${userID}; Path=/; domain=kamatte.cc; "`
         },
-        body: "",
-        "Cookie": `user_id=${userID}; domain=kamatte.cc; expires=${expire.toUTCString()};"`
+        body: ""//,
     };
     console.log('responseseeeeeeee');
     console.log(response);
@@ -77,6 +86,8 @@ function fetchToken(oauth_token) {
 }
 
 function putUser(tokenHash, roomID) {
+  console.log('tokenHash');
+  console.log(tokenHash);
   const userID = tokenHash.results.user_id;
   const putQuery = {
     TableName: `users-${process.env.STAGE}`,

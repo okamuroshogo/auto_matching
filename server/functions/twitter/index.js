@@ -22,7 +22,7 @@ exports.handler = (event, context, callback) => {
   console.log('json');
   console.log(json);
   const roomID = (json && json.matching_id);
-  const userID = (json && json.user_id);
+  const userID = (json && json.user_id) || '';
 
   twitter = new twitterAPI({
     consumerKey: process.env.CONSUMER_KEY,
@@ -31,7 +31,8 @@ exports.handler = (event, context, callback) => {
   });
 
   Promise.resolve().then(function(){
-    if (!userID) {  
+    //if (!userID) {  
+    if (userID == 'undefined' || !userID) {
       return new Promise(function(fulfilled, rejected){
         twitterRequestToken().then((tokenHash) => {
           return putToken(tokenHash); 
