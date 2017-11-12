@@ -11,7 +11,7 @@ export const setDetailData = (state, data) => {
 };
 
 export const setBtnState = (state, { btnState }) => {
-    state.btnState = {...state.btnState, btnState};
+    state.btnState = {...state.btnState, ...btnState};
 };
 
 export const setUserId = (state, { userId }) => {
