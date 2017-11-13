@@ -241,6 +241,33 @@ const getUser = (gender) => {
   });
 };
 
+const updateStatus = (roomID, matchingTweetID) => {
+  const params = {
+      TableName: `matching-${process.env.STAGE}`,
+      Key:{
+        id: roomID
+      },
+      ReturnValues:"UPDATED_NEW"
+  };
+  
+  params['ExpressionAttributeNames'] = {};
+  params['ExpressionAttributeNames']['#b'] = 'matchingTweetID';
+  params['ExpressionAttributeValues'] = {};
+  params['ExpressionAttributeValues'][':status'] = matchingTweetID;
+  params['UpdateExpression'] = 'SET #b = :status';
+
+  return new Promise(function (resolve, reject) {
+    dynamo.update(params, function (err, data) {
+      if (err) {
+        console.log(err);
+        reject(err);
+      } else {
+        resolve();
+      }
+    });
+  });
+};
+
 const deleteUser = (user) => {
   return new Promise((resolve, reject) => {
     const params = {
@@ -303,7 +330,7 @@ const postTweet = (matching) => {
           console.log(error);
           reject(error)
         }
-        resolve()
+        resolve(tweet);
       })
   });
 
@@ -371,11 +398,10 @@ const createMatching = () => {
         createImage(params.Item).then((fileName) => {
           uploadImage(fileName).then((ogpUrl) => {
             params.Item["ogpUrl"] = ogpUrl;
-            create(params).then(() => {
               // return 'hoge'; // TODO
 
-              postTweet(params.Item).then(() => {
-
+            postTweet(params.Item).then((tweet) => {
+              create(params).then(() => {
                 // return callback(null, 'hoge'); // TODO
                 deleteUser({
                   gender: params.Item.userGender1,
@@ -386,7 +412,12 @@ const createMatching = () => {
                       gender: params.Item.userGender2,
                       tweetID: params.Item.tweetID2
                     }).then(() => {
-
+                      console.log('tweet');
+                      console.log('tweet');
+                      console.log(tweet);
+                      updateStatus(params.Item.id, tweet.id_str).then(() => {
+                        
+                      });
                     })
                   })
               })
