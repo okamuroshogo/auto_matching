@@ -7,6 +7,14 @@ const twitterAPI = require('node-twitter-api');
 let twitter;
 let reservationURL = "";
 
+const twitterClient = require('twitter');
+const client = new twitterClient({
+  consumer_key: process.env.CONSUMER_KEY2,
+  consumer_secret: process.env.CONSUMER_SECRET2,
+  access_token_key: process.env.ACCESS_TOKEN_KEY2,
+  access_token_secret: process.env.ACCESS_TOKEN_SECRET2
+});
+
 const createResponse = (statusCode, body) => (
   {
     statusCode,
@@ -18,11 +26,13 @@ const createResponse = (statusCode, body) => (
 );
 
 exports.handler = (event, context, callback) => {
+  //const matchingID = event.path.split('/').pop();
+
   const json = JSON.parse(event.body);
   console.log('json');
   console.log(json);
   const roomID = (json && json.matching_id);
-  const userID = (json && json.user_id) || '';
+  const userID = (json && json.user_id) || false;
 
   twitter = new twitterAPI({
     consumerKey: process.env.CONSUMER_KEY,
@@ -31,6 +41,8 @@ exports.handler = (event, context, callback) => {
   });
 
   Promise.resolve().then(function(){
+    console.log('userID');
+    console.log(userID);
     //if (!userID) {  
     if (userID == 'undefined' || !userID) {
       return new Promise(function(fulfilled, rejected){
@@ -44,7 +56,10 @@ exports.handler = (event, context, callback) => {
           };
           console.log('responseseeeeeeee');
           console.log(response);
-          fulfilled(response); 
+          //fulfilled(response); 
+
+          callback(null, createResponse(200, response));
+          return;
         }).catch((error) => {
           rejected(error);
         });
@@ -56,15 +71,13 @@ exports.handler = (event, context, callback) => {
         console.log('roomID');
         console.log(roomID);
         getUser(userID, roomID).then((dataHash) => {
-          if (!('Item' in dataHash)) { reject(); return; }
+          if (!('Item' in dataHash)) { rejected(); return; }
           reservationURL = dataHash.Item.shopReservationUrl;
           console.log('dataHash');
           console.log(dataHash);
           if (userID === dataHash.Item.userID1) {
-            if (!dataHash.Item.userStatus2) { reject(); return; }
             return updateStatus('userStatus1', roomID);
           } else if (userID === dataHash.Item.userID2) {
-            if (!dataHash.Item.userStatus1) { reject(); return; }
             return updateStatus('userStatus2', roomID);
           } else {
             const response = {
@@ -77,21 +90,32 @@ exports.handler = (event, context, callback) => {
         }).then(() => {
           return getUser(userID, roomID);
         }).then((dataHash) => {
-          const isReservation1 = dataHash.Item.userStatus1;
-          const isReservation2 = dataHash.Item.userStatus2;
-          if (isReservation1 && isReservation2) {
-            const response = {
-              success: true,
-              reservationURL: reservationURL
-            };
-            fulfilled(response);
-          } else {
-            reject();
-          }
+    //      const isReservation1 = dataHash.Item.userStatus1;
+    //      const isReservation2 = dataHash.Item.userStatus2;
+    //      if (isReservation1 && isReservation2) {
+    //        fulfilled(toUser);
+    //      } else {
+    //        fulfilled(toUser);
+    //      }
+          const toUser = `@${dataHash.Item.screenName1} @${dataHash.Item.screenName2}`;
+          const shareUrl = `https://kamatte.cc/share/${dataHash.Item.id}`;
+          client.post('statuses/update',
+            {status: `${toUser} \n【行きたいボタンが押されました】\n\n\n\n只今、デモです。\n相手が行きたいと言っています！予約に進みましょう!! ${shareUrl}`},
+            function (error, tweet, response) {
+              if (error) {
+                console.log(error);
+                rejected(error);
+                return;
+              }
+              fulfilled();
+          });
         });
       });
     }
-  }).then((response) => {
+  }).then(() => {
+    const response = {
+      success: true
+    };
     callback(null, createResponse(200, response));
   }).catch((error) => {
     callback(null, createResponse(400, {Message: error.message}));
