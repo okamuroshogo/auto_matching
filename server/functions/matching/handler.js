@@ -325,8 +325,8 @@ const postTweet = (matching) => {
 
     // TODO　コミットしない
     client.post('statuses/update',
-      // {status: `${toUser} \n【お店をご用意しました！】\n\nあなたの過去のツイートより勝手にマッチングし、お店もご用意させていただきました！🎉🎉\n\n ${shareUrl} #kamatte_cc`},
-      {status: `${toUser} \n【お店をご用意しました！】\n\n\n\n只今、いいとものデモでマッチングしています。 ${shareUrl}`},
+      {status: `${toUser} \n【お店をご用意しました！】\n\nあなたの過去のツイートより勝手にマッチングし、お店もご用意させていただきました！🎉🎉\n\n ${shareUrl} #kamatte_cc`},
+      //{status: `${toUser} \n【お店をご用意しました！】\n\n\n\n只今、いいとものデモでマッチングしています。 ${shareUrl}`},
       function (error, tweet, response) {
         if (error) {
           console.log(error);

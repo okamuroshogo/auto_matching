@@ -78,10 +78,10 @@ exports.handler = (event, context, callback) => {
         }).then(() => {
           return getUser(userID, roomID);
         }).then((dataHash) => {
-          const toUser = `@${dataHash.Item.screenName1} @${dataHash.Item.screenName2}`;
+        //  const toUser = `@${dataHash.Item.screenName1} @${dataHash.Item.screenName2}`;
           const shareUrl = dataHash.Item.ogpUrl;
           client.post('statuses/update',
-            {status: `${toUser} \n【予約が確定されました】\n\n\n\n只今、デモです。\nおめでとうございます！！予約が確定したみたいです。楽しいひと時をお過ごしください！ ${shareUrl}`},
+            {status: `\n【予約が確定されました】\n\n\n\n\nおめでとうございます！！予約が確定したみたいです。楽しいひと時をお過ごしください！ #kamatte_cc`},
             function (error, tweet, response) {
               if (error) {
                 console.log(error);

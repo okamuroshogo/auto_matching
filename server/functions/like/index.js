@@ -97,10 +97,10 @@ exports.handler = (event, context, callback) => {
     //      } else {
     //        fulfilled(toUser);
     //      }
-          const toUser = `@${dataHash.Item.screenName1} @${dataHash.Item.screenName2}`;
+//          const toUser = `@${dataHash.Item.screenName1} @${dataHash.Item.screenName2}`;
           const shareUrl = `https://kamatte.cc/share/${dataHash.Item.id}`;
           client.post('statuses/update',
-            {status: `${toUser} \n【行きたいボタンが押されました】\n\n\n\n只今、デモです。\n相手が行きたいと言っています！予約に進みましょう!! ${shareUrl}`, in_reply_to_status_id: dataHash.Item.matchingTweetID},
+            {status: `【きになるボタンが押されました】\n\n\n\n\nお相手がきになると言っています！予約に進みましょう!! #kamatte_cc`, in_reply_to_status_id: dataHash.Item.matchingTweetID},
             function (error, tweet, response) {
               if (error) {
                 console.log(error);
