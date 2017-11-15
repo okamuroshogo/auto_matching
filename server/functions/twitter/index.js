@@ -1,7 +1,7 @@
 'use strict';
 
 require('dotenv').config();
-const aws         = require('aws-sdk');
+const aws = require('aws-sdk');
 const dynamo = new aws.DynamoDB.DocumentClient({region: 'ap-northeast-1'});
 const twitterAPI = require('node-twitter-api');
 let twitter;
@@ -30,12 +30,12 @@ exports.handler = (event, context, callback) => {
     callback: `${process.env.TWITTER_CALLBACK}?matching_id=${roomID}&user_id=${userID}`
   });
 
-  Promise.resolve().then(function(){
+  Promise.resolve().then(function () {
     //if (!userID) {  
     if (userID == 'undefined' || !userID) {
-      return new Promise(function(fulfilled, rejected){
+      return new Promise(function (fulfilled, rejected) {
         twitterRequestToken().then((tokenHash) => {
-          return putToken(tokenHash); 
+          return putToken(tokenHash);
         }).then((requestToken) => {
           const response = {
             success: true,
@@ -44,27 +44,40 @@ exports.handler = (event, context, callback) => {
           };
           console.log('responseseeeeeeee');
           console.log(response);
-          fulfilled(response); 
+          fulfilled(response);
         }).catch((error) => {
           rejected(error);
         });
       });
     } else {
-      return new Promise(function(fulfilled, rejected){
+      return new Promise(function (fulfilled, rejected) {
         console.log('userID');
         console.log(userID);
         console.log('roomID');
         console.log(roomID);
         getUser(userID, roomID).then((dataHash) => {
-          if (!('Item' in dataHash)) { reject(); return; }
+          if (!('Item' in dataHash)) {
+            rejected('Item in dataHash');
+            return;
+          }
           reservationURL = dataHash.Item.shopReservationUrl;
           console.log('dataHash');
           console.log(dataHash);
           if (userID === dataHash.Item.userID1) {
-            if (!dataHash.Item.userStatus2) { reject(); return; }
+            console.log('userID === dataHash.Item.userID1');
+            if (!dataHash.Item.userStatus2) {
+              console.log('!dataHash.Item.userStatus2');
+              rejected('!dataHash.Item.userStatus2');
+              return;
+            }
             return updateStatus('userStatus1', roomID);
           } else if (userID === dataHash.Item.userID2) {
-            if (!dataHash.Item.userStatus1) { reject(); return; }
+            console.log('userID === dataHash.Item.userID2');
+            if (!dataHash.Item.userStatus1) {
+              console.log('!dataHash.Item.userStatus1');
+              rejected('!dataHash.Item.userStatus1');
+              return;
+            }
             return updateStatus('userStatus2', roomID);
           } else {
             const response = {
@@ -82,11 +95,11 @@ exports.handler = (event, context, callback) => {
           if (isReservation1 && isReservation2) {
             const response = {
               success: true,
-              reservationURL: reservationURL
+              reservation_url: reservationURL
             };
             fulfilled(response);
           } else {
-            reject();
+            rejected('end');
           }
         });
       });
@@ -105,7 +118,7 @@ function twitterRequestToken() {
         console.log(error);
         reject(error);
         return;
-      } 
+      }
       resolve({requestToken, requestTokenSecret});
     });
   });
@@ -117,27 +130,27 @@ function putToken(tokenHash) {
     console.log(tokenHash);
     dynamo.put({
       TableName: `twitter-session-${process.env.STAGE}`,
-      Item:{
-        request_token : tokenHash.requestToken,
-        request_secret : tokenHash.requestTokenSecret
+      Item: {
+        request_token: tokenHash.requestToken,
+        request_secret: tokenHash.requestTokenSecret
         //follow : JSON.parse(querystring.parse(event['body-json']).follow)
       }
-    },  (err) => {
-    //},  function(err, res){
-      if (err){
+    }, (err) => {
+      //},  function(err, res){
+      if (err) {
         console.log(err);
         reject();
         return;
       }
-      resolve(tokenHash.requestToken);        
-    }); 
+      resolve(tokenHash.requestToken);
+    });
   });
 }
 
 function getUser(twUserID, roomID) {
   return new Promise((resolve, reject) => {
     var params = {
-      TableName : `matching-${process.env.STAGE}`,
+      TableName: `matching-${process.env.STAGE}`,
       Key: {
         'id': roomID
       },
@@ -145,7 +158,7 @@ function getUser(twUserID, roomID) {
     };
 
     dynamo.get(params, (err, data) => {
-      if (err){
+      if (err) {
         console.log(err);
         reject(err);
       } else {
@@ -156,19 +169,26 @@ function getUser(twUserID, roomID) {
 }
 
 function updateStatus(updateColumn, roomID) {
+  console.log('updateStatus');
   const params = {
-      TableName: `matching-${process.env.STAGE}`,
-      Key:{
-        id: roomID
-      },
-      ReturnValues:"UPDATED_NEW"
+    TableName: `matching-${process.env.STAGE}`,
+    Key: {
+      id: roomID
+    },
+    ReturnValues: "UPDATED_NEW"
   };
-  
+  console.log(params);
+
+
   params['ExpressionAttributeNames'] = {};
   params['ExpressionAttributeNames']['#b'] = `${updateColumn}`;
   params['ExpressionAttributeValues'] = {};
   params['ExpressionAttributeValues'][':status'] = true;
   params['UpdateExpression'] = 'SET #b = :status';
+
+  console.log(params);
+  console.log('params');
+
 
   return new Promise(function (resolve, reject) {
     dynamo.update(params, function (err, data) {
@@ -176,6 +196,7 @@ function updateStatus(updateColumn, roomID) {
         console.log(err);
         reject(err);
       } else {
+        console.log('updateStatus put success!');
         resolve();
       }
     });

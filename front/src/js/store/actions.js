@@ -61,7 +61,9 @@ export const getUserId = ({ commit }) => {
 };
 
 export const postReservation = ({ commit }, params) => {
+    console.error('postReservation');
     console.log(params);
+    console.error('postReservation');
     const matching_id = params.matchingId;
     const user_id = params.userId;
     fetchApi('reservation', {}, { method: 'post', body: JSON.stringify({ matching_id, user_id }) })

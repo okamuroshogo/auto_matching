@@ -12,7 +12,9 @@
         span
         span 行きたい !
     p
-      button.btn-reserve(v-bind:class="{ inactive: !btnState.isReserveBtnActive }" v-on:click="btnState.isReserveBtnActive ? postReservation({ matchingId, userId }) : null") お店を予約する
+      a(v-bind:href="detailData.shopReservationUrl")
+        button.btn-reserve お店を予約する
+        <!--button.btn-reserve(v-bind:class="{ inactive: !btnState.isReserveBtnActive }" v-on:click="btnState.isReserveBtnActive ? postReservation({ matchingId, userId }) : null") お店を予約する-->
 </template>
 
 <script>
@@ -45,19 +47,54 @@
         return this.$store.dispatch('getDetailData', { matchingId });
       })
       .then(() => {
+        console.log(this.$store.state);
+        console.log(this.$store.state.userId);
+        console.log(this.$store.state.detailData);
+        console.log(this.$store.getters.detailData);
         const userId = this.$store.state.userId;
+        const detailData = this.$store.getters.detailData;
+
         if (isCallback) {
           this.postReservation({ matchingId, userId });
           Promise.reject();
         }
-        const detailData = this.$store.state.detailData;
-        const isUser1 = userId == detailData.userID1;
-        const isUser2 = userId == detailData.userID2;
+        console.log('this');
+        console.log(this);
+        console.log('this.$store');
+        console.log(this.$store);
+
+
+        console.log('detailData');
+        console.log(detailData);
+
+        const isUser1 = userId === detailData.userID1;
+        const isUser2 = userId === detailData.userID2;
+
+        console.log('isUser1');
+        console.log(isUser1);
+        console.log('isUser2');
+        console.log(isUser2);
+
         // const isSelf = userId == detailData.userID1 || userId == detailData.userID2;
         // const isUser1Done = isUser1 && detailData.userStatus1;
         // const isUser2Done = isUser2 && detailData.userStatus2;
         const isSelfIkitai = (isUser1 && detailData.userStatus1) || (isUser2 && detailData.userStatus2);
+        console.log('isSelfIkitai');
+        console.log('isSelfIkitai');
+        console.log('isUser1 && detailData.userStatus1');
+        console.log(isUser1 && detailData.userStatus1);
+        console.log('isUser2 && detailData.userStatus2');
+        console.log(isUser2 && detailData.userStatus2);
+
         const isPartnerIkitai = (isUser1 && detailData.userStatus2) || (isUser2 && detailData.userStatus1);
+        console.log('isPartnerIkitai');
+        console.log(isPartnerIkitai);
+
+        console.log('isUser1 && detailData.userStatus2');
+        console.log(isUser1 && detailData.userStatus2);
+        console.log('isUser2 && detailData.userStatus1');
+        console.log(isUser2 && detailData.userStatus1);
+
         const isEachIkitai = detailData.userStatus1 ^ detailData.userStatus2; // どちらかがいきたい
         const isBothIkitai = detailData.userStatus1 && detailData.userStatus2; // ふたりともいきた
         const btnState = {
