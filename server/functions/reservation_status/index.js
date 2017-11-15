@@ -6,7 +6,7 @@ const dynamo = new aws.DynamoDB.DocumentClient({region: 'ap-northeast-1'});
 
 exports.handler = (event, context, callback) => {
   const data = event.queryStringParameters;
-  const roomID = data.matching_id;
+  const roomID = data && data.matching_id;
 
   getItem(roomID).then((item) => {
     const response = {
@@ -20,7 +20,15 @@ exports.handler = (event, context, callback) => {
   }).catch(function (error) {
     console.error('error');
     console.error(error);
-    callback(null, {statusCode: 400, error: error});
+    const response = {
+      statusCode: 400,
+      headers: {
+        "Access-Control-Allow-Origin" : "*", // Required for CORS support to work
+        "Access-Control-Allow-Credentials" : true // Required for cookies, authorization headers with HTTPS
+      },
+      body: JSON.stringify({ "message": `${error}` })
+    };
+    callback(null, response);
   });
 };
 
