@@ -64,6 +64,7 @@ export const postReservation = ({ commit }, params) => {
     console.log(params);
     const matching_id = params.matchingId;
     const user_id = params.userId;
+    commit('setBtnState', { btnState: { isReserveBtnActive: false } });
     fetchApi('reservation', {}, { method: 'post', body: JSON.stringify({ matching_id, user_id }) })
         .then((data) => {
             console.log(data);
