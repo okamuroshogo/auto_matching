@@ -8,6 +8,8 @@ const fs = require('fs');
 const uuid = require('uuid');
 const request = require('request');
 const apiUrl = `http://webservice.recruit.co.jp/hotpepper/gourmet/v1/?key=${process.env.HOT_API_KEY}&large_area=Z011&format=json`;
+const gurunabiURL = process.env.GURUNABI_API_URL;
+
 const Jimp = require('jimp');
 
 const twitter = require('twitter');
@@ -27,46 +29,81 @@ aws.config.region = 'ap-northeast-1';
 
 const dynamo = new aws.DynamoDB.DocumentClient();
 
-
-const createImage = (userImage1, userImage2, uuid) => {
+const getImageFromText = (text) => {
   return new Promise((resolve, reject) => {
-    const fileName = `/tmp/${uuid}.png`; // 書き込み可能なのは/tmp以下だけ、かつ名前重複でエラー起きるので重複できないようにする。
-    console.log('-----------------start---------------------');
-    console.log(userImage1, userImage2, uuid);
-    console.log('-----------------start---------------------');
+    const apiURL = process.env.API_URL + encodeURIComponent(text);
+    console.log(apiURL);
 
-    console.log(fileName);
-    console.log(__dirname + '/baseImage.png');
+    request.get(apiURL, (err, res, body) => {
+      if (err) {
+        console.log('-------------getImageFromText-------------');
+        console.log(err);
+        console.log('-------------getImageFromText-------------');
+        reject(err)
+      }
+      resolve(Jimp.read(Buffer.from(body, 'base64')));
+    })
+  });
+};
 
-    userImage1 = userImage1.replace('normal', 'bigger');
-    userImage2 = userImage2.replace('normal', 'bigger');
 
-    Jimp.read(__dirname + '/baseImage.png').then(function (base) {
+const createImage = (item) => {
+  // .userImageUrl1, params.Item.userImageUrl2, params.Item.id
+  return new Promise((resolve, reject) => {
+    let userImage1 = item.userImageUrl1;
+    let userImage2 = item.userImageUrl2;
+    const targetWord1 = item.targetWord1;
+    const targetWord2 = item.targetWord2;
+    const _uuid = item.id;
+    let targetWordImage1;
+    let targetWordImage2;
 
-      Jimp.read(userImage1).then(function (image1) {
-        Jimp.read(userImage2).then(function (image2) {
-          Jimp.read(__dirname + '/kareshi.png').then(function (kareshi) {
-            Jimp.read(__dirname + '/kanojo.png').then(function (kanojo) {
-              image1.scale(2.5, () => {
-                image2.scale(2.5, () => {
-                  base.composite(kareshi, 150, 500)
-                    .composite(kanojo, 700, 500)
-                    .composite(image1, 200, 200)
-                    .composite(image2, 800, 200)
-                    .write(fileName, () => {
-                      console.log(fileName);
-                      resolve(fileName);
-                    });
+    getImageFromText(targetWord1).then((_targetWordImage1) => {
+      targetWordImage1 = _targetWordImage1;
+      return getImageFromText(targetWord2)
+    })
+      .then((_targetWordImage2) => {
+        targetWordImage2 = _targetWordImage2;
+        const fileName = `/tmp/${_uuid}.png`; // 書き込み可能なのは/tmp以下だけ、かつ名前重複でエラー起きるので重複できないようにする。
+        console.log('-----------------start---------------------');
+        console.log(userImage1, userImage2, uuid);
+        console.log('-----------------start---------------------');
 
+        console.log(fileName);
+        console.log(__dirname + '/baseImage.png');
+
+        userImage1 = userImage1.replace('normal', 'bigger');
+        userImage2 = userImage2.replace('normal', 'bigger');
+
+
+        Jimp.read(__dirname + '/baseImage.png').then(function (base) {
+
+          Jimp.read(userImage1).then(function (image1) {
+            console.log('image1');
+            Jimp.read(userImage2).then(function (image2) {
+              Jimp.read(__dirname + '/mask.png').then(function (mask) {
+                console.log('image2');
+                image1.scale(2.5, () => {
+                  console.log('scale1');
+                  image2.scale(2.5, () => {
+                    console.log('scale2');
+                    base.composite(targetWordImage1, 90, 450)
+                      .composite(targetWordImage2, 705, 450)
+                      .composite(image1.mask(mask, 0, 0), 200, 200)
+                      .composite(image2.mask(mask, 0, 0), 800, 200)
+                      .write(fileName, () => {
+                        console.log(fileName);
+                        resolve(fileName);
+                      });
+                  });
                 });
-              });
+              })
             })
           })
-        })
-      })
-    }).catch(function (err) {
-      console.error(err);
-    });
+        }).catch(function (err) {
+          console.error(err);
+        });
+      });
   });
 };
 
@@ -97,6 +134,31 @@ function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
+const getGurunabi = () => {
+  return new Promise((resolve, reject) => {
+    console.log(gurunabiURL);
+    request.get(gurunabiURL, (err, data) => {
+      if (err) {
+        reject(err)
+      }
+      const body = JSON.parse(data.body);
+      console.log(body);
+      const rest = body.rest[getRandomInt(0, 9)];
+      console.log(rest);
+      console.log(rest.id);
+      const url = `https://r.gnavi.co.jp/plan/${rest.id}/plan-reserve/plan/plan_list/#wrapper`;
+      console.log(url);
+      resolve({
+        shopName: rest.name,
+        shopUrl: rest.url,
+        shopImageUrl: rest.image_url.shop_image1,
+        shopReservationUrl: `https://r.gnavi.co.jp/plan/${rest.id}/plan-reserve/plan/plan_list/#wrapper`,
+        shopAddress: rest.address
+      });
+    })
+  });
+};
+
 
 const checkReservation = (id) => {
   return new Promise((resolve, reject) => {
@@ -113,7 +175,7 @@ const checkReservation = (id) => {
   })
 };
 
-const searchShop = () => {
+const getHotpepper = () => {
   return new Promise((resolve, reject) => {
     request.get(apiUrl, (err, data) => {
       if (err) {
@@ -123,10 +185,26 @@ const searchShop = () => {
       const shop = body.results.shop[getRandomInt(0, 9)];
       checkReservation(shop.id).then((hasReservation) => {
         if (hasReservation) {
-          resolve(shop)
+          const selectedShop = shop;
+          console.log(selectedShop);
+          resolve({
+            shopName: selectedShop.name,
+            shopUrl: selectedShop.urls.pc,
+            shopImageUrl: selectedShop.photo.pc.l,
+            shopReservationUrl: `https://www.hotpepper.jp/str${selectedShop.id}/yoyaku`,
+            shopAddress: selectedShop.address
+          })
         }
         else {
-          resolve(body.results.shop[getRandomInt(0, 9)])
+          const selectedShop = body.results.shop[getRandomInt(0, 9)];
+          console.log(selectedShop);
+          resolve({
+            shopName: selectedShop.name,
+            shopUrl: selectedShop.urls.pc,
+            shopImageUrl: selectedShop.photo.pc.l,
+            shopReservationUrl: `https://www.hotpepper.jp/str${selectedShop.id}/yoyaku`,
+            shopAddress: selectedShop.address
+          })
         }
       })
     })
@@ -161,6 +239,33 @@ const getUser = (gender) => {
         return
       }
       resolve(data.Items[0]);
+    });
+  });
+};
+
+const updateStatus = (roomID, matchingTweetID) => {
+  const params = {
+      TableName: `matching-${process.env.STAGE}`,
+      Key:{
+        id: roomID
+      },
+      ReturnValues:"UPDATED_NEW"
+  };
+  
+  params['ExpressionAttributeNames'] = {};
+  params['ExpressionAttributeNames']['#b'] = 'matchingTweetID';
+  params['ExpressionAttributeValues'] = {};
+  params['ExpressionAttributeValues'][':status'] = matchingTweetID;
+  params['UpdateExpression'] = 'SET #b = :status';
+
+  return new Promise(function (resolve, reject) {
+    dynamo.update(params, function (err, data) {
+      if (err) {
+        console.log(err);
+        reject(err);
+      } else {
+        resolve();
+      }
     });
   });
 };
@@ -220,14 +325,14 @@ const postTweet = (matching) => {
 
     // TODO　コミットしない
     client.post('statuses/update',
-      // {status: `${toUser} \n【お店をご用意しました！】\n\nあなたの過去のツイートより勝手にマッチングし、お店もご用意させていただきました！🎉🎉\n\n ${shareUrl} #kamatte_cc`},
-      {status: `${toUser} \n【お店をご用意しました！】\n\n\n\n只今、いいとものデモでマッチングしています。 ${shareUrl}`},
+      {status: `${toUser} \n【お店をご用意しました！】\n\nあなたの過去のツイートより勝手にマッチングし、お店もご用意させていただきました！🎉🎉\n\n ${shareUrl} #kamatte_cc`},
+      //{status: `${toUser} \n【お店をご用意しました！】\n\n\n\n只今、いいとものデモでマッチングしています。 ${shareUrl}`},
       function (error, tweet, response) {
         if (error) {
           console.log(error);
           reject(error)
         }
-        resolve()
+        resolve(tweet);
       })
   });
 
@@ -242,7 +347,22 @@ const createMatching = () => {
       console.log(users);
       console.log('users');
 
-      searchShop().then((shop) => {
+      // gurunabi と ほっとの割合を決める
+      const dice = getRandomInt(1, 10);
+      console.log(dice);
+      let reservationFunc;
+      if (dice === 1) {
+        console.log('-------------------gurunabi-----------------');
+        reservationFunc = getGurunabi;
+        console.log('-------------------gurunabi-----------------');
+      } else {
+        console.log('-------------------getHotpepper-----------------');
+        reservationFunc = getHotpepper;
+        console.log('-------------------getHotpepper-----------------');
+      }
+
+
+      reservationFunc().then((shop) => {
         console.log('-------------searchShop----------------');
 
         const params = {
@@ -259,13 +379,15 @@ const createMatching = () => {
             userGender2: users[1].gender,
             userImageUrl1: users[0].userImageUrl,
             userImageUrl2: users[1].userImageUrl,
-            userStatus1: 0,
-            userStatus2: 0,
-            shopName: shop.name,
-            shopUrl: shop.urls.pc,
-            shopImageUrl: shop.photo.pc.l,
-            shopReservationUrl: `https://www.hotpepper.jp/str${shop.id}/yoyaku`,
-            shopAddress: shop.address,
+            userStatus1: false,
+            userStatus2: false,
+            targetWord1: users[0].targetWord,
+            targetWord2: users[1].targetWord,
+            shopName: shop.shopName,
+            shopUrl: shop.shopUrl,
+            shopImageUrl: shop.shopImageUrl,
+            shopReservationUrl: shop.shopReservationUrl,
+            shopAddress: shop.shopAddress,
           }
         };
 
@@ -275,12 +397,14 @@ const createMatching = () => {
           });
           return
         }
-
-        createImage(params.Item.userImageUrl1, params.Item.userImageUrl2, params.Item.id).then((fileName) => {
+        createImage(params.Item).then((fileName) => {
           uploadImage(fileName).then((ogpUrl) => {
             params.Item["ogpUrl"] = ogpUrl;
-            create(params).then(() => {
-              postTweet(params.Item).then(() => {
+              // return 'hoge'; // TODO
+
+            postTweet(params.Item).then((tweet) => {
+              create(params).then(() => {
+                // return callback(null, 'hoge'); // TODO
                 deleteUser({
                   gender: params.Item.userGender1,
                   tweetID: params.Item.tweetID1
@@ -290,7 +414,12 @@ const createMatching = () => {
                       gender: params.Item.userGender2,
                       tweetID: params.Item.tweetID2
                     }).then(() => {
-
+                      console.log('tweet');
+                      console.log('tweet');
+                      console.log(tweet);
+                      updateStatus(params.Item.id, tweet.id_str).then(() => {
+                        
+                      });
                     })
                   })
               })
@@ -320,7 +449,7 @@ const createMatching = () => {
 
 
 module.exports.createMatching = (event, context, callback) => {
-  createMatching()
+  callback(null, createMatching());
 };
 
 // createMatching();
