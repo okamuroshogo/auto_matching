@@ -9,7 +9,8 @@ Vue.use(Vuex);
 
 const state = {
     matchingCount: 0,
-    detailData: {}
+    detailData: {},
+    btnState: {},
 };
 
 export default new Vuex.Store({
