@@ -2,7 +2,7 @@
   .detail
     p おめでとうございます 🎉
     p いい感じのお店選んどきました！
-    p.shop-image(v-bind:style="'background-image:url(' + detailData.shopImageUrl + ')'")
+    p.shop-image(v-bind:style="'background-image:url(' + (detailData.shopImageUrl || '') + ')'")
     p.shop-name {{ detailData.shopName }}
     p.shop-address {{ detailData.shopAddress }}
     p 18:00〜 ２名様
@@ -68,6 +68,7 @@
         const isPartnerIkitai = (isUser1 && detailData.userStatus2) || (isUser2 && detailData.userStatus1);
         // const isEachIkitai = detailData.userStatus1 ^ detailData.userStatus2; // どちらかがいきたい
         // const isBothIkitai = detailData.userStatus1 && detailData.userStatus2; // ふたりともいきた
+        console.log(userId, isUser1, isUser2, isSelfIkitai);
         const btnState = {
           isIkitaiBtnActive: !isSelfIkitai,
           // isReserveBtnActive: isPartnerIkitai,
