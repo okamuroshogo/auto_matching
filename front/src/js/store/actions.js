@@ -70,7 +70,8 @@ export const postReservation = ({ commit }, params) => {
     commit('setBtnState', { btnState: { isReserveBtnActive: false } });
     fetchApi('reservation', {}, { method: 'post', body: JSON.stringify({ matching_id, user_id }) })
         .then((data) => {
-          if (!data.success) Promise.reject();
+            // console.log(data);
+            if (!data.success) Promise.reject();
             if (data.location) {
                 location.href = data.location;
                 childWindow.close();

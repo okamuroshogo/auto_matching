@@ -32,7 +32,7 @@ exports.handler = (event, context, callback) => {
   console.log('json');
   console.log(json);
   const roomID = (json && json.matching_id);
-  const userID = (json && json.user_id) || false;
+  const userID = (json && json.user_id) || '';
 
   twitter = new twitterAPI({
     consumerKey: process.env.CONSUMER_KEY,
@@ -84,7 +84,8 @@ exports.handler = (event, context, callback) => {
               success: false,
               error: 1
             };
-            fulfilled(response);
+           // fulfilled(response);
+            callback(null, createResponse(200, response));
             return;
           }
         }).then(() => {
