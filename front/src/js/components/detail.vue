@@ -77,7 +77,7 @@
         const btnState = {
           isIkitaiBtnActive: !isSelfIkitai,
           // isReserveBtnActive: isPartnerIkitai,
-          isReserveBtnActive: ture,
+          isReserveBtnActive: true,
         };
         // console.log(btnState);
         this.setBtnState({ btnState });
