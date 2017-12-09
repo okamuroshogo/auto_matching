@@ -12,7 +12,7 @@
         span
         span 行きたい !
     p
-      a(v-bind:href="detailData.shopReservationUrl")
+      a(v-bind:href="detailData.shopReservationUrl", style="text-decoration: none;")
         button.btn-reserve お店を予約する
         <!--button.btn-reserve(v-bind:class="{ inactive: !btnState.isReserveBtnActive }" v-on:click="btnState.isReserveBtnActive ? postReservation({ matchingId, userId }) : null") お店を予約する-->
 </template>
