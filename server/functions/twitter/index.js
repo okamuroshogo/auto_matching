@@ -50,7 +50,7 @@ exports.handler = (event, context, callback) => {
         });
       });
     } else {
-      return new Promise(function(fulfilled, rejected){
+      return new Promise(function(fulfilled, reject){
         console.log('userID');
         console.log(userID);
         console.log('roomID');
