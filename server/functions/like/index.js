@@ -108,10 +108,10 @@ exports.handler = (event, context, callback) => {
                 rejected(error);
                 return;
               }
-              const response = {
+              const res = {
                 success: true
               };
-              fulfilled(response);
+              fulfilled(res);
           });
         });
       });
