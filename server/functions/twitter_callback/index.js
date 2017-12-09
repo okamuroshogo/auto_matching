@@ -16,7 +16,7 @@ exports.handler = (event, context, callback) => {
   const qs = event.queryStringParameters;
   let userID = (qs && qs.user_id) || '';
   const roomID = qs && qs.matching_id;
-  const typeID = qs && qs.type_id;
+  const typeID = qs && qs.type;
   const oauth_token = qs.oauth_token;
   const oauth_verifier = qs.oauth_verifier;
   fetchToken(oauth_token).then(function(dynamo) { 
