@@ -25,7 +25,7 @@ is_set_twitter: false
 
 # fb_appid: ''
 
-# favicon_url: 'http://localhost/favicon.ico'
+favicon_url: '/favicon.ico'
 # apple_touch_icon_url: 'http://localhost/apple-touch-icon.png'
 
 # ga_tracking_code: ''
