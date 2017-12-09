@@ -4,6 +4,7 @@ require('dotenv').config();
 const aws         = require('aws-sdk');
 const dynamo = new aws.DynamoDB.DocumentClient({region: 'ap-northeast-1'});
 const twitterAPI = require('node-twitter-api');
+const moment = require("moment");
 let twitter;
 let reservationURL = "";
 
@@ -104,20 +105,20 @@ exports.handler = (event, context, callback) => {
     //      }
 //          const toUser = `@${dataHash.Item.screenName1} @${dataHash.Item.screenName2}`;
           const shareUrl = `https://kamatte.cc/share/${dataHash.Item.id}`;
-          //client.post('statuses/update',
-          //  {status: `【行きたいボタンが押されました】\n\n\n\n\nお相手がきになると言っています！予約に進みましょう!! #kamatte_cc`, in_reply_to_status_id: dataHash.Item.matchingTweetID},
-          //  function (error, tweet, response) {
-          //    if (error) {
-          //      console.log(error);
-          //      rejected(error);
-          //      return;
-          //    }
+          client.post('statuses/update',
+            {status: `【行きたいボタンが押されました】\n\n\n\n moment().format("HH:mm")に、お相手が行きたいと言いました！予約に進みましょう!! #kamatte_cc`, in_reply_to_status_id: dataHash.Item.matchingTweetID},
+            function (error, tweet, response) {
+              if (error) {
+                console.log(error);
+                rejected(error);
+                return;
+              }
               const res = {
                 success: true
               };
               console.log('ok! tweet');
               fulfilled(res);
-          //});
+          });
         });
       });
     }
