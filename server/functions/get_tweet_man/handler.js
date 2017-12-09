@@ -48,21 +48,23 @@ const getTweet = () => {
     console.log(event.user.profile_image_url);
     console.log(event.text);
 
-    const tweetParams = {
-      TableName: `tweets-${process.env.STAGE}`,
-      Item: {
-        tweetID: event.id_str,
-        userID: event.user.id_str,
-        createdAt: event.user.created_at,
-        userName: event.user.name,
-        userScreenName: event.user.screen_name,
-        userImageUrl: event.user.profile_image_url,
-        tweet: event.text,
-        targetWord: targetWord,
-        gender: gender // 男なら１, 女なら２
-      }
-    };
-    put(tweetParams).then()
+    if(event.text.indexOf('RT') === -1) {
+      const tweetParams = {
+        TableName: `tweets-${process.env.STAGE}`,
+        Item: {
+          tweetID: event.id_str,
+          userID: event.user.id_str,
+          createdAt: event.user.created_at,
+          userName: event.user.name,
+          userScreenName: event.user.screen_name,
+          userImageUrl: event.user.profile_image_url,
+          tweet: event.text,
+          targetWord: targetWord,
+          gender: gender // 男なら１, 女なら２
+        }
+      };
+      put(tweetParams).then()
+    }
   });
 
   stream.on('error', function (error) {
