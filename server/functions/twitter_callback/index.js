@@ -16,6 +16,7 @@ exports.handler = (event, context, callback) => {
   const qs = event.queryStringParameters;
   let userID = (qs && qs.user_id) || '';
   const roomID = qs && qs.matching_id;
+  const typeID = qs && qs.type_id;
   const oauth_token = qs.oauth_token;
   const oauth_verifier = qs.oauth_verifier;
   fetchToken(oauth_token).then(function(dynamo) { 
@@ -36,7 +37,7 @@ exports.handler = (event, context, callback) => {
     const response = {
         statusCode: 302,
         headers: {
-          'Location': `https://kamatte.cc/detail/?id=${roomID}&callback=true`,
+          'Location': `https://kamatte.cc/detail/?id=${roomID}&callback=true&type=${typeID}`,
           "Access-Control-Allow-Origin" : "*",
           "Access-Control-Allow-Credentials" : true,
           "Set-Cookie": `user_id=${userID}; Path=/; domain=kamatte.cc; "`

@@ -27,7 +27,7 @@ exports.handler = (event, context, callback) => {
   twitter = new twitterAPI({
     consumerKey: process.env.CONSUMER_KEY,
     consumerSecret: process.env.CONSUMER_SECRET,
-    callback: `${process.env.TWITTER_CALLBACK}?matching_id=${roomID}&user_id=${userID}`
+    callback: `${process.env.TWITTER_CALLBACK}?matching_id=${roomID}&user_id=${userID}&type=2`
   });
 
   Promise.resolve().then(function(){
