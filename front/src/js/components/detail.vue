@@ -76,9 +76,10 @@
         // const isBothIkitai = detailData.userStatus1 && detailData.userStatus2; // ふたりともいきた
         const btnState = {
           isIkitaiBtnActive: !isSelfIkitai,
-          isReserveBtnActive: isPartnerIkitai,
+          // isReserveBtnActive: isPartnerIkitai,
+          isReserveBtnActive: ture,
         };
-        console.log(btnState);
+        // console.log(btnState);
         this.setBtnState({ btnState });
       });
     }
