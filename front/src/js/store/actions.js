@@ -29,7 +29,7 @@ export const getDetailData = ({ commit }, params) => {
             //     reject();
             // }
             item.shopImageUrl = item.shopImageUrl || "https://imgfp.hotp.jp/IMGH/05/41/P027280541/P027280541_480.jpg"
-            commit('setDetailData', item);
+            commit('setDetailData', { data: item });
             // commit('setDetailData', {
             //     id: "fb294d07-011f-49d8-a23d-670228aca7c5",
             //     screenName1: "ttsh_ymmt",
@@ -64,7 +64,7 @@ export const postReservation = ({ commit }, params) => {
     // console.log(params);
     const matching_id = params.matchingId;
     const user_id = params.userId;
-    let childWindow = window.open('about:blank');
+    // let childWindow = window.open('about:blank');
 
     commit('setBtnState', { btnState: { isReserveBtnActive: false } });
     fetchApi('reservation', {}, { method: 'post', body: JSON.stringify({ matching_id, user_id }) })
@@ -73,19 +73,20 @@ export const postReservation = ({ commit }, params) => {
             if (!data.success) Promise.reject();
             if (data.location) {
                 location.href = data.location;
-                childWindow.close();
-                childWindow = null;
+                // childWindow.close();
+                // childWindow = null;
             }
             if (data.reservationURL) {
+                location.href = data.reservationURL;
                 // open(data.reservationURL, '_blank');
-                childWindow.location.href = data.reservationURL;
-                childWindow = null;
+                // childWindow.location.href = data.reservationURL;
+                // childWindow = null;
             }
             // commit('setDetailData', data);
         }).catch(() => {
             // location.href = '/';
-            childWindow.close();
-            childWindow = null;
+            // childWindow.close();
+            // childWindow = null;
         });
 };
 

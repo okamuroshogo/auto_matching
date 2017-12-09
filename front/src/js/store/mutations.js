@@ -6,7 +6,7 @@ export const setMatchingId = (state, { matchingId }) => {
     state.matchingId = matchingId;
 };
 
-export const setDetailData = (state, data) => {
+export const setDetailData = (state, { data }) => {
     state.detailData = data;
 };
 
