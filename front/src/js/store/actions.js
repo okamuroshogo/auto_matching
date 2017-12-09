@@ -64,7 +64,7 @@ export const postReservation = ({ commit }, params) => {
     // console.log(params);
     const matching_id = params.matchingId;
     const user_id = params.userId;
-    let childWindow = window.open('about:blank');
+    // let childWindow = window.open('about:blank');
 
     commit('setBtnState', { btnState: { isReserveBtnActive: false } });
     fetchApi('reservation', {}, { method: 'post', body: JSON.stringify({ matching_id, user_id }) })
@@ -73,19 +73,20 @@ export const postReservation = ({ commit }, params) => {
             if (!data.success) Promise.reject();
             if (data.location) {
                 location.href = data.location;
-                childWindow.close();
-                childWindow = null;
+                // childWindow.close();
+                // childWindow = null;
             }
             if (data.reservationURL) {
+                location.href = data.reservationURL;
                 // open(data.reservationURL, '_blank');
-                childWindow.location.href = data.reservationURL;
-                childWindow = null;
+                // childWindow.location.href = data.reservationURL;
+                // childWindow = null;
             }
             // commit('setDetailData', data);
         }).catch(() => {
             // location.href = '/';
-            childWindow.close();
-            childWindow = null;
+            // childWindow.close();
+            // childWindow = null;
         });
 };
 
