@@ -58,8 +58,9 @@ exports.handler = (event, context, callback) => {
           console.log(response);
           fulfilled(response); 
 
+          console.log('ok! token');
           //callback(null, createResponse(200, response));
-          //return;
+          return;
         }).catch((error) => {
           rejected(error);
         });
@@ -86,9 +87,12 @@ exports.handler = (event, context, callback) => {
             };
             fulfilled(response);
            // callback(null, createResponse(200, response));
-           // return;
+
+          console.log('ok! update');
+           return;
           }
         }).then(() => {
+          console.log('get user!!!!');
           return getUser(userID, roomID);
         }).then((dataHash) => {
     //      const isReservation1 = dataHash.Item.userStatus1;
@@ -111,6 +115,7 @@ exports.handler = (event, context, callback) => {
               const res = {
                 success: true
               };
+              console.log('ok! tweet');
               fulfilled(res);
           });
         });
@@ -119,6 +124,8 @@ exports.handler = (event, context, callback) => {
   }).then((response) => {
     callback(null, createResponse(200, response));
   }).catch((error) => {
+    console.log("error400");
+    console.log(error);
     callback(null, createResponse(400, {Message: error.message}));
   });
 };
