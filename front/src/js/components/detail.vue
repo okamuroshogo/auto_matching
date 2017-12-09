@@ -35,6 +35,8 @@
       const locationParams = qs.parse(locationSearch);
 
       const isCallback = locationParams.callback === 'true';
+      const isLikeCallback = isCallback && locationParams.type === '1'; // like
+      const isReservationCallback = isCallback && locationParams.type === '2'; // reservation
       const matchingId = locationParams.id;
       if (!matchingId) location.href = '/';
       if (locationParams.error == 1) alert('マッチングしていないユーザーアカウントです。ログインしているアカウントを確認してください!');
@@ -46,9 +48,21 @@
       })
       .then(() => {
         const userId = this.$store.state.userId;
-        if (isCallback) {
+        if (isLikeCallback) {
+          this.postLike({ matchingId, userId });
+          Promise.reject();
+          return;
+        }
+        else if (isReservationCallback) {
           this.postReservation({ matchingId, userId });
           Promise.reject();
+          return;
+        }
+        else if (isCallback) {
+          // typeなかったらlikeを叩く
+          this.postLike({ matchingId, userId });
+          Promise.reject();
+          return;
         }
         const detailData = this.$store.state.detailData;
         const isUser1 = userId == detailData.userID1;
