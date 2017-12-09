@@ -67,13 +67,12 @@ export const postReservation = ({ commit }, params) => {
     commit('setBtnState', { btnState: { isReserveBtnActive: false } });
     fetchApi('reservation', {}, { method: 'post', body: JSON.stringify({ matching_id, user_id }) })
         .then((data) => {
-            // console.log(data);
             if (!data.success) Promise.reject();
             if (data.location) {
                 location.href = data.location;
             }
             if (data.reservation_url) {
-                open(data.reservation_url, '_blank');
+                open(data.reservationURL, '_blank');
             }
             // commit('setDetailData', data);
         }).catch(() => {
