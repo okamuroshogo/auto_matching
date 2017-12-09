@@ -59,7 +59,7 @@ exports.handler = (event, context, callback) => {
           fulfilled(response); 
 
           //callback(null, createResponse(200, response));
-          return;
+          //return;
         }).catch((error) => {
           rejected(error);
         });
@@ -86,7 +86,7 @@ exports.handler = (event, context, callback) => {
             };
             fulfilled(response);
            // callback(null, createResponse(200, response));
-            return;
+           // return;
           }
         }).then(() => {
           return getUser(userID, roomID);
