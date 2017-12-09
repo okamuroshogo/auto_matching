@@ -2,7 +2,7 @@
   .detail
     p おめでとうございます 🎉
     p いい感じのお店選んどきました！
-    p.shop-image(v-bind:style="'background-image:url(' + detailData.shopImageUrl + ')'")
+    p.shop-image(v-bind:style="'background-image:url(' + (detailData.shopImageUrl || '') + ')'")
     p.shop-name {{ detailData.shopName }}
     p.shop-address {{ detailData.shopAddress }}
     p 18:00〜 ２名様
