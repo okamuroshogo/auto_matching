@@ -56,9 +56,9 @@ exports.handler = (event, context, callback) => {
           };
           console.log('responseseeeeeeee');
           console.log(response);
-          //fulfilled(response); 
+          fulfilled(response); 
 
-          callback(null, createResponse(200, response));
+          //callback(null, createResponse(200, response));
           return;
         }).catch((error) => {
           rejected(error);
@@ -84,8 +84,8 @@ exports.handler = (event, context, callback) => {
               success: false,
               error: 1
             };
-           // fulfilled(response);
-            callback(null, createResponse(200, response));
+            fulfilled(response);
+           // callback(null, createResponse(200, response));
             return;
           }
         }).then(() => {
@@ -108,15 +108,15 @@ exports.handler = (event, context, callback) => {
                 rejected(error);
                 return;
               }
-              fulfilled();
+              const response = {
+                success: true
+              };
+              fulfilled(response);
           });
         });
       });
     }
-  }).then(() => {
-    const response = {
-      success: true
-    };
+  }).then((response) => {
     callback(null, createResponse(200, response));
   }).catch((error) => {
     callback(null, createResponse(400, {Message: error.message}));
