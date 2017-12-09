@@ -2,6 +2,7 @@
   "dependencies": {
     "dotenv": "^4.0.0",
     "moment": "^2.19.3",
+    "moment-timezone": "^0.5.14",
     "node-twitter-api": "^1.8.0",
     "twitter": "^1.7.1"
   }
