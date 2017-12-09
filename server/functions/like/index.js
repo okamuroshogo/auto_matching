@@ -4,7 +4,7 @@ require('dotenv').config();
 const aws         = require('aws-sdk');
 const dynamo = new aws.DynamoDB.DocumentClient({region: 'ap-northeast-1'});
 const twitterAPI = require('node-twitter-api');
-const moment = require("moment");
+const moment = require('moment-timezone')
 let twitter;
 let reservationURL = "";
 
