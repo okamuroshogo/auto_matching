@@ -29,7 +29,7 @@ export const getDetailData = ({ commit }, params) => {
             //     reject();
             // }
             item.shopImageUrl = item.shopImageUrl || "https://imgfp.hotp.jp/IMGH/05/41/P027280541/P027280541_480.jpg"
-            commit('setDetailData', item);
+            commit('setDetailData', { data: item });
             // commit('setDetailData', {
             //     id: "fb294d07-011f-49d8-a23d-670228aca7c5",
             //     screenName1: "ttsh_ymmt",
