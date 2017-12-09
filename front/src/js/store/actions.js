@@ -66,7 +66,6 @@ export const postReservation = ({ commit }, params) => {
     const user_id = params.userId;
     let childWindow = window.open('about:blank');
 
-
     commit('setBtnState', { btnState: { isReserveBtnActive: false } });
     fetchApi('reservation', {}, { method: 'post', body: JSON.stringify({ matching_id, user_id }) })
         .then((data) => {

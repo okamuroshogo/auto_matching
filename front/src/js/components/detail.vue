@@ -50,19 +50,13 @@
         const userId = this.$store.state.userId;
         if (isLikeCallback) {
           this.postLike({ matchingId, userId });
-          Promise.reject();
-          return;
         }
         else if (isReservationCallback) {
           this.postReservation({ matchingId, userId });
-          Promise.reject();
-          return;
         }
         else if (isCallback) {
           // typeなかったらlikeを叩く
           this.postLike({ matchingId, userId });
-          Promise.reject();
-          return;
         }
         const detailData = this.$store.state.detailData;
         const isUser1 = userId == detailData.userID1;
