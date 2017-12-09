@@ -1,9 +1,17 @@
-// const domain = 'https://wqcgcdtbn5.execute-api.ap-northeast-1.amazonaws.com/dev';
-// const domain = 'https://75n6tmmj4d.execute-api.ap-northeast-1.amazonaws.com/dev';
-const domain = '';
+import Cookies from 'js-cookie';
+
+function fetchApi(endpoint, params, options) {
+    // const domain = 'https://wqcgcdtbn5.execute-api.ap-northeast-1.amazonaws.com/dev';
+    // const domain = 'https://75n6tmmj4d.execute-api.ap-northeast-1.amazonaws.com/dev';
+    // const domain = '';
+    const domain = 'https://kamatte.cc';
+    const paramStr = Object.keys(params).map((key) => `${key}=${params[key]}`).join('&');
+    return fetch(`${domain}/api/v1/${endpoint}?${paramStr}`, { ...options, mode: 'cors' })
+        .then((res) => res.json());
+}
 
 export const getMatchingCount = ({ commit }) => {
-    fetch(domain + '/api/v1/matching_count', { mode: 'cors' })
+    fetchApi('matching_count')
         .then((data) => {
             commit('setMatchingCount', {
                 count: data.count
@@ -12,9 +20,8 @@ export const getMatchingCount = ({ commit }) => {
 };
 
 export const getDetailData = ({ commit }, params) => {
-    const id = params.id;
-    fetch(domain + `/api/v1/reservation_status?matching_id=${id}`, { mode: 'cors' })
-        .then((res) => res.json())
+    const matching_id = params.matchingId;
+    fetchApi('reservation', { matching_id })
         .then((data) => {
             const item = data.matching.Item;
             console.log('data: ', item);
@@ -41,6 +48,51 @@ export const getDetailData = ({ commit }, params) => {
             //     userStatus1: 0,
             //     userStatus2: 0
             // });
+        }).catch(() => {
+            // location.href = '/';
+        });
+};
+
+export const getUserId = ({ commit }) => {
+    // Cookies.set('user_id', '11111');
+    return commit('setUserId', {
+        userId: Cookies.get('user_id'),
+    });
+};
+
+export const postReservation = ({ commit }, params) => {
+    console.log(params);
+    const matching_id = params.matchingId;
+    const user_id = params.userId;
+    commit('setBtnState', { btnState: { isReserveBtnActive: false } });
+    fetchApi('reservation', {}, { method: 'post', body: JSON.stringify({ matching_id, user_id }) })
+        .then((data) => {
+            console.log(data);
+            if (!data.success) Promise.reject();
+            if (data.location) {
+                location.href = data.location;
+            }
+            if (data.reservation_url) {
+                open(data.reservation_url, '_blank');
+            }
+            // commit('setDetailData', data);
+        }).catch(() => {
+            // location.href = '/';
+        });
+};
+
+export const postLike = ({ commit }, params) => {
+    console.log(params);
+    const matching_id = params.matchingId;
+    const user_id = params.userId;
+    commit('setBtnState', { btnState: { isIkitaiBtnActive: false } });
+    fetchApi('like', {}, { method: 'post', body: JSON.stringify({ matching_id, user_id }) })
+        .then((data) => {
+            console.log(data);
+            if (!data.success) Promise.reject();
+            if (data.location) {
+                location.href = data.location;
+            }
         }).catch(() => {
             // location.href = '/';
         });
