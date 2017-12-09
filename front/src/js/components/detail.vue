@@ -68,6 +68,7 @@
         const isPartnerIkitai = (isUser1 && detailData.userStatus2) || (isUser2 && detailData.userStatus1);
         // const isEachIkitai = detailData.userStatus1 ^ detailData.userStatus2; // どちらかがいきたい
         // const isBothIkitai = detailData.userStatus1 && detailData.userStatus2; // ふたりともいきた
+        console.log(userId, isUser1, isUser2, isSelfIkitai);
         const btnState = {
           isIkitaiBtnActive: !isSelfIkitai,
           // isReserveBtnActive: isPartnerIkitai,
