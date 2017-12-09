@@ -104,20 +104,20 @@ exports.handler = (event, context, callback) => {
     //      }
 //          const toUser = `@${dataHash.Item.screenName1} @${dataHash.Item.screenName2}`;
           const shareUrl = `https://kamatte.cc/share/${dataHash.Item.id}`;
-          client.post('statuses/update',
-            {status: `【きになるボタンが押されました】\n\n\n\n\nお相手がきになると言っています！予約に進みましょう!! #kamatte_cc`, in_reply_to_status_id: dataHash.Item.matchingTweetID},
-            function (error, tweet, response) {
-              if (error) {
-                console.log(error);
-                rejected(error);
-                return;
-              }
+          //client.post('statuses/update',
+          //  {status: `【行きたいボタンが押されました】\n\n\n\n\nお相手がきになると言っています！予約に進みましょう!! #kamatte_cc`, in_reply_to_status_id: dataHash.Item.matchingTweetID},
+          //  function (error, tweet, response) {
+          //    if (error) {
+          //      console.log(error);
+          //      rejected(error);
+          //      return;
+          //    }
               const res = {
                 success: true
               };
               console.log('ok! tweet');
               fulfilled(res);
-          });
+          //});
         });
       });
     }
