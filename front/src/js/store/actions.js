@@ -11,7 +11,7 @@ function fetchApi(endpoint, params, options) {
 }
 
 export const getMatchingCount = ({ commit }) => {
-    fetchApi('matching_count')
+    return fetchApi('matching_count')
         .then((data) => {
             commit('setMatchingCount', {
                 count: data.count
@@ -21,7 +21,7 @@ export const getMatchingCount = ({ commit }) => {
 
 export const getDetailData = ({ commit }, params) => {
     const matching_id = params.matchingId;
-    fetchApi('reservation', { matching_id })
+    return fetchApi('reservation', { matching_id })
         .then((data) => {
             const item = data.matching.Item;
             // console.log('data: ', item);
@@ -67,7 +67,7 @@ export const postReservation = ({ commit }, params) => {
     // let childWindow = window.open('about:blank');
 
     commit('setBtnState', { btnState: { isReserveBtnActive: false } });
-    fetchApi('reservation', {}, { method: 'post', body: JSON.stringify({ matching_id, user_id }) })
+    return fetchApi('reservation', {}, { method: 'post', body: JSON.stringify({ matching_id, user_id }) })
         .then((data) => {
             // console.log(data);
             if (!data.success) Promise.reject();
@@ -95,7 +95,7 @@ export const postLike = ({ commit }, params) => {
     const matching_id = params.matchingId;
     const user_id = params.userId;
     commit('setBtnState', { btnState: { isIkitaiBtnActive: false } });
-    fetchApi('like', {}, { method: 'post', body: JSON.stringify({ matching_id, user_id }) })
+    return fetchApi('like', {}, { method: 'post', body: JSON.stringify({ matching_id, user_id }) })
         .then((data) => {
             // console.log(data);
             if (!data.success) Promise.reject();
