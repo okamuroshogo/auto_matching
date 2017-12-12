@@ -56,7 +56,6 @@ const getTweet = () => {
           tweetID: event.id_str,
           userID: event.user.id_str,
           createdAt: event.user.created_at,
-          ttl: event.user
           userName: event.user.name,
           userScreenName: event.user.screen_name,
           userImageUrl: event.user.profile_image_url,
