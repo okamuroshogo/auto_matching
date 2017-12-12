@@ -1,9 +1,9 @@
 # domain: 'http://localhost'
-url: 'http://kamatte.com/'
+url: 'http://kamatte.cc/'
 
-site_name: 'kamatte'
+site_name: 'kamatte | かまって'
 
-meta_description: 'かまってちゃんのための受動的マッチングサービス'
+meta_description: 'kamatte(かまって)は、かまってちゃんのためだけの受動的マッチングサービスです'
 meta_keywords:
   - かまって
   - かまってちゃん
