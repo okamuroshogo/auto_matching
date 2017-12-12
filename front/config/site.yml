@@ -45,6 +45,8 @@ og_image_height: 630
 is_set_twitter: true
 tw_description: 'かまってちゃんのための受動的マッチングサービス'
 tw_hashtags: ['kamatte_cc']
+tw_site: '@kamatte_cc'		
+tw_creator: '@kamatte_cc'
 
 fb_appid: '1758420817800910'
 
