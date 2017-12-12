@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "serverless-dynamodb-ttl": "^0.1.1",
     "serverless-python-requirements": "^3.0.9"
   }
 }

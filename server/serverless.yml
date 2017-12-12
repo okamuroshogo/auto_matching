@@ -17,9 +17,17 @@ custom:
   defaultStage: prod
   pythonRequirements:
     dockerizePip: true
+  dynamodb:
+    ttl:
+      - table: "tweets-${self:provider.stage}" 
+        field: ttl
+
+
 
 plugins:
   - serverless-python-requirements
+  - serverless-dynamodb-ttl
+
 
 provider:
   name: aws
