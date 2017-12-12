@@ -38,17 +38,13 @@ meta_keywords:
 share_image: 'https://kamatte.cc/img/ogp.png'
 
 is_set_ogp: true
-og_description: 'description'
+og_description: 'かまってちゃんのための受動的マッチングサービス'
 og_image_width: 1200
 og_image_height: 630
 
 is_set_twitter: true
 tw_description: 'かまってちゃんのための受動的マッチングサービス'
 tw_hashtags: ['kamatte_cc']
-tw_site: '@kamatte_cc'
-tw_creator: '@kamatte_cc'
-
-line_description: 'かまってちゃんのための受動的マッチングサービス https://kamatte.cc/'
 
 fb_appid: '1758420817800910'
 
