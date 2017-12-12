@@ -64,7 +64,7 @@ const getTweet = () => {
           tweet: event.text,
           targetWord: targetWord,
           gender: gender, // 男なら１, 女なら２
-          ttl: moment().add('days', 1).unix()
+          ttl: moment().add('days', 1).unix();
         }
       };
       if (event.text.indexOf(targetWord2) === -1) {
