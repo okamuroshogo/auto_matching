@@ -3,27 +3,54 @@ url: 'http://kamatte.com/'
 
 site_name: 'kamatte'
 
-# meta_description: 'description'
-# meta_keywords:
-#   - key
-#   - words
+meta_description: 'かまってちゃんのための受動的マッチングサービス'
+meta_keywords:
+  - かまって
+  - かまってちゃん
+  - 寂しい
+  - 彼氏欲しい
+  - 彼女欲しい
+  - 彼氏募集中
+  - 彼女募集中
+  - kamatte
+  - kamattecc
+  - kamatte_cc
+  - らぶりつ
+  - お迎え
+  - 出会い系
+  - マッチング
+  - クリぼっち
+  - サンタコス
+  - 合コン
+  - 結婚
+  	年上好き
+	- 彼氏募集中
+	- 彼女募集中
+	- 愛してくれる人
+	- 裏垢JK
+	- 裏垢男子
+	- 裏垢女子
+	- 裏垢男子と繋がりたい
+	- ソロ充
+	- リア充爆発しろ
+	- 付き合いたい
 
-# share_image: 'http://localhost/img/ogp.png'
+share_image: 'https://kamatte.cc/img/ogp.png'
 
-is_set_ogp: false
-# og_description: 'description'
-# og_image_width: 1200
-# og_image_height: 630
+is_set_ogp: true
+og_description: 'description'
+og_image_width: 1200
+og_image_height: 630
 
-is_set_twitter: false
-# tw_description: 'description'
-# tw_hashtags: ['hashtag']
-# tw_site: '@hoge'
-# tw_creator: '@hoge'
+is_set_twitter: true
+tw_description: 'かまってちゃんのための受動的マッチングサービス'
+tw_hashtags: ['kamatte_cc']
+tw_site: '@kamatte_cc'
+tw_creator: '@kamatte_cc'
 
-# line_description: 'description http://localhost/'
+line_description: 'かまってちゃんのための受動的マッチングサービス https://kamatte.cc/'
 
-# fb_appid: ''
+fb_appid: '1758420817800910'
 
 favicon_url: '/favicon.ico'
 # apple_touch_icon_url: 'http://localhost/apple-touch-icon.png'
