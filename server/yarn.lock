@@ -207,6 +207,16 @@ safe-buffer@~5.1.0, safe-buffer@~5.1.1:
   version "5.1.1"
   resolved "https://registry.yarnpkg.com/safe-buffer/-/safe-buffer-5.1.1.tgz#893312af69b2123def71f57889001671eeb2c853"
 
+semver-compare@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/semver-compare/-/semver-compare-1.0.0.tgz#0dee216a1c941ab37e9efb1788f6afc5ff5537fc"
+
+serverless-dynamodb-ttl@^0.1.1:
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/serverless-dynamodb-ttl/-/serverless-dynamodb-ttl-0.1.1.tgz#e913a84502f2caedec2c8a5f431778eb7eaf95de"
+  dependencies:
+    semver-compare "^1.0.0"
+
 serverless-python-requirements@^3.0.9:
   version "3.0.9"
   resolved "https://registry.yarnpkg.com/serverless-python-requirements/-/serverless-python-requirements-3.0.9.tgz#a9fcb47c4cb6ba392784707c80048845ddc44276"

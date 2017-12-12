@@ -1,6 +1,7 @@
 'use strict';
 
 const aws = require('aws-sdk');
+const moment = require("moment");
 require('dotenv').config();
 // aws.config.endpoint = new aws.Endpoint('http://localhost:8000'); // TODO
 aws.config.region = 'ap-northeast-1';
@@ -55,12 +56,14 @@ const getTweet = () => {
           tweetID: event.id_str,
           userID: event.user.id_str,
           createdAt: event.user.created_at,
+          ttl: event.user
           userName: event.user.name,
           userScreenName: event.user.screen_name,
           userImageUrl: event.user.profile_image_url,
           tweet: event.text,
           targetWord: targetWord,
-          gender: gender // 男なら１, 女なら２
+          gender: gender, // 男なら１, 女なら２
+          ttl: moment().add('days', 1).unix()    
         }
       };
       put(tweetParams).then()
