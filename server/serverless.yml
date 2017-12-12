@@ -79,7 +79,7 @@ functions:
     handler: functions/matching/handler.createMatching
     timeout: 30
     events:
-      - schedule: rate(1 hour)
+      - schedule: rate(3 hour)
 
   reservation:
     handler: functions/twitter/index.handler
