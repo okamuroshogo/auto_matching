@@ -149,6 +149,14 @@ functions:
           method: get
           cors: true
 
+  blackListAPI:
+    handler: functions/blacklist/index.handler
+    events:
+      - http:
+          path: api/v1/blacklist
+          method: post
+          cors: true
+
 resources:
   Resources:
     MatchingDynamoDbTable:
