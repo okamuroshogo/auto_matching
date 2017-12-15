@@ -61,7 +61,10 @@ exports.handler = (event, context, callback) => {
         console.log('userID');
         console.log(userID);
         putUser(userID).then(() => {
-          fulfilled();
+          const res = {
+            success: true
+          };
+          fulfilled(res);
         }).catch((error) => {
           rejected(error); 
         });

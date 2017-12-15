@@ -62,7 +62,7 @@ const isblacklist = (userID) => {
       }
       console.log('black lists data');
       console.log(data);
-      if (data.Item.userID === userID) {
+      if (('Item' in data) && data.Item.userID === userID) {
         resolve(true);
       } else {
         resolve(false);
