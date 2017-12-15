@@ -149,6 +149,14 @@ functions:
           method: get
           cors: true
 
+  blackListAPI:
+    handler: functions/blacklist/index.handler
+    events:
+      - http:
+          path: api/v1/blacklist
+          method: post
+          cors: true
+
 resources:
   Resources:
     MatchingDynamoDbTable:
@@ -222,3 +230,19 @@ resources:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
         TableName: "users-${self:provider.stage}"
+    TwitterUserBlackListsDynamoDbTable:
+      Type: 'AWS::DynamoDB::Table'
+      DeletionPolicy: Retain
+      Properties:
+        AttributeDefinitions:
+          -
+            AttributeName: userID
+            AttributeType: S
+        KeySchema:
+          -
+            AttributeName: userID
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        TableName: "twitter-user-black-lists-${self:provider.stage}"
