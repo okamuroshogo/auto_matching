@@ -37,6 +37,38 @@ const put = (tweetParams) => {
   });
 };
 
+const isblacklist = (userID) => {
+  return new Promise((resolve, reject) => {
+    const params = {
+      TableName : `twitter-user-black-lists-${process.env.STAGE}`,
+      Key: {
+        'userID': userID
+      }
+    };
+    dynamo.get(params, (err, data) => {
+      if (err) {
+        console.error('dynamodb get error');
+        console.error('dynamodb get error');
+        console.error('dynamodb get error');
+        console.error('dynamodb get error');
+        console.error('dynamodb get error');
+        console.error('dynamodb get error');
+        console.error('dynamodb get error');
+        console.error(err.message);
+        // error getできなかったら成功
+        resolve(false);
+      }
+      console.log('black lists data');
+      console.log(data);
+      if (data.Item.userID === userID) {
+        resolve(true);
+      } else {
+        resolve(false);
+      }
+    });
+  });
+};
+
 
 const getTweet = () => {
   const stream = client.stream('statuses/filter', {track: targetWord});
@@ -51,24 +83,25 @@ const getTweet = () => {
     console.log("moment().add()");
     console.log(moment().add('days', 1).unix());
           
-
-    if(event.text.indexOf('RT') === -1) {
-      const tweetParams = {
-        TableName: `tweets-${process.env.STAGE}`,
-        Item: {
-          tweetID: event.id_str,
-          userID: event.user.id_str,
-          createdAt: event.user.created_at,
-          userName: event.user.name,
-          userScreenName: event.user.screen_name,
-          userImageUrl: event.user.profile_image_url,
-          tweet: event.text,
-          targetWord: targetWord,
-          gender: gender, // 男なら１, 女なら２
-          ttl: moment().add('days', 1).unix()
-        }
-      };
-      put(tweetParams).then()
+    isblacklist(event.user.id_str).then((isblack) => {
+      if(event.text.indexOf('RT') === -1 || !isblack) {
+        const tweetParams = {
+          TableName: `tweets-${process.env.STAGE}`,
+          Item: {
+            tweetID: event.id_str,
+            userID: event.user.id_str,
+            createdAt: event.user.created_at,
+            userName: event.user.name,
+            userScreenName: event.user.screen_name,
+            userImageUrl: event.user.profile_image_url,
+            tweet: event.text,
+            targetWord: targetWord,
+            gender: gender, // 男なら１, 女なら２
+            ttl: moment().add('days', 1).unix()
+          }
+        };
+        put(tweetParams);
+      });
     }
   });
 
