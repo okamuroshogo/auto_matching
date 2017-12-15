@@ -84,7 +84,7 @@ const getTweet = () => {
     console.log(moment().add('days', 1).unix());
           
     isblacklist(event.user.id_str).then((isblack) => {
-      if(event.text.indexOf('RT') === -1 || !isblack) {
+      if(event.text.indexOf('RT') === -1 && !isblack) {
         const tweetParams = {
           TableName: `tweets-${process.env.STAGE}`,
           Item: {

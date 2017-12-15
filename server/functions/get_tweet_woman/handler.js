@@ -84,7 +84,7 @@ const getTweet = () => {
     console.log(event.user.profile_image_url);
     console.log(event.text);
     isblacklist(event.user.id_str).then((isblack) => {
-      if(event.text.indexOf('RT') === -1 || !isblack) {
+      if(event.text.indexOf('RT') === -1 && !isblack) {
         const tweetParams = {
           TableName: `tweets-${process.env.STAGE}`,
           Item: {
