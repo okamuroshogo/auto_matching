@@ -101,8 +101,8 @@ const getTweet = () => {
           }
         };
         put(tweetParams);
-      });
-    }
+      }
+    });
   });
 
   stream.on('error', function (error) {
