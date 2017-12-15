@@ -48,6 +48,9 @@ const getTweet = () => {
     console.log(event.user.screen_name);
     console.log(event.user.profile_image_url);
     console.log(event.text);
+    console.log("moment().add()");
+    console.log(moment().add('days', 1).unix());
+          
 
     if(event.text.indexOf('RT') === -1) {
       const tweetParams = {
