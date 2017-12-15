@@ -6,7 +6,7 @@
       p マッチング数
       p {{ matchingCount || 0 }} 件！
     div.top_twitter
-      | <a class="twitter-timeline"  href="https://twitter.com/hashtag/kamatte_cc" data-widget-id="916891364859641857">#kamatte_cc のツイート</a>
+      | <a class="twitter-timeline" href="https://twitter.com/kamatte_cc?ref_src=twsrc%5Etfw" data-show-replies="true">マッチング中</a>
 </template>
 
 <script>

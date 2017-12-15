@@ -1,6 +1,7 @@
 'use strict';
 
 const aws = require('aws-sdk');
+const moment = require("moment");
 require('dotenv').config();
 // aws.config.endpoint = new aws.Endpoint('http://localhost:8000'); // TODO
 aws.config.region = 'ap-northeast-1';
@@ -47,22 +48,28 @@ const getTweet = () => {
     console.log(event.user.screen_name);
     console.log(event.user.profile_image_url);
     console.log(event.text);
+    console.log("moment().add()");
+    console.log(moment().add('days', 1).unix());
+          
 
-    const tweetParams = {
-      TableName: `tweets-${process.env.STAGE}`,
-      Item: {
-        tweetID: event.id_str,
-        userID: event.user.id_str,
-        createdAt: event.user.created_at,
-        userName: event.user.name,
-        userScreenName: event.user.screen_name,
-        userImageUrl: event.user.profile_image_url,
-        tweet: event.text,
-        targetWord: targetWord,
-        gender: gender // 男なら１, 女なら２
-      }
-    };
-    put(tweetParams).then()
+    if(event.text.indexOf('RT') === -1) {
+      const tweetParams = {
+        TableName: `tweets-${process.env.STAGE}`,
+        Item: {
+          tweetID: event.id_str,
+          userID: event.user.id_str,
+          createdAt: event.user.created_at,
+          userName: event.user.name,
+          userScreenName: event.user.screen_name,
+          userImageUrl: event.user.profile_image_url,
+          tweet: event.text,
+          targetWord: targetWord,
+          gender: gender, // 男なら１, 女なら２
+          ttl: moment().add('days', 1).unix()
+        }
+      };
+      put(tweetParams).then()
+    }
   });
 
   stream.on('error', function (error) {
