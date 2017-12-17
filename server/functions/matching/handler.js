@@ -323,10 +323,8 @@ const postTweet = (matching) => {
 
     const shareUrl = `https://kamatte.cc/share/${matching.id}`;
 
-    // TODO　コミットしない
     client.post('statuses/update',
-      {status: `${toUser} \n【お店をご用意しました！】\n\n先ほどのツイートよりお互いの需要がマッチしていたため、こちらでお店をご用意させていただきました！🎉🎉\n\n良い一時になるよう心からお祈り申し上げます\n ${shareUrl} #kamatte_cc`},
-      //{status: `${toUser} \n【お店をご用意しました！】\n\n\n\n只今、いいとものデモでマッチングしています。 ${shareUrl}`},
+      {status: `${toUser} \n【お店をご用意しました！】\nお互いの需要がマッチしていたため、お店をご用意させていただきました！🎉🎉\n\nさあ！日付を確認して、予約を確定しましょう！\n\n良いひとときになるよう、心からお祈り申し上げます\n ${shareUrl} #kamatte_cc`},
       function (error, tweet, response) {
         if (error) {
           console.log(error);
