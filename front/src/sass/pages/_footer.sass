@@ -15,15 +15,16 @@
     display: table-cell
     text-align: center
     vertical-align: middle
+  @media #{$small}
+    .nav__item
+      height: 40px
+
   .nav__item a
     display: block
     margin: 14px
     color: #FFF
     text-decoration: none
     font-size: 14px
-  @media screen and (min-width: 480px)
-    .social-area-syncer
-      min-height: 80px
   ul.social-button-syncer
     width: 238px
     margin: 24px auto
@@ -36,10 +37,16 @@
       height: 71px
       margin: 0 8px
       padding: 0
-  @media screen and (min-width: 480px)
+  @media #{$small}
     ul.social-button-syncer
       width: 300px
   .sc-fb
     z-index: 99
     width: 69px
-
+@media #{$small}
+  .footer
+    height: 130px
+    .navi
+      display: block
+    .link
+      display: block
