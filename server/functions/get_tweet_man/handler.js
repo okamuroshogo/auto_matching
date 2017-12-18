@@ -81,7 +81,7 @@ const getTweet = () => {
     console.log(event.user.profile_image_url);
     console.log(event.text);
     console.log("moment().add()");
-    console.log(moment().add('days', 1).unix());
+    console.log(moment().add('hours', 1).unix());
           
     isblacklist(event.user.id_str).then((isblack) => {
       if(event.text.indexOf('RT') === -1 && !isblack) {
