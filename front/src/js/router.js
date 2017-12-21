@@ -7,17 +7,6 @@ import Privacy from './components/privacy.vue';
 import Contact from './components/contact.vue';
 import Terms from './components/terms.vue';
 
-
-//const elRoot = document.getElementById('root');
-//const elDetail = document.getElementById('detail');
-
-//new Vue({
-//    el: elRoot || elDetail,
-//    store,
-//    render: (h) => h(elroot ? root : detail)
-//});
-
-
 Vue.use(VueRouter);
 
 const routes = [
