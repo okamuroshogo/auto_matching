@@ -1,0 +1,52 @@
+footer
+  position: fixed
+  bottom: 0
+  width: 100%
+  height: 80px
+  background-color: $main_color
+  .navi
+    display: flex
+    justify-content: space-between
+  .link
+    display: table-cell
+    vertical-align: middle
+  .nav__item
+    height: 80px
+    display: table-cell
+    text-align: center
+    vertical-align: middle
+  @media #{$small}
+    .nav__item
+      height: 40px
+
+  .nav__item a
+    display: block
+    margin: 14px
+    color: #FFF
+    text-decoration: none
+    font-size: 14px
+  ul.social-button-syncer
+    width: 280px
+    margin: 24px auto
+    padding: 0
+    border: none
+    list-style-type: none
+    li
+      float: left
+      text-align: center
+      height: 71px
+      margin: 0 8px
+      padding: 0
+  @media #{$small}
+    ul.social-button-syncer
+      width: 300px
+  .sc-fb
+    z-index: 99
+    width: 69px
+@media #{$small}
+  footer
+    height: 130px
+    .navi
+      display: block
+    .link
+      display: block
