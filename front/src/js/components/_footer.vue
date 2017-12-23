@@ -16,31 +16,3 @@
             a.hatena-bookmark-button(href='http://b.hatena.ne.jp/entry/https://kamatte.cc', data-hatena-bookmark-layout='basic-label', data-hatena-bookmark-lang='ja', title='このエントリーをはてなブックマークに追加')
               img(src='https://b.st-hatena.com/images/entry-button/button-only@2x.png', alt='このエントリーをはてなブックマークに追加', width='20', height='20', style='border:none;')
 </template>
-
-<script>
-  window.addEventListener("load", shareButtonReadSyncer, false );
-  function shareButtonReadSyncer(){
-    // Facebook
-    window.fbAsyncInit = function() {
-      FB.init({
-        appId      : '#{fb_appid}',
-        xfbml      : true,
-        version    : 'v2.11'
-      });
-      FB.AppEvents.logPageView();
-    };
-    (function(d, s, id){
-      var js, fjs = d.getElementsByTagName(s)[0];
-      if (d.getElementById(id)) {return;}
-      js = d.createElement(s); js.id = id;
-      js.src = "https://connect.facebook.net/en_US/sdk.js";
-      fjs.parentNode.insertBefore(js, fjs);
-    }(document, 'script', 'facebook-jssdk'));
-    // はてなブックマーク
-    var scriptTag = document.createElement("script");
-    scriptTag.type = "text/javascript"
-    scriptTag.src = "https://b.st-hatena.com/js/bookmark_button.js";
-    scriptTag.async = true;
-    document.getElementsByTagName("head")[0].appendChild(scriptTag);
-  }
-</script>
