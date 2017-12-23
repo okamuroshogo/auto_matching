@@ -1,6 +1,6 @@
 <template lang="pug">
-  footer
-    dev.navi
+  footer.app-footer
+    div.navi
       nav.link
         ul
           li.nav__item: a(href="/contact") お問い合わせ

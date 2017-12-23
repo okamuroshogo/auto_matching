@@ -1,16 +1,16 @@
 <template lang="pug">
   div#app
     router-view
-    appFooter
+    app-footer
 </template>
 
 <script>
-  import Footer from './components/_footer.vue';
+  import AppFooter from './components/_app-footer.vue';
 
   export default {
     name: 'App',
     components: {
-      appFooter: Footer
+      AppFooter
     },
   };
 </script>
