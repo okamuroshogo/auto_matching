@@ -17,7 +17,6 @@
     "lint": "gulp lint"
   },
   "devDependencies": {
-    "axios": "^0.17.1",
     "babel-core": "^6.26.0",
     "babel-eslint": "latest",
     "babel-plugin-transform-runtime": "^6.23.0",
