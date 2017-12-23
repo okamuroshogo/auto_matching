@@ -1,3 +1,2 @@
 <template lang="pug">
 </template>
-
