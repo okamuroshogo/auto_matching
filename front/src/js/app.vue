@@ -1,5 +1,6 @@
 <template lang="pug">
   div#app
+    div.header kamatte
     router-view
     app-footer
 </template>
