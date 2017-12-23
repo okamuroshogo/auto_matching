@@ -11,10 +11,10 @@ Vue.use(VueRouter);
 
 const routes = [
   { path: '/', component: Root },
-  { path: '/detail', component: Detail },
-  { path: '/privacy', component: Privacy },
-  { path: '/contact', component: Contact },
-  { path: '/terms', component: Terms }
+  { path: '/detail/', component: Detail },
+  { path: '/privacy/', component: Privacy },
+  { path: '/contact/', component: Contact },
+  { path: '/terms/', component: Terms }
 ];
 
 const router = new VueRouter({
