@@ -60,6 +60,6 @@
     h3 第９条（お問い合わせ窓口）
     p.
       本ポリシーに関するお問い合わせは，下記の窓口までお願いいたします。
-      Eメールアドレス： kamattecc@gmail.com
+      Eメールアドレス： <a href="mailto:kamattecc@gmail.com">kamattecc@gmail.com</a>
     p.footer 以上
 </template>
