@@ -1,6 +1,6 @@
 <template lang="pug">
   div#app
-    router-link.header(tag="header" to="/" exact): a kamatte
+    router-link.app-header(tag="header" to="/" exact): a kamatte
     router-view
     app-footer
 </template>
