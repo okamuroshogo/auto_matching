@@ -22,7 +22,13 @@
       ...mapActions([])
     },
     created() {
-      this.$store.dispatch('getMatchingCount');
+      // this.$store.dispatch('getMatchingCount');
+    },
+    mounted() {
+      if (window.twttr) {
+        // twitter widgetsの再読み込み
+        twttr.widgets.load();
+      }
     }
   }
 </script>
