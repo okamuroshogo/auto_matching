@@ -49,51 +49,30 @@
   <body>
     <div class="wrapper">
       <div class="header">kamatte</div>
+      <div id="app"></div>
       <div id="detail"></div>
     </div>
-    <div id="app">
-      <router-view></router-view>
-    </div>
     <script src="/js/script.js"></script>
-    <footer>
-      <dev class="navi">
-        <nav class="link">
-          <ul>
-            <li class="nav__item"><a href="/contact">お問い合わせ</a></li>
-            <li class="nav__item"><a href="/privacy">プライパシーポリシー</a></li>
-            <li class="nav__item"><a href="/terms">利用規約</a></li>
-          </ul>
-        </nav>
-        <div class="link">
-          <ul class="social-button-syncer">
-            <li class="sc-tw"><a class="twitter-share-button" href="https://twitter.com/intent/tweet"></a></li>
-            <li class="sc-fb">
-              <div class="fb-like" data-width="80" data-layout="button_count" data-action="like" data-size="small" data-show-faces="true" data-share="false"></div>
-            </li>
-            <li><a class="hatena-bookmark-button" href="http://b.hatena.ne.jp/entry/https://kamatte.cc" data-hatena-bookmark-layout="basic-label" data-hatena-bookmark-lang="ja" title="このエントリーをはてなブックマークに追加"><img src="https://b.st-hatena.com/images/entry-button/button-only@2x.png" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border:none;"></a></li>
-          </ul>
-        </div>
-      </dev>
-    </footer>
-    <script type="text/javascript">
-      window.addEventListener("load", shareButtonReadSyncer, false );
-      function shareButtonReadSyncer(){
+    <script>
+      window.addEventListener("load", shareButtonReadSyncer, false);
+      function shareButtonReadSyncer() {
         // Facebook
-        window.fbAsyncInit = function() {
+        window.fbAsyncInit = function () {
           FB.init({
-            appId      : '1758420817800910',
-            xfbml      : true,
-            version    : 'v2.11'
+            appId: '1758420817800910',
+            xfbml: true,
+            version: 'v2.11'
           });
           FB.AppEvents.logPageView();
         };
-        (function(d, s, id){
+        (function (d, s, id) {
           var js, fjs = d.getElementsByTagName(s)[0];
-          if (d.getElementById(id)) {return;}
+          if (d.getElementById(id)) { return; }
           js = d.createElement(s); js.id = id;
           js.src = "https://connect.facebook.net/en_US/sdk.js";
           fjs.parentNode.insertBefore(js, fjs);
         }(document, 'script', 'facebook-jssdk'));
+      
         // はてなブックマーク
         var scriptTag = document.createElement("script");
         scriptTag.type = "text/javascript"
