@@ -46,6 +46,7 @@
     "vinyl-buffer": "latest",
     "vinyl-source-stream": "latest",
     "vue": "^2.4.4",
+    "vue-router": "^3.0.1",
     "vueify": "^9.4.1",
     "vuex": "^2.4.1",
     "watchify": "latest"
@@ -58,8 +59,5 @@
     "plugins": [
       "transform-runtime"
     ]
-  },
-  "dependencies": {
-    "vue-router": "^3.0.1"
   }
 }
