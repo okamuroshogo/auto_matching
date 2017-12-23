@@ -62,5 +62,5 @@
       本ポリシーに関するお問い合わせは，下記の窓口までお願いいたします。
     p.
       Eメールアドレス： kamattecc@gmail.com
-    p 以上
+    p.footer 以上
 </template>
