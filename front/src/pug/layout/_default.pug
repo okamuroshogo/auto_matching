@@ -14,12 +14,9 @@ html(lang="ja")
 
   body
     div.wrapper
-      div.header kamatte
-      block content-block
+      div#app
 
     block javascript-block
       script(src="/js/script.js")
 
-    include ../partials/_footer.pug
-
-
+    include ../partials/_share-scripts

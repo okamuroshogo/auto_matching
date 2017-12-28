@@ -1,10 +1,14 @@
-.header
+.app-header
   width: 100vw
   height: 66px
   position: relative
   background-color: $main_color
   text-indent: -9999px
   overflow: hidden
+  a
+    display: block
+    width: 100%
+    height: 100%
   &:after
     content: ''
     display: block
@@ -17,3 +21,4 @@
     background-position: center
     background-size: auto 33px
     background-image: url('/img/logo.svg')
+    pointer-events: none
