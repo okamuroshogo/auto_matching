@@ -11,14 +11,12 @@
         | するwebサービスです
 
     div.kamatte_tweet
-      button.btn-tweet
-        a(href="https://twitter.com/intent/tweet?text=この文言をランダムに変えたい")
+      button.btn-tweet(v-on:click="kamatte_tweet()")
         span かまってツイートする
     div.howto
 
     div.kamatte_tweet
-      button.btn-tweet
-        a(href="https://twitter.com/intent/tweet?text=この文言をランダムに変えたい")
+      button.btn-tweet(v-on:click="kamatte_tweet()")
         span かまってツイートする
 
     div.matching_count
@@ -40,7 +38,8 @@
       ...mapGetters([])
     },
     methods: {
-      ...mapActions([])
+      ...mapActions([]),
+      kamatte_tweet
     },
     created() {
       this.$store.dispatch('getMatchingCount');
@@ -51,5 +50,10 @@
         twttr.widgets.load();
       }
     }
+  }
+
+  function kamatte_tweet() {
+    const base = "https://twitter.com/intent/tweet?hashtags="
+    window.open(Math.floor( Math.random() * 2 ) % 2 == 0 ? base + "彼女募集中" : base + "彼氏募集中")
   }
 </script>
