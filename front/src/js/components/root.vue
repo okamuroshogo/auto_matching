@@ -2,19 +2,26 @@
   .root
     //- h1.logo kamatte
     div.top_image
-    //- div.matching_count
-      p マッチング数
-      p {{ matchingCount || 0 }} 件！
     div.kamatte_tittle
-      p かまってちゃんのためのマッチングサービス
+      div.text-title
+        p かまってちゃんのためのマッチングサービス
       p kamatteは、twitter上のかまってちゃんを
       p 
-        span.text-title-bold 勝手にマッチングして、お店の手配まで
+        span.text-explain-bold 勝手にマッチングして、お店の手配まで
         | するwebサービスです
     div.kamatte_tweet
-      | <a href="https://twitter.com/intent/tweet?text=この文言をランダムに変えたい" data-size="large"> かまってツイートする</a>
+      a(href="https://twitter.com/intent/tweet?text=この文言をランダムに変えたい" data-size="large")
+        img(src="/img/tweet-btn.png")
+    div.howto
+
     div.kamatte_tweet
-      | <a href="https://twitter.com/intent/tweet?text=この文言をランダムに変えたい" data-size="large"> かまってツイートする</a>
+      a(href="https://twitter.com/intent/tweet?text=この文言をランダムに変えたい" data-size="large")
+        img(src="/img/tweet-btn.png")
+
+    div.matching_count
+      p これまでのマッチング数 
+        span.text-count-bold {{ matchingCount || 0 }} 
+        | 件 
 
     div.top_twitter
       | <a class="twitter-timeline" href="https://twitter.com/kamatte_cc?ref_src=twsrc%5Etfw" data-show-replies="true">マッチング中</a>
@@ -33,7 +40,7 @@
       ...mapActions([])
     },
     created() {
-      // this.$store.dispatch('getMatchingCount');
+      this.$store.dispatch('getMatchingCount');
     },
     mounted() {
       if (window.twttr) {
