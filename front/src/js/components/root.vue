@@ -3,20 +3,23 @@
     //- h1.logo kamatte
     div.top_image
     div.kamatte_tittle
-      div.text-title
-        p かまってちゃんのためのマッチングサービス
+      p.text-title かまってちゃんのためのマッチングサービス
       p kamatteは、twitter上のかまってちゃんを
-      p 
+        br
+        | 
         span.text-explain-bold 勝手にマッチングして、お店の手配まで
         | するwebサービスです
+
     div.kamatte_tweet
-      a(href="https://twitter.com/intent/tweet?text=この文言をランダムに変えたい" data-size="large")
-        img(src="/img/tweet-btn.png")
+      button.btn-tweet
+        a(href="https://twitter.com/intent/tweet?text=この文言をランダムに変えたい")
+        span かまってツイートする
     div.howto
 
     div.kamatte_tweet
-      a(href="https://twitter.com/intent/tweet?text=この文言をランダムに変えたい" data-size="large")
-        img(src="/img/tweet-btn.png")
+      button.btn-tweet
+        a(href="https://twitter.com/intent/tweet?text=この文言をランダムに変えたい")
+        span かまってツイートする
 
     div.matching_count
       p これまでのマッチング数 

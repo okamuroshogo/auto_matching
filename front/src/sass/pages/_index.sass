@@ -40,11 +40,11 @@
     background-image: url('/img/top_image.png')
   .text-explain-bold
     color: $main_color
-  .text-title p
+  .text-title
     color: $main_color
     font-size: 35px
     text-shadow: 1px 3px 5px #aaa
-    font-weight: normal
+    font-weight: bold
     margin-bottom: 50px
   .matching_count
     margin: 20px auto
@@ -52,20 +52,21 @@
   .text-count-bold
     font-size: 30px
     color: $main_color
+  .kamatte_tittle
+    padding-bottom: 50px
 
   .kamatte_tweet
-    padding: auto
     margin: auto
     width: 300px
     height: auto
   .howto
     width: 100%
     height: 0
-    padding-top: 142.65%
+    padding-top: 143.65%
     margin: auto
     margin-top: 80px
     margin-bottom: 80px
-    background-size: contain
+    background-size: cover
     background-repeat: no-repeat
     background-image: url('/img/howto.png')
     
@@ -79,3 +80,21 @@
     -webkit-overflow-scrolling: touch
     overflow-scrolling: touch
 
+  .btn-tweet
+    $h: 60px
+    display: block
+    width: 270px
+    height: $h
+    margin: 12px auto 15px
+    border-radius: 20px
+    background-color: $main_color
+    box-shadow: 0 10px 0 0 $shadow_color
+    color: #fff
+    font-size: 20px
+    font-weight: bold
+    text-decoration: none
+    text-align: center
+    line-height: $h
+    &:not(.inactive):active
+      box-shadow: 0 2px 0 0 $blue_shadow_color
+      transform: translateY(8px)
