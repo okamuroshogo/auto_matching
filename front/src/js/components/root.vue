@@ -5,11 +5,13 @@
       p.text-title かまってちゃんのための
         br.sp_br
         | マッチングサービス
-      p kamatteは、twitter上のかまってちゃんを
+      p.text-explain kamatteは、twitter上のかまってちゃんを
         br
         | 
         span.text-explain-bold 勝手にマッチングして、お店の手配まで
-        | するwebサービスです
+        | する
+        br.sp_br
+        | webサービスです
 
     div.kamatte_tweet
       button.btn-tweet(v-on:click="kamatte_tweet()")
