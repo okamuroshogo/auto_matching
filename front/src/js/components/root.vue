@@ -2,7 +2,7 @@
   .root
     //- h1.logo kamatte
     div.top_image
-    div.kamatte_tittle
+    div.kamatte_title
       p.text-title かまってちゃんのためのマッチングサービス
       p kamatteは、twitter上のかまってちゃんを
         br
