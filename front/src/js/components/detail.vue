@@ -12,7 +12,11 @@
         span
         span 行きたい !
     p
+    p.confirm-text 本人確認のためログインが必要です
       button.btn-reserve(v-bind:class="{ inactive: !btnState.isReserveBtnActive }" v-on:click="btnState.isReserveBtnActive ? postReservation({ matchingId, userId }) : null") お店を予約する
+    p
+    p.kamawanai 二度とかまってほしくない人は
+      a(href="/kamawanai") こちら
 </template>
 
 <script>
