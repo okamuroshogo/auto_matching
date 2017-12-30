@@ -6,6 +6,7 @@ import Detail from './components/detail.vue';
 import Privacy from './components/privacy.vue';
 import Contact from './components/contact.vue';
 import Terms from './components/terms.vue';
+import Kamawanai from './components/kamawanai.vue';
 
 const VueScrollTo = require('vue-scrollto');
 Vue.use(VueScrollTo)
@@ -16,6 +17,7 @@ const routes = [
   { path: '/detail/', component: Detail },
   { path: '/privacy/', component: Privacy },
   { path: '/contact/', component: Contact },
+  { path: '/kamawanai/', component: Kamawanai },
   { path: '/terms/', component: Terms }
 ];
 
