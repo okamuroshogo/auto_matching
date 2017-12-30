@@ -17,6 +17,7 @@
     "lint": "gulp lint"
   },
   "devDependencies": {
+    "babel-core": "^6.26.0",
     "babel-eslint": "latest",
     "babel-plugin-transform-runtime": "^6.23.0",
     "babel-preset-es2015": "latest",
@@ -45,6 +46,8 @@
     "vinyl-buffer": "latest",
     "vinyl-source-stream": "latest",
     "vue": "^2.4.4",
+    "vue-router": "^3.0.1",
+    "vue-scrollto": "^2.8.0",
     "vueify": "^9.4.1",
     "vuex": "^2.4.1",
     "watchify": "latest"

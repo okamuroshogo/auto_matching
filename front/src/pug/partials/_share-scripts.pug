@@ -1,27 +1,30 @@
-//- share scripts
-
-//- facebook script
-div#fb-root
 script.
-  (function(d, s, id) {
-    var js, fjs = d.getElementsByTagName(s)[0];
-    if (d.getElementById(id)) return;
-    js = d.createElement(s); js.id = id;
-    js.src = "//connect.facebook.net/ja_JP/sdk.js#xfbml=1&version=v2.5&appId=#{Settings.facebook.app_id}";
-    fjs.parentNode.insertBefore(js, fjs);
-  }(document, 'script', 'facebook-jssdk'));
-//- script!= SNSHelper.fb_root(facebook_app_id)
+  window.addEventListener("load", shareButtonReadSyncer, false);
+  function shareButtonReadSyncer() {
+    // Facebook
+    window.fbAsyncInit = function () {
+      FB.init({
+        appId: '#{fb_appid}',
+        xfbml: true,
+        version: 'v2.11'
+      });
+      FB.AppEvents.logPageView();
+    };
+    (function (d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) { return; }
+      js = d.createElement(s); js.id = id;
+      js.src = "https://connect.facebook.net/en_US/sdk.js";
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
 
-//- twitter script
-script.
-  !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');
-//- script!= SNSHelper.twitter_wjs()
+    // はてなブックマーク
+    var scriptTag = document.createElement("script");
+    scriptTag.type = "text/javascript"
+    scriptTag.src = "https://b.st-hatena.com/js/bookmark_button.js";
+    scriptTag.async = true;
+    document.getElementsByTagName("head")[0].appendChild(scriptTag);
+  }
 
-//- line script
-script(type="text/javascript" src="//media.line.me/js/line-button.js?v=20140411")
-
-//- hatena
-script(type="text/javascript" src="https://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async")
-
-//- linkedin
-script(type="text/javascript" src="//platform.linkedin.com/in.js") lang: en_US
+  // twitter widgets
+  !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");

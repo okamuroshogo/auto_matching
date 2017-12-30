@@ -5,17 +5,19 @@ doctype html
 html(lang="ja")
   head
     include ../partials/_meta
-    
+
     block stylesheet-block
       link(rel="stylesheet" href="/css/app.css")
-    
+
     include ../partials/_ga.html
     include ../partials/_adsense.html
-    
+
   body
     div.wrapper
-      div.header kamatte
-      block content-block
-    
+      div#app
+
     block javascript-block
       script(src="/js/script.js")
+
+    include ../partials/_share-scripts
+    include ../partials/_viewport

@@ -4,6 +4,7 @@ function fetchApi(endpoint, params, options) {
     // const domain = 'https://wqcgcdtbn5.execute-api.ap-northeast-1.amazonaws.com/dev';
     // const domain = 'https://75n6tmmj4d.execute-api.ap-northeast-1.amazonaws.com/dev';
     // const domain = '';
+
     const domain = 'https://kamatte.cc';
     const paramStr = Object.keys(params).map((key) => `${key}=${params[key]}`).join('&');
     return fetch(`${domain}/api/v1/${endpoint}?${paramStr}`, { ...options, mode: 'cors' })
@@ -11,8 +12,9 @@ function fetchApi(endpoint, params, options) {
 }
 
 export const getMatchingCount = ({ commit }) => {
-    fetchApi('matching_count')
+    fetchApi('matching_count', {})
         .then((data) => {
+          console.log(data);
             commit('setMatchingCount', {
                 count: data.count
             });

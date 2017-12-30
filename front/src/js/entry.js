@@ -1,14 +1,11 @@
 import Vue from 'vue';
-
 import store from './store';
-import Root from './components/root.vue';
-import Detail from './components/detail.vue';
-
-const elRoot = document.getElementById('root');
-const elDetail = document.getElementById('detail');
+import router from './router.js';
+import App from './app.vue';
 
 new Vue({
-    el: elRoot || elDetail,
-    store,
-    render: (h) => h(elRoot ? Root : Detail)
+  el: '#app',
+  router,
+  store,
+  render: h => h(App)
 });
