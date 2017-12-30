@@ -7,6 +7,8 @@ import Privacy from './components/privacy.vue';
 import Contact from './components/contact.vue';
 import Terms from './components/terms.vue';
 
+const VueScrollTo = require('vue-scrollto');
+Vue.use(VueScrollTo)
 Vue.use(VueRouter);
 
 const routes = [
@@ -21,7 +23,7 @@ const router = new VueRouter({
   routes,
   mode: 'history',
   scrollBehavior (to, from, savedPosition) {
-     return { x: 0, y: 0 }
+    return { x: 0, y: 0 }
    }
 });
 

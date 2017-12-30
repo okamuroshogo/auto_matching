@@ -16,7 +16,7 @@
     div.kamatte_tweet
       button.btn-tweet(v-on:click="kamatte_tweet()")
         span かまってツイートする
-    div.howto
+      #howto.howto
 
     div.kamatte_tweet
       button.btn-tweet(v-on:click="kamatte_tweet()")

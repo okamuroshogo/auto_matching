@@ -6,6 +6,8 @@
           router-link.nav__item(tag="li" to="/contact/" exact): a お問い合わせ
           router-link.nav__item(tag="li" to="/privacy/" exact): a プライパシーポリシー
           router-link.nav__item(tag="li" to="/terms/" exact): a 利用規約
+          router-link.nav__item(tag='li' to='/'): a(href='#', v-scroll-to="'#howto'") 使い方
+
       div.link
         ul.social-button-syncer
           li.sc-tw
