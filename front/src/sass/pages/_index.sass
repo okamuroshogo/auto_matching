@@ -1,4 +1,8 @@
 .root
+  .sp_br
+    display: none
+    @media #{$small}
+      display: block
   padding: 0
   p
     margin: 5px auto
@@ -57,7 +61,6 @@
 
   .kamatte_tweet
     margin: auto
-    width: 300px
     height: auto
   .howto
     width: 100%
@@ -69,6 +72,9 @@
     background-size: cover
     background-repeat: no-repeat
     background-image: url('/img/howto.png')
+    @media #{$small}
+      background-image: url('/img/howto_sp.png')
+      padding-top: 172.66%
     
   .top_twitter
     text-align: center
@@ -99,3 +105,7 @@
     &:not(.inactive):active
       box-shadow: 0 2px 0 0 $blue_shadow_color
       transform: translateY(8px)
+    @media #{$small}
+      font-size: 25px
+      width: 80%
+      

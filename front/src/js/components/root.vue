@@ -1,9 +1,10 @@
 <template lang="pug">
   .root
-    //- h1.logo kamatte
     div.top_image
     div.kamatte_title
-      p.text-title かまってちゃんのためのマッチングサービス
+      p.text-title かまってちゃんのための
+        br.sp_br
+        | マッチングサービス
       p kamatteは、twitter上のかまってちゃんを
         br
         | 
