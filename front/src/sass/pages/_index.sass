@@ -1,4 +1,8 @@
 .root
+  .sp_br
+    display: none
+    @media #{$small}
+      display: block
   padding: 0
   p
     margin: 5px auto
@@ -8,7 +12,6 @@
     text-align: center
   img
     max-width: 100%
-
   .logo
     font-size: 2.0rem
     width: 100vw
@@ -32,17 +35,52 @@
 
   .top_image
     width: 100%
-    height: 172px
-    max-width: 520px
+    height: 0
+    padding-top: 50.15%
+    background-size: contain
     margin: auto
     background-position: top
     background-repeat: no-repeat
-    background-size: cover
-    background-image: url('/img/top_couple.jpg')
-
+    background-image: url('/img/top_image.png')
+  .text-explain-bold
+    color: $main_color
+  .text-explain
+    @media #{$small}
+      font-size: 15px
+  .text-title
+    color: $main_color
+    font-size: 35px
+    text-shadow: 1px 3px 5px #aaa
+    font-weight: bold
+    margin-bottom: 50px
+    @media #{$small}
+      font-size: 19px
   .matching_count
     margin: 20px auto
+    color: $main_color
+  .text-count-bold
+    font-size: 30px
+    color: $main_color
+  .kamatte_title
+    padding-bottom: 50px
 
+  .kamatte_tweet
+    margin: auto
+    height: auto
+  .howto
+    width: 100%
+    height: 0
+    padding-top: 143.65%
+    margin: auto
+    margin-top: 80px
+    margin-bottom: 80px
+    background-size: cover
+    background-repeat: no-repeat
+    background-image: url('/img/howto.png')
+    @media #{$small}
+      background-image: url('/img/howto_sp.png')
+      padding-top: 172.66%
+    
   .top_twitter
     text-align: center
     width: 100%
@@ -52,3 +90,27 @@
     overflow: scroll
     -webkit-overflow-scrolling: touch
     overflow-scrolling: touch
+
+  .btn-tweet
+    $h: 60px
+    display: block
+    width: 270px
+    height: $h
+    margin: 12px auto 15px
+    border-radius: 20px
+    border: none
+    background-color: $main_color
+    box-shadow: 0 10px 0 0 $shadow_color
+    color: #fff
+    font-size: 20px
+    font-weight: bold
+    text-decoration: none
+    text-align: center
+    line-height: $h
+    &:not(.inactive):active
+      box-shadow: 0 2px 0 0 $blue_shadow_color
+      transform: translateY(8px)
+    @media #{$small}
+      font-size: 23px
+      width: 80%
+      
