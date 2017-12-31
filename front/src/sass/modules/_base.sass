@@ -14,7 +14,7 @@ body
   background: #fff
   margin-bottom: 80px
   @media #{$small}
-    margin-bottom: 150px
+    margin-bottom: 180px
 
 .wrapper
   min-width: 320px
@@ -23,3 +23,21 @@ body
 
 a
   color: $blue_color
+
+.adsense_pc
+  display: none
+.adsense_sp
+  display: none
+
+@media #{$small}
+  .adsense_sp
+    display: block
+    text-align: center
+@media #{$middle}
+  .adsense_pc
+    display: block
+    text-align: center
+@media #{$large}
+  .adsense_pc
+    display: block
+    text-align: center
